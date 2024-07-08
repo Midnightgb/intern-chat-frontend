@@ -10,4 +10,10 @@ import { RouterView } from 'vue-router'
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-gray-100 min-h-screen;
+  }
+}
 </style>
