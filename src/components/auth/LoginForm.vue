@@ -1,7 +1,7 @@
 <template>
   <form @submit.prevent="handleSubmit" class="mt-8 space-y-6">
     <div>
-      <label for="network_user" class="block text-sm font-medium text-gray-700">Network_user</label>
+      <label for="network_user" class="block text-sm font-medium text-gray-700">Usuario</label>
       <input
         id="network_user"
         v-model="state.network_user"
@@ -13,7 +13,7 @@
       <p v-if="v$.network_user.$error" class="mt-2 text-sm text-red-600">{{ v$.network_user.$errors[0].$message }}</p>
     </div>
     <div>
-      <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+      <label for="password" class="block text-sm font-medium text-gray-700">Contraseña</label>
       <input
         id="password"
         v-model="state.password"
