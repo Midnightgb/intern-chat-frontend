@@ -1,6 +1,6 @@
-import { emailValidator, passwordValidator } from './commonValidators'
+import { networkUserValidator, passwordValidator } from './commonValidators'
 
 export const loginValidators = {
-  email: emailValidator,
+  network_user: networkUserValidator,
   password: passwordValidator
 }

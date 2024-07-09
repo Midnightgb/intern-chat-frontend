@@ -1,13 +1,11 @@
-import { required, email, minLength } from '@vuelidate/validators'
+import { required, minLength } from '@vuelidate/validators'
 
-export const emailValidator = {
+export const networkUserValidator = {
   required,
-  email,
-  // Validador personalizado
-  customCompanyEmail: (value) => value.endsWith('@company.com') || 'Debe ser un correo de la empresa'
+  minLength: minLength(2),
 }
 
 export const passwordValidator = {
   required,
-  minLength: minLength(6)
+  minLength: minLength(2)
 }
