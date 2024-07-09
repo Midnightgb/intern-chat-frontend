@@ -36,6 +36,10 @@
 import { reactive } from 'vue'
 import { useVuelidate } from '@vuelidate/core'
 import { loginValidators } from '@/validators/loginValidators'
+import axios from 'axios'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
 
 const state = reactive({
   email: '',
@@ -47,7 +51,26 @@ const v$ = useVuelidate(loginValidators, state)
 const handleSubmit = async () => {
   const isFormCorrect = await v$.value.$validate()
   if (isFormCorrect) {
-    console.log('Form is valid. Submitting...', state)
+    try {
+      const response = await axios.post('https://intern-chat-backend-production.onrender.com/auth/login', {
+        email: state.email,
+        password: state.password
+      })
+      
+      console.log('Login successful', response.data)
+      
+      // Aquí puedes manejar la respuesta exitosa, por ejemplo:
+      // - Guardar el token en el almacenamiento local
+      localStorage.setItem('token', response.data.token)
+      
+      // - Redirigir al usuario a la página principal
+      router.push('/dashboard')
+    } catch (error) {
+      console.error('Login failed', error.response?.data || error.message)
+      // Aquí puedes manejar los errores, por ejemplo:
+      // - Mostrar un mensaje de error al usuario
+      alert('Login failed: ' + (error.response?.data?.message || 'Unknown error'))
+    }
   } else {
     console.log('Form is invalid')
   }
