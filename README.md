@@ -1,4 +1,4 @@
-# intern-chat
+https://supabase.com/dashboard/join?token=lrjjt-uscri-xshux-tygwj&slug=mbgvsaxiihbepjlxsgac&name=mydb# intern-chat
 
 This template should help get you started developing with Vue 3 in Vite.
 
