@@ -36,7 +36,7 @@
 import { reactive } from 'vue'
 import { useVuelidate } from '@vuelidate/core'
 import { loginValidators } from '@/validators/loginValidators'
-import axios from 'axios'
+import apiClient from '@/services/api'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
@@ -52,7 +52,7 @@ const handleSubmit = async () => {
   const isFormCorrect = await v$.value.$validate()
   if (isFormCorrect) {
     try {
-      const response = await axios.post('https://intern-chat-backend-production.onrender.com/collaborative_chat/auth/login', {
+      const response = await apiClient.post('auth/login', {
         network_user: state.network_user,
         password: state.password
       })
