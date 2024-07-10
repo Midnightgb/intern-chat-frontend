@@ -1,6 +1,6 @@
 import { reactive } from 'vue'
 import { useVuelidate } from '@vuelidate/core'
-import { loginValidators } from '@/validators/loginValidators'
+import { loginValidators } from '@/utils/validators';
 import apiClient from '@/services/api'
 import { useRouter } from 'vue-router'
 
