@@ -1,5 +1,6 @@
 <script>
 import Swal from 'sweetalert2'
+import 'sweetalert2/src/sweetalert2.scss'
 
 const Toast = Swal.mixin({
   toast: true,
@@ -16,12 +17,17 @@ const Toast = Swal.mixin({
 export default {
   name: 'ToastNotification',
   methods: {
-    showToast(icon, message) {
-      Toast.fire({
-        icon: icon,
-        title: message
-      })
-    }
+  showToast(icon, message) {
+    console.log('Método showToast llamado con:', icon, message);
+    Toast.fire({
+      icon: icon,
+      title: message
+    }).then(() => {
+      console.log('Toast mostrado exitosamente');
+    }).catch((error) => {
+      console.error('Error al mostrar el toast:', error);
+    });
   }
+}
 }
 </script>
