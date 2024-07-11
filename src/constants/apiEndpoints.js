@@ -1,23 +1,16 @@
 // src/constants/apiEndpoints.js
-/* root_router.use('/user',user_routes)
-root_router.use('/role',role_routes)
-root_router.use('/user_permission',user_permi)
-root_router.use('/direct_message',direct_message_routes)
-root_router.use('/channel',channel_routes)
-root_router.use('/permission',permission_routes)
-root_router.use('/history',history)
-root_router.use('/auth',auth) */
 const BASE_URL = 'https://intern-chat-backend-production.onrender.com/collaborative_chat';
 const BASE_USER = `${BASE_URL}/user`;
 const BASE_AUTH = `${BASE_URL}/auth`;
 const BASE_PRIVILEGE = `${BASE_URL}/user_permission`;
+const BASE_MESSAGE = `${BASE_URL}/direct_message`;
+const BASE_CHANNEL = `${BASE_URL}/channel`;
 
 export const API_ENDPOINTS = {
 
   // Autenticación
   LOGIN: `${BASE_AUTH}/login`,
   LOGOUT: `${BASE_AUTH}/logout`,
-  REGISTER: `${BASE_AUTH}/create_user`,
 
   // Usuarios
   GET_USERS: `${BASE_USER}/users`,
@@ -37,4 +30,26 @@ export const API_ENDPOINTS = {
 
   // Permisos	Global
   GET_GLOBAL_PRIVILEGES: `${BASE_URL}/permission/permissions`,
+
+  // Historial
+  MAKE_HISTORY: `${BASE_URL}/history/create_history`,
+
+  // Mensajes
+  GET_CONVERSATIONS: `${BASE_MESSAGE}/conversations`,
+  CREATE_CONVERSATION: `${BASE_MESSAGE}/create_conversation`,
+  GET_MESSAGES_CONVERSATION: `${BASE_MESSAGE}/message_conversation`,
+  DELETE_CONVERSATION: `${BASE_MESSAGE}/delete_conversation/:id`,
+  UPDATE_CONVERSATION: `${BASE_MESSAGE}/update_conversation`,
+
+  // Canales
+  GET_CHANNELS: `${BASE_CHANNEL}/channels`,
+  GET_USERS_CHANNEL: `${BASE_CHANNEL}/user_channels/:id`,
+  GET_MESSAGES_CHANNEL: `${BASE_CHANNEL}/messages_channel/:id`,
+  CREATE_CHANNEL: `${BASE_CHANNEL}/create_channel`,
+  INSERT_USERS_CHANNEL: `${BASE_CHANNEL}/insert_users_channel`,
+  DELETE_CHANNEL: `${BASE_CHANNEL}/delete_channel/:id`,
+  UPDATE_CHANNEL: `${BASE_CHANNEL}/update_channel`,
+  SEND_MESSAGE: `${BASE_CHANNEL}/send_message`,
+  UPDATE_MESSAGE: `${BASE_CHANNEL}/update_message`,
+  DELETE_MESSAGE: `${BASE_CHANNEL}/delete_message`,
 };
