@@ -16,6 +16,7 @@ export const API_ENDPOINTS = {
   GET_USERS: `${BASE_USER}/users`,
   GET_USER_BY_ID: `${BASE_USER}/find_user/:id`,
   GET_USER_BY_NAME: `${BASE_USER}/find_user_name/:network_user`,
+  CREATE_USER: `${BASE_USER}/create_user`,
   DELETE_USER: `${BASE_USER}/delete_user/:id`,
   UPDATE_USER: `${BASE_USER}/update_user/:id`,
 
