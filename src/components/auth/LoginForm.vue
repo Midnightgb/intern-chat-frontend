@@ -1,3 +1,4 @@
+// src/components/auth/LoginForm.vue
 <template>
   <form @submit.prevent="handleSubmit" class="mt-8 space-y-6">
     <div>
@@ -35,5 +36,15 @@
 <script setup>
 import useLogin from '@/composables/useLogin'
 
-const { state, v$, handleSubmit } = useLogin()
+const emit = defineEmits(['login-success'])
+
+const { state, v$, handleSubmit: originalHandleSubmit } = useLogin()
+
+const handleSubmit = async () => {
+  const loginSuccessful = await originalHandleSubmit()
+  if (loginSuccessful) {
+    console.log('Login exitoso, emitiendo evento')
+    emit('login-success')
+  }
+}
 </script>

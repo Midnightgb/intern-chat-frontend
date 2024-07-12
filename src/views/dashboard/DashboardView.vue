@@ -2,9 +2,11 @@
   <div class="w-full max-w-sm p-6 bg-orange-200 rounded-lg shadow-md">
     <h1 class="mb-6 text-2xl font-bold text-center text-gray-900">Dashboard</h1>
     <p class="text-center text-gray-700">Welcome back, {{ user.name }}!</p>
+    <p class="text-center text-gray-700">You are logged in as {{ user.role }}.</p>
+    <p class="text-center text-gray-700">Your full data is: {{ user }}</p>
     <button
       class="w-full py-2 mt-6 text-white bg-blue-500 rounded-md hover:bg-blue-600"
-      @click="logout"
+      @click="handleLogout"
     >
       Logout
     </button>
@@ -12,9 +14,17 @@
 </template>
 
 <script setup>
-  import { useAuth } from '@/composables'
-  import { useAuthHandlers } from '@/handlers'
+import { useAuth } from '@/composables/useAuth'
+import { useAuthHandlers } from '@/handlers'
+import { useRouter } from 'vue-router'
 
-  const { user } = useAuth()
-  const { logout } = useAuthHandlers()
+const { user, logout: authLogout } = useAuth()
+const { handleLogout: handlersLogout } = useAuthHandlers()
+const router = useRouter()
+
+const handleLogout = () => {
+  authLogout()
+  handlersLogout()
+  router.push({ name: 'login' })
+}
 </script>
