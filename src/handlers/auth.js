@@ -5,12 +5,12 @@ export const useAuthHandlers = () => {
   const router = useRouter()
 
   const handleLoginSuccess = () => {
-    router.push({ name: 'Dashboard' })
+    router.push({ name: 'Panel' })
   }
 
   const handleLogout = () => {
     // Lógica de logout...
-    router.push({ name: 'Login' })
+    router.push({ name: 'login' })
   }
 
   return {
