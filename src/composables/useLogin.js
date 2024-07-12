@@ -29,14 +29,11 @@ export default function useLogin() {
         localStorage.setItem('token', response.data.token)
 
         router.push('/dashboard')
-
-        // Mostrar la alerta después de la redirección
-        console.log('Showing success toast');
         ToastNotification.methods.showToast('success', 'Login successful');
-        console.log('Toast shown');
+
       } catch (error) {
         console.warn('LOG Login failed', error.response?.data || error.message)
-        ToastNotification.methods.showToast('error', 'Login failed');
+          ToastNotification.methods.showToast('error', 'Login failed');
       }
     } else {
       console.log('Form is invalid')
