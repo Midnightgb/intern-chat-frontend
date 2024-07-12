@@ -6,6 +6,9 @@ export const ROUTES = {
   LOGIN: '/inicio-sesion',
   LOGOUT: '/cerrar-sesion',
 
+  // Rutas privadas
+  DASHBOARD: '/panel',
+
   // Rutas usuario
   USERS: '/usuarios',
   USER: '/usuarios/:id',
