@@ -9,7 +9,6 @@ export const useAuthHandlers = () => {
   }
 
   const handleLogout = () => {
-    // Lógica de logout...
     router.push({ name: 'login' })
   }
 

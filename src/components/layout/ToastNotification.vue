@@ -18,7 +18,6 @@ export default {
   name: 'ToastNotification',
   methods: {
   showToast(icon, message) {
-    console.log('Método showToast llamado con:', icon, message);
     Toast.fire({
       icon: icon,
       title: message

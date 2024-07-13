@@ -33,7 +33,7 @@
 </template>
 
 <script setup>
-import useLogin from '@/composables/useLogin'
+import useHandleSubmit from '@/handlers/auth/handleSubmit'
 
-const { state, v$, handleSubmit } = useLogin()
+const { state, v$, handleSubmit } = useHandleSubmit()
 </script>
