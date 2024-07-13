@@ -1,12 +1,11 @@
-// src/composables/useLogin.js
 import { reactive } from 'vue'
 import { useVuelidate } from '@vuelidate/core'
 import { loginValidators } from '@/utils/validators'
 import { login as apiLogin } from '@/services/api'
-import { useAuth } from './useAuth'
+import { useAuthStore } from '@/stores/auth'
 
 export default function useLogin() {
-  const { login: authLogin } = useAuth()
+  const authStore = useAuthStore()
 
   const state = reactive({
     network_user: '',
@@ -27,8 +26,7 @@ export default function useLogin() {
         console.log('Login successful', response.data)
         
         localStorage.setItem('token', response.data.token)
-        console.log('networkUser', response.data.user.network_user);
-        authLogin({
+        authStore.login({
           name: response.data.user.full_name,
           networkUser: response.data.user.network_user,
           profilePic: response.data.user.photo_url,

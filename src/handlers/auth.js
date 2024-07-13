@@ -1,12 +1,12 @@
-// src/handlers/auth.js
 import { useRouter } from 'vue-router'
 import { useAuth } from '@/composables/useAuth'
 
 export const useAuthHandlers = () => { 
   const router = useRouter()
-  const { logout } = useAuth()
+  const { logout, user } = useAuth()
 
   const handleLoginSuccess = () => {
+    console.log('Redirecting to dashboard with user:', user)
     router.push({ name: 'Panel' })
   }
 

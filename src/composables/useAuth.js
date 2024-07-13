@@ -1,40 +1,12 @@
-// src/composables/useAuth.js
-import { ref, reactive } from 'vue'
+import { useAuthStore } from '@/stores/auth'
 
 export function useAuth() {
-  const isAuthenticated = ref(false)
-  const user = reactive({
-    name: '',
-    networkUser: '',
-    profilePic: '',
-    role: ''
-  })
-  const setUser = (userData) => {
-    isAuthenticated.value = true
-    Object.assign(user, userData)
-  }
-
-  const clearUser = () => {
-    isAuthenticated.value = false
-    Object.keys(user).forEach(key => {
-      user[key] = ''
-    })
-  }
-
-  const login = (userData) => {
-    setUser(userData)
-    console.log('DATOS RECIBIDOS', userData);
-  }
-
-  const logout = () => {
-    clearUser()
-    localStorage.removeItem('token')
-  }
+  const authStore = useAuthStore()
 
   return {
-    isAuthenticated,
-    user,
-    login,
-    logout
+    isAuthenticated: authStore.isAuthenticated,
+    user: authStore.user,
+    login: authStore.login,
+    logout: authStore.logout
   }
 }

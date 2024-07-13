@@ -32,19 +32,25 @@
     </div>
   </form>
 </template>
-
 <script setup>
 import useLogin from '@/composables/useLogin'
+import { useRouter } from 'vue-router'
+import { storeToRefs } from 'pinia'
+import { useAuthStore } from '@/stores/auth'
 
 const emit = defineEmits(['login-success'])
+const router = useRouter()
+const authStore = useAuthStore()
+const { user } = storeToRefs(authStore)
 
 const { state, v$, handleSubmit: originalHandleSubmit } = useLogin()
 
 const handleSubmit = async () => {
   const loginSuccessful = await originalHandleSubmit()
   if (loginSuccessful) {
-    console.log('Login exitoso, emitiendo evento')
+    console.log('Login exitoso, datos del usuario:', user.value)
     emit('login-success')
+    router.push({ name: 'Panel' })
   }
 }
 </script>
