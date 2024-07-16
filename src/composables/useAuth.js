@@ -1,3 +1,4 @@
+//src/composables/useAuth.js
 import { useAuthStore } from '@/stores/auth'
 
 export function useAuth() {
