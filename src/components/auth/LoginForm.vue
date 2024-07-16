@@ -1,3 +1,4 @@
+// src/components/auth/LoginForm.vue
 <template>
   <form @submit.prevent="handleSubmit" class="mt-8 space-y-6">
     <div>
@@ -31,9 +32,22 @@
     </div>
   </form>
 </template>
-
 <script setup>
-import useHandleSubmit from '@/handlers/auth/handleSubmit'
+import useLogin from '@/composables/useLogin'
+import { storeToRefs } from 'pinia'
+import { useAuthStore } from '@/stores/auth'
 
-const { state, v$, handleSubmit } = useHandleSubmit()
+const emit = defineEmits(['login-success'])
+const authStore = useAuthStore()
+const { user } = storeToRefs(authStore)
+
+const { state, v$, handleSubmit: originalHandleSubmit } = useLogin()
+
+const handleSubmit = async () => {
+  const loginSuccessful = await originalHandleSubmit()
+  if (loginSuccessful) {
+    console.log('Login exitoso, datos del usuario:', user.value)
+    emit('login-success')
+  }
+}
 </script>
