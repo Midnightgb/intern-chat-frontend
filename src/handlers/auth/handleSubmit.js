@@ -30,9 +30,9 @@ export default function useHandleSubmit () {
             
             localStorage.setItem('token', response.data.token)
             
-            if (response.data.success === true) {
-              const channels = await getChannels()
-              console.log('Channels', channels.data)
+            if (response.data.success) {
+              const channels = await getChannels();
+              console.log('Channels', channels.data);
             }
     
             router.push('/dashboard')
