@@ -16,7 +16,6 @@
 <script setup>
 import { useAuth } from '@/composables/useAuth'
 import { useAuthHandlers } from '@/handlers'
-import { watchEffect } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useAuthStore } from '@/stores/auth'
 
@@ -25,9 +24,6 @@ const authStore = useAuthStore()
 const { user } = storeToRefs(authStore)
 const { handleLogout: handlersLogout } = useAuthHandlers()
 
-watchEffect(() => {
-  console.log('User data changed:', user.value)
-})
 
 const handleLogout = () => {
   authLogout()

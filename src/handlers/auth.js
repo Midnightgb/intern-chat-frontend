@@ -7,7 +7,6 @@ export const useAuthHandlers = () => {
   const authStore = useAuthStore()
 
   const handleLoginSuccess = () => {
-    console.log('Redirecting to dashboard with user:', authStore.user)
     router.push({ name: 'Panel' })
   }
 

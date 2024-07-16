@@ -34,19 +34,15 @@
 </template>
 <script setup>
 import useLogin from '@/composables/useLogin'
-import { storeToRefs } from 'pinia'
-import { useAuthStore } from '@/stores/auth'
 
 const emit = defineEmits(['login-success'])
-const authStore = useAuthStore()
-const { user } = storeToRefs(authStore)
 
 const { state, v$, handleSubmit: originalHandleSubmit } = useLogin()
 
 const handleSubmit = async () => {
   const loginSuccessful = await originalHandleSubmit()
   if (loginSuccessful) {
-    console.log('Login exitoso, datos del usuario:', user.value)
+    
     emit('login-success')
   }
 }
