@@ -15,7 +15,9 @@
   <div>
     <NavBar />
   </div>
-
+  <div class="flex justify-center items-center h-screen">
+    <RouterView />
+  </div>
 
 </template>
 
@@ -27,6 +29,7 @@ onMounted(() => {
     initFlowbite();
 })
 import NavBar from '@/components/partials/NavBar.vue'
+import { RouterView } from 'vue-router'
 /* import { useAuth } from '@/composables/useAuth'
 import { useAuthHandlers } from '@/handlers'
 import { storeToRefs } from 'pinia'

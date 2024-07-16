@@ -7,6 +7,10 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
+      path: '/:pathMatch(.*)*',
+      redirect: { name: 'login' },
+    },
+    {
       path: ROUTES.LOGIN,
       name: 'login',
       component: () => import('@/views/auth/LoginView.vue'),
@@ -22,6 +26,14 @@ const router = createRouter({
         requiresAuth: true,
       },
     },
+    {
+      path: ROUTES.CONVERSATIONS,
+      name: 'Conversations',
+      component: () => import('@/views/conversations/ConversationsView.vue'),
+      meta: {
+        requiresAuth: true,
+      },
+    }
   ]
 });
 
