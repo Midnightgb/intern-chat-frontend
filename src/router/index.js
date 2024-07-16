@@ -27,11 +27,11 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   const authStore = useAuthStore();
-  const isAuthenticated = authStore.isAuthenticated;
+  authStore.checkAuth(); // Verifica la autenticación en cada navegación
 
-  if (to.meta.requiresAuth && !isAuthenticated) {
+  if (to.meta.requiresAuth && !authStore.isAuthenticated) {
     next({ name: 'login' });
-  } else if (to.name === 'login' && isAuthenticated) {
+  } else if (to.name === 'login' && authStore.isAuthenticated) {
     next({ name: 'Panel' });
   } else {
     next();

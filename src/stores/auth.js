@@ -1,3 +1,4 @@
+// src/stores/auth.js
 import { defineStore } from 'pinia'
 
 export const useAuthStore = defineStore('auth', {
@@ -8,13 +9,24 @@ export const useAuthStore = defineStore('auth', {
       networkUser: '',
       profilePic: '',
       role: ''
-    }
+    },
+    token: null
   }),
   actions: {
     login(userData) {
       this.isAuthenticated = true
-      this.user = { ...userData }
-      console.log('DATOS ACTUALIZADOS EN AUTH:', this.user)
+      this.user = {
+        name: userData.name,
+        networkUser: userData.networkUser,
+        profilePic: userData.profilePic,
+        role: userData.role
+      }
+      this.token = userData.token
+      localStorage.setItem('auth', JSON.stringify({
+        isAuthenticated: true,
+        user: this.user,
+        token: this.token
+      }))
     },
     logout() {
       this.isAuthenticated = false
@@ -24,7 +36,18 @@ export const useAuthStore = defineStore('auth', {
         profilePic: '',
         role: ''
       }
-      localStorage.removeItem('token')
+      this.token = null
+      localStorage.removeItem('auth')
+    },
+    checkAuth() {
+      const auth = JSON.parse(localStorage.getItem('auth'))
+      if (auth) {
+        this.isAuthenticated = auth.isAuthenticated
+        this.user = auth.user
+        this.token = auth.token
+      } else {
+        this.logout()
+      }
     }
   }
 })

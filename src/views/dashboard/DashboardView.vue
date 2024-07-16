@@ -16,7 +16,6 @@
 <script setup>
 import { useAuth } from '@/composables/useAuth'
 import { useAuthHandlers } from '@/handlers'
-import { useRouter } from 'vue-router'
 import { watchEffect } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useAuthStore } from '@/stores/auth'
@@ -25,7 +24,6 @@ const { logout: authLogout } = useAuth()
 const authStore = useAuthStore()
 const { user } = storeToRefs(authStore)
 const { handleLogout: handlersLogout } = useAuthHandlers()
-const router = useRouter()
 
 watchEffect(() => {
   console.log('User data changed:', user.value)
@@ -34,6 +32,5 @@ watchEffect(() => {
 const handleLogout = () => {
   authLogout()
   handlersLogout()
-  router.push({ name: 'login' })
 }
 </script>
