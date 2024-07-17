@@ -11,25 +11,14 @@
       Logout
     </button>
   </div> -->
-
-  <div>
-    <NavBar />
-  </div>
   <div class="flex justify-center items-center h-screen">
-    <RouterView />
+    <h1 class=" text-2xl font-bold text-center text-gray-900">Dashboard</h1>
   </div>
 
 </template>
 
 <script setup>
-import { onMounted } from 'vue'
-import { initFlowbite } from 'flowbite'
-// initialize components based on data attribute selectors
-onMounted(() => {
-    initFlowbite();
-})
-import NavBar from '@/components/partials/NavBar.vue'
-import { RouterView } from 'vue-router'
+
 /* import { useAuth } from '@/composables/useAuth'
 import { useAuthHandlers } from '@/handlers'
 import { storeToRefs } from 'pinia'
