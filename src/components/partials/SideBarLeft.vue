@@ -51,7 +51,7 @@ import { onMounted } from 'vue';
 const channelStore = useChannelStore();
 
 onMounted(() => {
-  if (!channelStore.channels.length) {
+  if (!channelStore.initialized) {
     channelStore.fetchChannels();
   }
 });
