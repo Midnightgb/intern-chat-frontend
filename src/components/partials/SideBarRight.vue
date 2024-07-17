@@ -26,7 +26,7 @@
             <span class="ml-2 text-sm font-medium hidden sm:inline">Settings</span>
           </div>
         </a> -->
-        <ToolTip triggerText="Configuraciones" :triggerIcon="'<Settings />'" tooltipContent="Ajutes de usuario" />
+        <ToolTip triggerText="Configuraciones" triggerIcon="Settings" tooltipContent="Ajutes de usuario" />
       </div>
     </div>
   </aside>
@@ -34,4 +34,5 @@
 
 <script setup>
 import ToolTip from '../layout/ToolTip.vue';
+
 </script>

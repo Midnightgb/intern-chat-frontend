@@ -3,8 +3,7 @@
     <template #trigger>
       <fwb-button color="dark">
         {{ triggerText }}
-        <slot name="triggerIcon"></slot>
-        <Settings />
+        <component :is="iconComponent" v-if="iconComponent" />
       </fwb-button>
     </template>
     <template #content>
@@ -15,9 +14,18 @@
 
 <script setup>
 import { FwbButton, FwbTooltip } from 'flowbite-vue'
-import { Settings } from 'lucide-vue-next';
+import { computed, defineAsyncComponent } from 'vue'
 
-defineProps({
+import { Settings, User, Bell } from 'lucide-vue-next'
+
+const iconMap = {
+  Settings,
+  User,
+  Bell,
+  // Agregar más iconos aquí
+}
+
+const props = defineProps({
   triggerText: {
     type: String,
     required: true
@@ -32,4 +40,14 @@ defineProps({
   }
 })
 
+const iconComponent = computed(() => {
+  if (props.triggerIcon && iconMap[props.triggerIcon]) {
+    return iconMap[props.triggerIcon]
+  }
+  // Si el icono no está en el mapa, intenta cargarlo dinámicamente
+  if (props.triggerIcon) {
+    return defineAsyncComponent(() => import(`lucide-vue-next/dist/esm/icons/${props.triggerIcon.toLowerCase()}.js`))
+  }
+  return null
+})
 </script>
