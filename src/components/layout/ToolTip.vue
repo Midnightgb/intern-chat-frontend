@@ -46,7 +46,7 @@ const iconComponent = computed(() => {
   }
   // Si el icono no está en el mapa, intenta cargarlo dinámicamente
   if (props.triggerIcon) {
-    return defineAsyncComponent(() => import(`lucide-vue-next/dist/esm/icons/${props.triggerIcon.toLowerCase()}.js`))
+    return defineAsyncComponent(() => import(`../../../node_modules/lucide-vue-next/dist/esm/icons/${props.triggerIcon.toLowerCase()}.js`))
   }
   return null
 })
