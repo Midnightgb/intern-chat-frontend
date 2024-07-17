@@ -1,7 +1,8 @@
+//src/App.vue
 <template>
-  <div class="min-h-screen">
+  <div class="min-h-screen flex flex-col">
     <template v-if="showAuthContent">
-      <div class="flex bg-gray-100 ">
+      <div class="flex flex-grow bg-gray-100">
         <SidebarLeft />
         <SideBarRight />
         <MainContent>
@@ -10,7 +11,7 @@
       </div>
     </template>
     <template v-else>
-      <div class="flex items-center justify-center bg-green-100">
+      <div class="flex items-center justify-center bg-green-100 flex-grow">
         <RouterView />
       </div>
     </template>
