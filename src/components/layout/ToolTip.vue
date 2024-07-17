@@ -16,12 +16,11 @@
 import { FwbButton, FwbTooltip } from 'flowbite-vue'
 import { computed, defineAsyncComponent } from 'vue'
 
-import { Settings, User, Bell } from 'lucide-vue-next'
+import { Settings, User} from 'lucide-vue-next'
 
 const iconMap = {
   Settings,
   User,
-  Bell,
   // Agregar más iconos aquí
 }
 
