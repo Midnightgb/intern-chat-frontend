@@ -27,7 +27,7 @@ const iconMap = {
 const props = defineProps({
   triggerText: {
     type: String,
-    required: true
+    required: false
   },
   triggerIcon: {
     type: String,
