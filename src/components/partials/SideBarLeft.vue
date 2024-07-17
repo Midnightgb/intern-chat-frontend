@@ -1,8 +1,6 @@
-<!-- src/components/partials/SideBarLeft.vue -->
-
 <template>
-  <aside class="bg-background border-r flex flex-col items-center gap-2 p-4 w-16 sm:w-64">
-    <div class="flex flex-col items-center gap-2 w-full">
+  <aside class="bg-background border-r border-gray-300 flex flex-col items-center gap-2 p-4 w-16 sm:w-64 h-screen">
+    <div class="flex flex-col items-center gap-2 w-full flex-grow">
       <a class="bg-primary rounded-lg p-2 text-primary-foreground w-full" href="#">
         <div class="flex items-center justify-center">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -12,10 +10,10 @@
           </svg>
         </div>
       </a>
-      <div class="flex flex-col items-center gap-2 w-full">
+      <div class="flex flex-col items-center gap-2 w-full flex-grow">
         <template v-if="loading">
-          <div class="flex items-center justify-center w-full">
-            <span>Loading...</span>
+          <div class="flex items-center justify-center w-full h-full">
+            <fwb-spinner color="gray" size="10" />
           </div>
         </template>
         <template v-else-if="error">
@@ -45,8 +43,7 @@
 </template>
 
 <script setup>
+import { FwbSpinner } from 'flowbite-vue';
 import { useFetchChannels } from '@/composables/channels/getChannels';
 const { channels, loading, error } = useFetchChannels();
 </script>
-
-
