@@ -40,7 +40,6 @@ export default function useLogin() {
         return true
       } catch (error) {
         console.error('Login failed', error.response?.data || error.message)
-        alert('Login failed: ' + (error.response?.data?.message || 'Unknown error'))
         return false
       }
     } else {
