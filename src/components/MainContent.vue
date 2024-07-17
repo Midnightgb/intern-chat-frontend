@@ -29,6 +29,7 @@
       <div class="flex-1 bg-muted rounded-lg p-4 overflow-auto">
         <UserList />
       </div>
+      <DropDown />
       <MessageInput />
     </div>
   </main>
@@ -37,4 +38,5 @@
 <script setup>
 import UserList from '@/components/partials/UserList.vue';
 import MessageInput from '@/components/partials/MessageInput.vue';
+import DropDown from './layout/DropDown.vue';
 </script>
