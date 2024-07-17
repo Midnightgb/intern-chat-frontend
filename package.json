@@ -15,6 +15,7 @@
     "@vuelidate/validators": "2.0.4",
     "axios": "1.7.2",
     "flowbite": "2.3.0",
+    "flowbite-vue": "0.1.5",
     "lucide-vue-next": "0.408.0",
     "pinia": "2.1.7",
     "sweetalert2": "11.4.8",

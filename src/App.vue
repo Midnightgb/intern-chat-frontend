@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-screen">
     <template v-if="showAuthContent">
-      <div class="flex bg-gray-100 text-black">
+      <div class="flex bg-gray-100 ">
         <SidebarLeft />
         <SideBarRight />
         <MainContent>
