@@ -26,13 +26,30 @@
             <span class="ml-2 text-sm font-medium hidden sm:inline">Settings</span>
           </div>
         </a> -->
-        <ToolTip triggerText="Configuraciones" triggerIcon="Settings" tooltipContent="Ajutes de usuario" />
+        <ToolTip 
+        triggerText="Configuraciones" 
+        triggerIcon="Settings" 
+        tooltipContent="Ajustes de usuario" />
       </div>
+    </div>
+    <div>
+      <fwb-button color="red" class="w-full" outline @click="handleLogout">Cerrar Sesion</fwb-button>
     </div>
   </aside>
 </template>
 
 <script setup>
 import ToolTip from '../layout/ToolTip.vue';
+import { FwbButton } from 'flowbite-vue'
+import { useAuth } from '@/composables/useAuth'
+import { useAuthHandlers } from '@/handlers'
 
+const { logout: authLogout } = useAuth()
+const { handleLogout: handlersLogout } = useAuthHandlers()
+
+
+const handleLogout = () => {
+  authLogout()
+  handlersLogout()
+} 
 </script>

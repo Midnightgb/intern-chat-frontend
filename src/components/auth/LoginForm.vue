@@ -26,24 +26,34 @@
       <p v-if="v$.password.$error" class="mt-2 text-sm text-red-600">{{ v$.password.$errors[0].$message }}</p>
     </div>
     <div>
-      <button type="submit" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-        Sign in
-      </button>
+      <fwb-button type="submit" :disabled="loading" :loading="loading" @click="loading = !loading" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Iniciar Sesión</fwb-button>
     </div>
   </form>
 </template>
 <script setup>
+import { ref } from 'vue'
+import { FwbButton } from 'flowbite-vue'
 import useLogin from '@/composables/useLogin'
+import { watchEffect } from 'vue';
 
 const emit = defineEmits(['login-success'])
 
+const loading = ref(false)
 const { state, v$, handleSubmit: originalHandleSubmit } = useLogin()
+
+watchEffect(() => {
+  if (loading.value) {
+    handleSubmit()
+  }
+})
 
 const handleSubmit = async () => {
   const loginSuccessful = await originalHandleSubmit()
   if (loginSuccessful) {
     
     emit('login-success')
+  }else{
+    loading.value = false
   }
 }
 </script>
