@@ -1,6 +1,6 @@
 <template>
-  <aside class="bg-background border-l flex flex-col h-full items-center gap-2 p-4 w-16 sm:w-64">
-    <div class="flex flex-col items-center gap-2 w-full flex-grow">
+  <aside class="bg-background border-r border-gray-300 flex flex-col h-screen items-center gap-2 p-4 w-16 sm:w-64">
+    <div class="flex flex-col items-center gap-2 w-full flex-grow overflow-y-auto">
       <div class="flex flex-col items-center gap-2 w-full">
         <a class="bg-muted rounded-lg p-2 text-muted-foreground hover:bg-accent hover:text-accent-foreground w-full" href="#">
           <div class="flex items-center justify-center">
@@ -15,7 +15,7 @@
     </div>
     
     <!-- Bloque de configuraciones de usuario -->
-    <div class="mt-auto w-full">
+    <div class="mt-auto w-full flex-shrink-0">
       <div class="flex items-center gap-2 w-full mb-2">
         <span class="relative flex shrink-0 overflow-hidden rounded-full w-8 h-8">
           <img class="aspect-square h-full w-full" alt="User Avatar" src="/images/placeholder-user.png" />
