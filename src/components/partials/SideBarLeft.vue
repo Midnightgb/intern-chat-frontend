@@ -1,3 +1,4 @@
+//src/components/partials/SideBarLeft.vue
 <template>
   <aside class="bg-background border-r flex flex-col items-center gap-2 p-4 w-16 sm:w-64">
     <div class="flex flex-col items-center gap-2 w-full">
@@ -41,17 +42,25 @@
     </div>
   </aside>
 </template>
-
 <script setup>
 import { useChannelStore } from '@/stores/channels/channelStore';
 import { storeToRefs } from 'pinia';
-import { onMounted } from 'vue';
+import { onMounted, onUnmounted } from 'vue';
 
 const channelStore = useChannelStore();
 
 onMounted(() => {
-  channelStore.fetchChannelsIfNeeded(); 
-});       
+  channelStore.initializeStore();
+  // Configurar una actualización periódica
+  const intervalId = setInterval(() => {
+    channelStore.fetchChannelsIfNeeded();
+  }, 60000); // Verificar cada minuto
+
+  // Limpiar el intervalo cuando el componente se desmonta
+  onUnmounted(() => {
+    clearInterval(intervalId);
+  });
+});
 
 const { channels, loading, error } = storeToRefs(channelStore);
 </script>
