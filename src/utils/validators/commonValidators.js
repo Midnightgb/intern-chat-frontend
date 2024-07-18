@@ -22,7 +22,6 @@ const i18n = {
   }
 }
 
-console.log(messages.es);
 const withI18nMessage = createI18nMessage({ t: i18n.t })
 
 const requiredEs = withI18nMessage(required)
