@@ -7,15 +7,16 @@ export const useChannelStore = defineStore('channel', {
     channels: [],
     loading: true,
     error: null,
-    initialized: false, // Flag para saber si los canales ya han sido cargados
+    initialized: false,   
   }),
-  actions: {
+  actions: { 
     async fetchChannelsIfNeeded() {
       if (!this.initialized) {
         try {
+          console.log('Fetching channels');
           const response = await getChannels();
           this.channels = response.data;
-          this.initialized = true; // Marcamos que los canales han sido cargados
+          this.initialized = true; 
         } catch (err) {
           if (err.response && err.response.status === 403) {
             this.error = 'Acceso denegado. Verifica tus credenciales.';
@@ -26,6 +27,9 @@ export const useChannelStore = defineStore('channel', {
         } finally {
           this.loading = false;
         }
+      } else {
+        console.log('Channels already fetched');
+        this.loading = false;
       }
     },
   },

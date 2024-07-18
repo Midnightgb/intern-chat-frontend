@@ -1,4 +1,3 @@
-<!-- src/components/partials/SideBarLeft.vue -->
 <template>
   <aside class="bg-background border-r flex flex-col items-center gap-2 p-4 w-16 sm:w-64">
     <div class="flex flex-col items-center gap-2 w-full">
@@ -51,10 +50,8 @@ import { onMounted } from 'vue';
 const channelStore = useChannelStore();
 
 onMounted(() => {
-  if (!channelStore.initialized) {
-    channelStore.fetchChannels();
-  }
-});
+  channelStore.fetchChannelsIfNeeded(); 
+});       
 
 const { channels, loading, error } = storeToRefs(channelStore);
 </script>
