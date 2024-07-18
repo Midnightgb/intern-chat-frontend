@@ -1,7 +1,7 @@
 // src/handlers/auth/handleSubmit.js
 import { reactive } from 'vue'
 import { useRouter } from 'vue-router'
-import { loginValidators } from '@/utils/validators';
+import { authValidators } from '@/utils/validators';
 import { useVuelidate } from '@vuelidate/core'
 import ToastNotification from '@/components/layout/ToastNotification.vue';
 import { login, getChannels } from '@/services/api'
@@ -15,7 +15,7 @@ export default function useHandleSubmit () {
       password: ''
     })
 
-    const v$ = useVuelidate(loginValidators, state)
+    const v$ = useVuelidate(authValidators, state)
 
     const handleSubmit = async () => {
         const isFormCorrect = await v$.value.$validate()

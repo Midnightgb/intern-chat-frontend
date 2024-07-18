@@ -16,19 +16,18 @@
 import { FwbButton, FwbTooltip } from 'flowbite-vue'
 import { computed, defineAsyncComponent } from 'vue'
 
-import { Settings, User, Bell } from 'lucide-vue-next'
+import { Settings, User} from 'lucide-vue-next'
 
 const iconMap = {
   Settings,
   User,
-  Bell,
   // Agregar más iconos aquí
 }
 
 const props = defineProps({
   triggerText: {
     type: String,
-    required: true
+    required: false
   },
   triggerIcon: {
     type: String,
@@ -46,7 +45,7 @@ const iconComponent = computed(() => {
   }
   // Si el icono no está en el mapa, intenta cargarlo dinámicamente
   if (props.triggerIcon) {
-    return defineAsyncComponent(() => import(`lucide-vue-next/dist/esm/icons/${props.triggerIcon.toLowerCase()}.js`))
+    return defineAsyncComponent(() => import(`../../../node_modules/lucide-vue-next/dist/esm/icons/${props.triggerIcon.toLowerCase()}.js`))
   }
   return null
 })

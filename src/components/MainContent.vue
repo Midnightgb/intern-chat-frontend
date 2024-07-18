@@ -1,5 +1,5 @@
 <template>
-  <main class="flex-1 bg-background p-6">
+  <main class="flex-1 border-r border-t border-gray-300 mt-2 rounded-tr-xl bg-background p-6">
     <div class="flex flex-col h-full">
       <div class="flex items-center justify-between mb-4">
         <div class="flex items-center gap-2">

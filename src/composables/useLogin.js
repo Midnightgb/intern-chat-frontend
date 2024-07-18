@@ -1,6 +1,7 @@
+//src/composables/useLogin.js
 import { reactive } from 'vue'
 import { useVuelidate } from '@vuelidate/core'
-import { loginValidators } from '@/utils/validators'
+import { authValidators } from '@/utils/validators'
 import { login as apiLogin } from '@/services/api'
 import { useAuthStore } from '@/stores/auth'
 
@@ -12,7 +13,7 @@ export default function useLogin() {
     password: ''
   })
 
-  const v$ = useVuelidate(loginValidators, state)
+  const v$ = useVuelidate(authValidators, state)
 
   const handleSubmit = async () => {
     const isFormCorrect = await v$.value.$validate()
