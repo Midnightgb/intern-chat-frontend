@@ -16,8 +16,10 @@
     "axios": "1.7.2",
     "flowbite": "2.3.0",
     "flowbite-vue": "0.1.5",
+    "jwt-decode": "4.0.0",
     "lucide-vue-next": "0.408.0",
     "pinia": "2.1.7",
+    "pinia-plugin-persistedstate": "3.2.1",
     "sweetalert2": "11.4.8",
     "vue": "3.4.21",
     "vue-router": "4.3.0"
