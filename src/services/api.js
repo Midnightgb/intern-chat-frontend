@@ -17,6 +17,20 @@ const apiClient = axios.create({
   }
 });
 
+// Interceptor para agregar el token a cada solicitud
+apiClient.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      config.headers['Authorization'] = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
 // Funciones de API
 export const login = (credentials) => {
   return publicApi.post(API_ENDPOINTS.LOGIN, credentials);
