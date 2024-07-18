@@ -20,7 +20,9 @@ const apiClient = axios.create({
 // Interceptor para agregar el token a cada solicitud
 apiClient.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('token');
+    const cookie = document.cookie.split(';').find(cookie => cookie.trim().startsWith('session='));
+    const token = cookie ? cookie.split('=')[1] : null;
+    console.log('Token:', token);
     if (token) {
       config.headers['Authorization'] = `Bearer ${token}`;
     }

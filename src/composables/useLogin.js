@@ -1,4 +1,4 @@
-//src/composables/useLogin.js
+// src/composables/useLogin.js
 import { reactive } from 'vue'
 import { useVuelidate } from '@vuelidate/core'
 import { authValidators } from '@/utils/validators'
@@ -26,17 +26,8 @@ export default function useLogin() {
         
         console.log('Login successful', response.data)
         
-        // Almacena el token en localStorage
-        localStorage.setItem('token', response.data.token)
-        
-        // Actualiza el store de autenticación
-        authStore.login({
-          name: response.data.user.full_name,
-          networkUser: response.data.user.network_user,
-          profilePic: response.data.user.photo_url,
-          role: response.data.role,
-          token: response.data.token // Asegúrate de pasar el token aquí
-        })
+        // Actualiza el store de autenticación con los datos del usuario y el token
+        authStore.login(response.data.user, response.data.token)
         
         return true
       } catch (error) {
