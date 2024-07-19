@@ -33,18 +33,26 @@ export const useAuthStore = defineStore('auth', {
     },
     async logout() {
       try {
-        // Intenta hacer logout en el servidor
-        await apiLogout()
-      } catch (error) {
-        console.error('Error durante el logout del servidor:', error)
-        // Continuamos con el logout local incluso si falla el logout del servidor
-      } finally {
-        this.$reset()
-        this.clearSessionCookie()
-        localStorage.clear()
+        console.log('Logout en proceso...');
+        // Guardar el token actual antes de hacer la solicitud de logout
+        const currentToken = this.token;
         
-        const channelStore = useChannelStore()
-        channelStore.$reset()
+        // Realizar el logout en el servidor
+        await apiLogout(currentToken);
+        
+        console.log('Logout exitoso');
+      } catch (error) {
+        console.error('Error durante el logout del servidor:', error);
+        throw error; // Propagar el error para manejarlo en el componente
+      } finally {
+        // Limpiar el estado local después de intentar el logout en el servidor
+        this.clearSessionCookie();
+        this.$reset();
+        
+        const channelStore = useChannelStore();
+        channelStore.$reset();
+
+        localStorage.clear();
       }
     },
     checkAuth() {
