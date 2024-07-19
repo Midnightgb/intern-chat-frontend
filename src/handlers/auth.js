@@ -10,8 +10,8 @@ export const useAuthHandlers = () => {
     router.push({ name: 'Panel' })
   }
 
-  const handleLogout = () => {
-    authStore.logout()
+  const handleLogout = async () => {
+    await authStore.logout()
     router.push({ name: 'login' })
   }
 

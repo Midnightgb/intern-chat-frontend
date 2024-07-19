@@ -2,6 +2,8 @@
 import { defineStore } from 'pinia'
 import { jwtDecode } from 'jwt-decode'
 import { useChannelStore } from './channels/channelStore'
+import { logout as apiLogout } from '@/services/api'
+
 export const useAuthStore = defineStore('auth', {
   state: () => ({
     isAuthenticated: false,
@@ -20,33 +22,38 @@ export const useAuthStore = defineStore('auth', {
       this.token = token
       this.setSessionCookie(token)
       
-      // Opcionalmente, puedes verificar el token aquí
       try {
         const decodedToken = jwtDecode(token)
-        // Podrías usar decodedToken para verificar la expiración, por ejemplo
+        // usar decodedToken para verificar la expiración, por ejemplo
         console.log('Token decoded:', decodedToken)
       } catch (error) {
         console.error('Error decoding token:', error)
         // Manejar el error según sea necesario
       }
     },
-    logout() {
-      this.$reset()
-      this.clearSessionCookie()
-
-      localStorage.clear()
-
-      const channelStore = useChannelStore()
-      channelStore.$reset()
+    async logout() {
+      try {
+        // Intenta hacer logout en el servidor
+        await apiLogout()
+      } catch (error) {
+        console.error('Error durante el logout del servidor:', error)
+        // Continuamos con el logout local incluso si falla el logout del servidor
+      } finally {
+        this.$reset()
+        this.clearSessionCookie()
+        localStorage.clear()
+        
+        const channelStore = useChannelStore()
+        channelStore.$reset()
+      }
     },
     checkAuth() {
       const token = this.getSessionCookie()
       if (token) {
-        // Aquí deberías verificar el token con el backend
+        // Aquí verificar el token con el backend
         // Por ahora, solo estableceremos isAuthenticated a true
         this.isAuthenticated = true
         this.token = token
-        // Idealmente, también deberías obtener la información del usuario del backend
       } else {
         this.logout()
       }
@@ -69,7 +76,7 @@ export const useAuthStore = defineStore('auth', {
       {
         key: 'auth_store',
         storage: localStorage,
-        paths: ['isAuthenticated', 'user'] // No almacenamos el token por seguridad
+        paths: ['isAuthenticated', 'user']
       }
     ]
   }

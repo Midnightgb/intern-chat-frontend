@@ -13,7 +13,7 @@ const apiClient = axios.create({
   baseURL: API_ENDPOINTS.BASE_URL,
   headers: {
     'Content-Type': 'application/json',
-    'Authorization': `Bearer ${localStorage.getItem('token')}`
+    'Authorization': `Bearer`
   }
 });
 
@@ -39,7 +39,7 @@ export const login = (credentials) => {
 };
 
 export const logout = () => {
-  return apiClient.post(API_ENDPOINTS.LOGOUT);
+  return apiClient.get(API_ENDPOINTS.LOGOUT);
 };
 
 export const getChannels = () => {
