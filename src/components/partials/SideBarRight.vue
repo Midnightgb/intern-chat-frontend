@@ -1,3 +1,4 @@
+//src/components/partials/SideBarRight.vue
 <template>
   <aside class="bg-background border-r border-gray-300 flex flex-col h-screen items-center gap-2 p-4 w-16 sm:w-64">
     <div class="flex flex-col items-center gap-2 w-full flex-grow overflow-y-auto">
@@ -11,7 +12,7 @@
           </div>
         </a>
       </div>
-      <!-- Aquí puedes agregar más elementos de la barra lateral si es necesario -->
+      <!-- Aquí agregar los mensajes directos -->
     </div>
     
     <!-- Bloque de configuraciones de usuario -->
@@ -20,7 +21,7 @@
         <span class="relative flex shrink-0 overflow-hidden rounded-full w-8 h-8">
           <img class="aspect-square h-full w-full" alt="User Avatar" src="/images/placeholder-user.png" />
         </span>
-        <div class="text-sm font-medium hidden sm:inline">John Doe</div>
+        <div class="text-sm font-medium hidden sm:inline">{{user.networkUser}}</div>
         <ToolTip 
         triggerIcon="Settings" 
         tooltipContent="Ajustes de usuario" />
@@ -35,14 +36,12 @@
 <script setup>
 import ToolTip from '../layout/ToolTip.vue';
 import { FwbButton } from 'flowbite-vue'
-import { useAuth } from '@/composables/useAuth'
-import { useAuthHandlers } from '@/handlers'
+import { useAuthStore } from '@/stores/auth'
+import { storeToRefs } from 'pinia'
+import useLogout from '@/composables/useLogout'
 
-const { logout: authLogout } = useAuth()
-const { handleLogout: handlersLogout } = useAuthHandlers()
+const authStore = useAuthStore()
+const { user } = storeToRefs(authStore)
+const { handleLogout } = useLogout()
 
-const handleLogout = () => {
-  authLogout()
-  handlersLogout()
-} 
 </script>
