@@ -36,7 +36,20 @@
 </template>
 
 <script setup>
+import { watch } from 'vue';
 import UserList from '@/components/partials/UserList.vue';
 import MessageInput from '@/components/partials/MessageInput.vue';
 import DropDown from './layout/DropDown.vue';
+import { useCurrentChannelStore } from '@/stores/channels/currentChannelStore';
+import { storeToRefs } from 'pinia';
+
+const currentChannelStore = useCurrentChannelStore();
+const { currentChannelId } = storeToRefs(currentChannelStore);
+
+watch(currentChannelId, (newId) => {
+  console.log('Current channel ID changed to:', newId);
+}, { immediate: true });
+
 </script>
+
+ 
