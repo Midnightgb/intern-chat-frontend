@@ -5,11 +5,14 @@
 
 html, body {
   height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
 }
 
 #app {
-  max-width: 1280px;
-  margin: 0 auto;
+  width: 100%;
+  max-width: none;
   font-weight: normal;
   display: flex;
   flex-direction: column;
@@ -19,6 +22,6 @@ html, body {
 
 @layer base {
   body {
-    @apply bg-gray-100 min-h-screen;
+    @apply bg-gray-100 min-h-screen w-full;
   }
 }
