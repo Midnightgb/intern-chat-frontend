@@ -1,6 +1,7 @@
 // src/components/auth/LoginForm.vue
 <template>
-  <div class="bg-gradient-to-r from-purple-900 via-purple-800 to-purple-600 text-gray-800">
+  <!-- <div class="bg-gradient-to-r from-purple-900 via-purple-800 to-purple-600 text-gray-800"> -->
+  <div class="bg-gradient-to-r from-blue-900 via-blue-700 to-blue-500 text-white">
     <div class="min-h-screen flex fle-col items-center justify-center lg:p-6 p-4">
       <div class="grid md:grid-cols-2 items-center gap-10 max-w-6xl w-full">
         <div>
@@ -22,7 +23,7 @@
 
         <form
           @submit.prevent="handleSubmit"
-          class="bg-white rounded-xl px-6 py-8 space-y-6 max-w-md md:ml-auto w-full"
+          class="bg-white rounded-xl px-6 py-8 space-y-6 max-w-md md:ml-auto w-full text-black"
         >
           <h3 class="text-3xl font-extrabold mb-12">Inicio de sesión</h3>
           <div>
