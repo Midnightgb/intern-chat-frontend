@@ -20,7 +20,10 @@
           @submit.prevent="handleSubmit"
           class="bg-white rounded-xl px-6 py-8 space-y-6 max-w-md md:ml-auto w-full text-black"
         >
-          <h3 class="text-3xl font-extrabold mb-12 text-blue-900">Inicio de sesión</h3>
+          <h3 class="text-3xl font-extrabold mb-5 text-blue-900">Inicio de sesión</h3>
+          <p v-if="error" >
+            <AlertMessage :message="error" type="danger" />
+          </p>
           <div>
             <input
               id="network_user"
@@ -69,13 +72,14 @@
 </template>
 <script setup>
 import { ref } from 'vue'
-import { FwbButton } from 'flowbite-vue'
+import { FwbButton} from 'flowbite-vue'
 import useLogin from '@/composables/useLogin'
+import AlertMessage from '@/components/common/StatusAlert.vue'
 
 const emit = defineEmits(['login-success'])
 
 const loading = ref(false)
-const { state, v$, handleSubmit: originalHandleSubmit } = useLogin()
+const { state, v$, handleSubmit: originalHandleSubmit, error } = useLogin()
 
 const handleSubmit = async () => {
   if (loading.value) return
