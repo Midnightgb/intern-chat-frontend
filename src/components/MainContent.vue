@@ -38,5 +38,5 @@
 <script setup>
 import UserList from '@/components/partials/UserList.vue';
 import MessageInput from '@/components/partials/MessageInput.vue';
-import DropDown from './layout/DropDown.vue';
+import DropDown from './common/DropDown.vue';
 </script>
