@@ -1,5 +1,4 @@
-// src/composables/useLogin.js
-import { reactive } from 'vue'
+import { reactive, ref } from 'vue'
 import { useVuelidate } from '@vuelidate/core'
 import { authValidators } from '@/utils/validators'
 import { login as apiLogin } from '@/services/api'
@@ -13,9 +12,12 @@ export default function useLogin() {
     password: ''
   })
 
+  const error = ref('')
+
   const v$ = useVuelidate(authValidators, state)
 
   const handleSubmit = async () => {
+    error.value = ''
     const isFormCorrect = await v$.value.$validate()
     if (isFormCorrect) {
       try {
@@ -30,8 +32,9 @@ export default function useLogin() {
         authStore.login(response.data.user, response.data.token)
         
         return true
-      } catch (error) {
-        console.error('Login failed', error.response?.data || error.message)
+      } catch (err) {
+        console.error('Login failed', err.response?.data || err.message)
+        error.value = err.response?.data?.error || 'Error al iniciar sesión'
         return false
       }
     } else {
@@ -43,6 +46,7 @@ export default function useLogin() {
   return {
     state,
     v$,
-    handleSubmit
+    handleSubmit,
+    error
   }
 }
