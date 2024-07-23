@@ -54,10 +54,9 @@ const currentChannelStore = useCurrentChannelStore();
 
 onMounted(() => {
   channelStore.initializeStore();
-  // Configurar una actualización periódica
   const intervalId = setInterval(() => {
     channelStore.fetchChannelsIfNeeded();
-  }, 60000); // Verificar cada minuto
+  }, 60000);
 
   // Limpiar el intervalo cuando el componente se desmonta
   onUnmounted(() => {

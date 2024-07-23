@@ -24,7 +24,6 @@ apiClient.interceptors.request.use(
   (config) => {
     const cookie = document.cookie.split(';').find(cookie => cookie.trim().startsWith('session='));
     const token = cookie ? cookie.split('=')[1] : null;
-    console.log('Token:', token);
     if (token) {
       config.headers['Authorization'] = `Bearer ${token}`;
     }
@@ -46,6 +45,10 @@ export const logout = () => {
 
 export const getChannels = () => {
   return apiClient.get(API_ENDPOINTS.GET_CHANNELS);
+};
+
+export const getMessagesChannel = (channelId) => {
+  return apiClient.get(`${API_ENDPOINTS.GET_MESSAGES_CHANNEL}/${channelId}`);
 };
 
 
