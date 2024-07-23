@@ -1,29 +1,26 @@
-// src/stores/messages/messageStore.js
 import { defineStore } from 'pinia';
-import { getMessagesChannel } from '@/services/api';  
 
 export const useMessageStore = defineStore('message', {
   state: () => ({
+    messages: [],
     loading: false,
     error: null,
   }),
   actions: {
-    async fetchMessages(channelId) {
-      console.log("ESTAN ENTRADO A HACER LA PETICION");
-      this.loading = true;
-      try {
-        const response = await getMessagesChannel(channelId);
-        console.log('Messages xxxxx:', response);
-      } catch (err) {
-        if (err.response && err.response.status === 403) {
-          this.error = 'Acceso denegado. Verifica tus credenciales.';
-        } else {
-          this.error = 'Ocurrió un error al obtener los mensajes.';
-        }
-        console.error('Error fetching messages:', err);
-      } finally {
-        this.loading = false;
+    setMessages(messages) {
+      this.messages = messages;
+    },
+    addMessage(message) {
+      this.messages.push(message);
+    },
+    updateMessage(updatedMessage) {
+      const index = this.messages.findIndex(m => m.id_message === updatedMessage.id_message);
+      if (index !== -1) {
+        this.messages[index] = updatedMessage;
       }
+    },
+    deleteMessage(messageId) {
+      this.messages = this.messages.filter(m => m.id_message !== messageId);
     },
   },
 });

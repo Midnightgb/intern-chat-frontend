@@ -78,6 +78,12 @@
         <div class="flex-1 bg-muted rounded-lg p-4 overflow-auto">
           <UserList />
         </div>
+        <ul>
+          <li v-for="message in messages" :key="message.id_message">
+            {{ message.users.full_name }}: {{ message.content }}
+            ({{ new Date(message.created_at).toLocaleString() }})
+          </li>
+        </ul>
         <DropDown />
         <MessageInput />
       </div>
@@ -91,15 +97,28 @@ import { FwbSpinner } from 'flowbite-vue';
 import UserList from '@/components/partials/UserList.vue';
 import MessageInput from '@/components/partials/MessageInput.vue';
 import DropDown from './layout/DropDown.vue';
+import { onMounted, onUnmounted, watch } from 'vue';
 import { useCurrentChannelStore } from '@/stores/channels/currentChannelStore';
-import { useMessagesWatcher } from '@/composables/messages/useMessagesWatcher';
+import { useMessageStore } from '@/stores/messages/messageStore';
+import { socketService } from '@/services/socketService';
 
-// Obtener la referencia reactiva del store
 const currentChannelStore = useCurrentChannelStore();
+const messageStore = useMessageStore();
 const { currentChannelId } = storeToRefs(currentChannelStore);
+const { messages } = storeToRefs(messageStore);
 
-// Usar el composable para gestionar el estado de carga
-const { isLoading, messages } = useMessagesWatcher(currentChannelId);
+onMounted(() => {
+  socketService.connect();
+});
 
-console.log(messages);
+onUnmounted(() => {
+  socketService.disconnect();
+});
+
+watch(currentChannelId, (newChannelId) => {
+  if (newChannelId) {
+    socketService.joinChannel(newChannelId);
+  }
+});
+
 </script>

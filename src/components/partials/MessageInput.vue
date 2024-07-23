@@ -19,6 +19,7 @@
 </template>
 
 <script setup>
+//import { socketService } from '@/services/socketService';
 import { ref } from 'vue';
 
 
@@ -30,6 +31,7 @@ const sendMessage = () => {
   }
 
   console.log(message.value);
-  message.value = '';
+  //socketService.sendMessage(currentChannelId.value, messageContent.value);
+  message.value = ''; // Limpiar el input después de enviar
 };
 </script>
