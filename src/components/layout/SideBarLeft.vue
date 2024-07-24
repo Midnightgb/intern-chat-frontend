@@ -72,8 +72,8 @@ const onPrimaryButtonClick = () => {
 };
 
 const onChannelClick = (channel) => {
-  console.log('Channel clicked:', channel.id_channel);
+  console.log('Channel clicked:', channel.id_channel, channel.name);
   currentChannelStore.setCurrentChannelId(channel.id_channel);
+  currentChannelStore.setCurrentChannelName(channel.name);
 };
 </script>
- 
