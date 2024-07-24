@@ -1,3 +1,4 @@
+//src/components/chat/MessageList.vue
 <template>
   <div class="flex flex-col gap-4">
     <div v-for="message in messages" :key="message.id_message" class="flex items-start gap-2">

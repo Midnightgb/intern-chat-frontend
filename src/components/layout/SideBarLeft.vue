@@ -1,3 +1,4 @@
+//src/components/layout/SideBarLeft.vue
 <template>
   <aside class="bg-background border-r border-gray-300 flex flex-col items-center gap-2 p-4 w-16 sm:w-64 h-screen">
     <div class="flex flex-col items-center gap-2 w-full flex-grow">

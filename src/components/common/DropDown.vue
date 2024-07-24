@@ -1,3 +1,4 @@
+//src/components/common/DropDown.vue
 <template>
   <fwb-dropdown text="Click me" placement="top">
     <fwb-list-group>

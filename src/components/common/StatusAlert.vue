@@ -1,3 +1,4 @@
+//src/components/common/StatusAlert.vue
 <template>
   <div v-if="message">
     <fwb-alert :border="true" :type="type" class="font-semibold">

@@ -1,3 +1,4 @@
+//src/components/common/ToastNotification.vue
 <script>
 import Swal from 'sweetalert2'
 import 'sweetalert2/src/sweetalert2.scss'

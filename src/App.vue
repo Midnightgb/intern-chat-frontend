@@ -23,9 +23,9 @@ import { onMounted, computed } from 'vue'
 import { RouterView, useRoute } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { initFlowbite } from 'flowbite'
-import SidebarLeft from './components/layout/SideBarLeft.vue'
-import SideBarRight from './components/layout/SideBarRight.vue'
-import MainContent from './components/layout/MainContent.vue'
+import SidebarLeft from '@/components/layout/SideBarLeft.vue'
+import SideBarRight from '@/components/layout/SideBarRight.vue'
+import MainContent from '@/components/layout/MainContent.vue'
 
 onMounted(() => {
   initFlowbite()
