@@ -29,7 +29,7 @@ export default function useLogin() {
         console.log('Login successful', response.data)
         // Actualiza el store de autenticación con los datos del usuario y el token
         authStore.login(response.data.user, response.data.token)
-        
+
         return true
       } catch (err) {
         console.error('Login failed', err.response?.data || err.message)

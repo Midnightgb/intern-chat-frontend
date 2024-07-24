@@ -1,8 +1,5 @@
 <template>
-  <div class="flex justify-center items-center h-screen">
-  </div>
+  <div class="flex justify-center items-center h-screen"></div>
 </template>
 
-<script setup>
-
-</script>
+<script setup></script>

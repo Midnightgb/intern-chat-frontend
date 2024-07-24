@@ -18,16 +18,16 @@ const Toast = Swal.mixin({
 export default {
   name: 'ToastNotification',
   methods: {
-  showToast(icon, message) {
-    Toast.fire({
-      icon: icon,
-      title: message
-    }).then(() => {
-      
-    }).catch((error) => {
-      console.error('Error al mostrar el toast:', error);
-    });
+    showToast(icon, message) {
+      Toast.fire({
+        icon: icon,
+        title: message
+      })
+        .then(() => {})
+        .catch((error) => {
+          console.error('Error al mostrar el toast:', error)
+        })
+    }
   }
-}
 }
 </script>

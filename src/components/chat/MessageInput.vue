@@ -2,7 +2,11 @@
 <template>
   <div class="mt-4 flex items-center gap-2">
     <span class="relative flex shrink-0 overflow-hidden rounded-full w-8 h-8">
-      <img class="aspect-square h-full w-full" alt="User Avatar" src="/images/placeholder-user.png" />
+      <img
+        class="aspect-square h-full w-full"
+        alt="User Avatar"
+        src="/images/placeholder-user.png"
+      />
     </span>
     <input
       v-model="message"
@@ -10,8 +14,22 @@
       placeholder="Type your message..."
       type="text"
     />
-    <button @click="sendMessage" class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-10 w-10">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5">
+    <button
+      @click="sendMessage"
+      class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-10 w-10"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="h-5 w-5"
+      >
         <circle cx="11" cy="11" r="8"></circle>
         <path d="m21 21-4.3-4.3"></path>
       </svg>
@@ -20,24 +38,24 @@
 </template>
 
 <script setup>
-import { socketService } from '@/services/socketService';
-import { ref } from 'vue';
-import { storeToRefs } from 'pinia';
-import { useCurrentChannelStore } from '@/stores/channels/currentChannelStore';
+import { ref } from 'vue'
+import { storeToRefs } from 'pinia'
+// Services
+import { socketService } from '@/services/socketService'
+// Stores
+import { useCurrentChannelStore } from '@/stores/channels/currentChannelStore'
 
-const currentChannelStore = useCurrentChannelStore();
-const { currentChannelId } = storeToRefs(currentChannelStore);
+const currentChannelStore = useCurrentChannelStore()
+const { currentChannelId } = storeToRefs(currentChannelStore)
 
-const message = ref('');
+const message = ref('')
 
 const sendMessage = () => {
   if (message.value.trim() === '') {
-    return;
+    return
   }
 
-  
-  
-  socketService.sendMessage(currentChannelId.value, message.value);
-  message.value = ''; // Limpiar el input después de enviar
-};
+  socketService.sendMessage(currentChannelId.value, message.value)
+  message.value = '' // Limpiar el input después de enviar
+}
 </script>

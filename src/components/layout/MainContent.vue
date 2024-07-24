@@ -1,6 +1,8 @@
 //src/layout/MainContent.vue
 <template>
-  <main class="flex-1 border-r border-t border-gray-300 mt-2 rounded-tr-xl bg-background p-6 flex flex-col h-[calc(100vh-4rem)]">
+  <main
+    class="flex-1 border-r border-t border-gray-300 mt-2 rounded-tr-xl bg-background p-6 flex flex-col h-[calc(100vh-4rem)]"
+  >
     <div class="flex flex-col h-full">
       <!-- Mostrar mensaje cuando el canal no esté seleccionado -->
       <div v-if="currentChannelId === null" class="flex items-center justify-center h-full">
@@ -25,35 +27,35 @@
 </template>
 
 <script setup>
-import { storeToRefs } from 'pinia';
-import { FwbSpinner } from 'flowbite-vue';
-import { onMounted, onUnmounted, watch } from 'vue';
+import { storeToRefs } from 'pinia'
+import { onMounted, onUnmounted, watch } from 'vue'
 // Services
-import { socketService } from '@/services/socketService';
+import { socketService } from '@/services/socketService'
 // Stores
-import { useCurrentChannelStore } from '@/stores/channels/currentChannelStore';
-import { useMessageStore } from '@/stores/messages/messageStore';
+import { useCurrentChannelStore } from '@/stores/channels/currentChannelStore'
+import { useMessageStore } from '@/stores/messages/messageStore'
 // Components
-import MessageInput from '@/components/chat/MessageInput.vue';
-import MessageList from '@/components/chat/MessageList.vue';
-import ServerHeader from '@/components/partials/ServerHeader.vue';
+import { FwbSpinner } from 'flowbite-vue'
+import MessageInput from '@/components/chat/MessageInput.vue'
+import MessageList from '@/components/chat/MessageList.vue'
+import ServerHeader from '@/components/partials/ServerHeader.vue'
 
-const currentChannelStore = useCurrentChannelStore();
-const messageStore = useMessageStore();
-const { currentChannelId, currentChannelName } = storeToRefs(currentChannelStore);
-const { loading: isLoading } = storeToRefs(messageStore);
+const currentChannelStore = useCurrentChannelStore()
+const messageStore = useMessageStore()
+const { currentChannelId, currentChannelName } = storeToRefs(currentChannelStore)
+const { loading: isLoading } = storeToRefs(messageStore)
 
 onMounted(() => {
-  socketService.connect();
-});
+  socketService.connect()
+})
 
 onUnmounted(() => {
-  socketService.disconnect();
-});
+  socketService.disconnect()
+})
 
 watch(currentChannelId, (newChannelId) => {
   if (newChannelId) {
-    socketService.joinChannel(newChannelId);
+    socketService.joinChannel(newChannelId)
   }
-});
+})
 </script>

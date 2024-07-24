@@ -29,7 +29,7 @@ import MainContent from '@/components/layout/MainContent.vue'
 
 onMounted(() => {
   initFlowbite()
-  authStore.checkAuth() 
+  authStore.checkAuth()
 })
 
 const route = useRoute()

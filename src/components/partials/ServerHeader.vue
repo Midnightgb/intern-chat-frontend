@@ -68,7 +68,7 @@
 defineProps({
   serverName: {
     type: String,
-    required: true,
-  },
-});
+    required: true
+  }
+})
 </script>

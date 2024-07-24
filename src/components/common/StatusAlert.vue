@@ -8,7 +8,7 @@
 </template>
 
 <script setup>
-import { FwbAlert } from 'flowbite-vue';
+import { FwbAlert } from 'flowbite-vue'
 
 defineProps({
   message: String,
@@ -17,6 +17,5 @@ defineProps({
     default: 'info',
     validator: (value) => ['info', 'success', 'warning', 'danger'].includes(value)
   }
-});
-
+})
 </script>

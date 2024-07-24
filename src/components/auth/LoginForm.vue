@@ -21,7 +21,7 @@
           class="bg-white rounded-xl px-6 py-8 space-y-6 max-w-md md:ml-auto w-full text-black"
         >
           <h3 class="text-3xl font-extrabold mb-5 text-blue-900">Inicio de sesión</h3>
-          <p v-if="error" >
+          <p v-if="error">
             <AlertMessage :message="error" type="danger" />
           </p>
           <div>
@@ -72,7 +72,8 @@
 </template>
 <script setup>
 import { ref } from 'vue'
-import { FwbButton} from 'flowbite-vue'
+// Components
+import { FwbButton } from 'flowbite-vue'
 import useLogin from '@/composables/useLogin'
 import AlertMessage from '@/components/common/StatusAlert.vue'
 

@@ -21,11 +21,11 @@ export const useAuthStore = defineStore('auth', {
       }
       this.token = token
       this.setSessionCookie(token)
-      
+
       try {
         const decodedToken = jwtDecode(token)
         // usar decodedToken para verificar la expiración, por ejemplo
-        console.log('Token decoded:', decodedToken);
+        console.log('Token decoded:', decodedToken)
       } catch (error) {
         console.error('Error decoding token:', error)
         // Manejar el error según sea necesario
@@ -34,12 +34,12 @@ export const useAuthStore = defineStore('auth', {
     async logout() {
       try {
         // Realizar el logout en el servidor
-        await apiLogout(this.token);
+        await apiLogout(this.token)
       } catch (error) {
-        console.error('Error durante el logout del servidor:', error);
-        throw error; // Propagar el error para manejarlo en el componente
+        console.error('Error durante el logout del servidor:', error)
+        throw error // Propagar el error para manejarlo en el componente
       } finally {
-        cleanupSession();
+        cleanupSession()
       }
     },
     checkAuth() {
@@ -60,11 +60,12 @@ export const useAuthStore = defineStore('auth', {
     },
     getSessionCookie() {
       const cookies = document.cookie.split(';')
-      const sessionCookie = cookies.find(cookie => cookie.trim().startsWith('session='))
+      const sessionCookie = cookies.find((cookie) => cookie.trim().startsWith('session='))
       return sessionCookie ? sessionCookie.split('=')[1] : null
     },
     clearSessionCookie() {
-      document.cookie = 'session=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; secure; samesite=strict'
+      document.cookie =
+        'session=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; secure; samesite=strict'
     }
   },
   persist: {
