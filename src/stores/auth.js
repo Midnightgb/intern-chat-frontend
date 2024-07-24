@@ -2,9 +2,7 @@
 import { defineStore } from 'pinia'
 import { jwtDecode } from 'jwt-decode'
 import { logout as apiLogout } from '@/services/api'
-import { useChannelStore } from './channels/channelStore'
-import { useMessageStore } from './messages/messageStore'
-import { useCurrentChannelStore } from './channels/currentChannelStore'
+import { cleanupSession } from '@/utils/sessionCleanup'
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
@@ -36,25 +34,14 @@ export const useAuthStore = defineStore('auth', {
     async logout() {
       try {
         console.log('Logout en proceso...');
-        // Guardar el token actual antes de hacer la solicitud de logout
-        const currentToken = this.token;
-        
         // Realizar el logout en el servidor
-        await apiLogout(currentToken);
-        
+        await apiLogout(this.token);
         console.log('Logout exitoso');
       } catch (error) {
         console.error('Error durante el logout del servidor:', error);
         throw error; // Propagar el error para manejarlo en el componente
       } finally {
-        // Limpiar el estado local después de intentar el logout en el servidor
-        this.clearSessionCookie();
-        this.$reset();
-        
-        useChannelStore().$reset();
-        useMessageStore().$reset();
-        useCurrentChannelStore().$reset();
-        localStorage.clear();
+        cleanupSession();
       }
     },
     checkAuth() {
@@ -65,7 +52,9 @@ export const useAuthStore = defineStore('auth', {
         this.isAuthenticated = true
         this.token = token
       } else {
-        this.logout()
+        this.isAuthenticated = false
+        this.user = null
+        this.token = null
       }
     },
     setSessionCookie(token) {

@@ -39,7 +39,7 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   const authStore = useAuthStore();
-  authStore.checkAuth(); // Verifica la autenticación en cada navegación
+  authStore.checkAuth();
 
   if (to.meta.requiresAuth && !authStore.isAuthenticated) {
     next({ name: 'login' });
