@@ -11,7 +11,7 @@
       </div>
     </template>
     <template v-else>
-      <div class="flex items-center justify-center bg-green-100 flex-grow">
+      <div>
         <RouterView />
       </div>
     </template>

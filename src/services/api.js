@@ -9,8 +9,6 @@ const publicApi = axios.create({
   }
 });
 
-// Obtener el token de la cookie
-
 const apiClient = axios.create({
   baseURL: API_ENDPOINTS.BASE_URL,
   headers: {

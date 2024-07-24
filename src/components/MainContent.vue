@@ -96,7 +96,7 @@ import { storeToRefs } from 'pinia';
 import { FwbSpinner } from 'flowbite-vue';
 import UserList from '@/components/partials/UserList.vue';
 import MessageInput from '@/components/partials/MessageInput.vue';
-import DropDown from './layout/DropDown.vue';
+import DropDown from './common/DropDown.vue';
 import { onMounted, onUnmounted, watch } from 'vue';
 import { useCurrentChannelStore } from '@/stores/channels/currentChannelStore';
 import { useMessageStore } from '@/stores/messages/messageStore';

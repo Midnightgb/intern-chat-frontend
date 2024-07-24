@@ -34,7 +34,7 @@
 </template>
 
 <script setup>
-import ToolTip from '../layout/ToolTip.vue';
+import ToolTip from '../common/ToolTip.vue';
 import { FwbButton } from 'flowbite-vue'
 import { useAuthStore } from '@/stores/auth'
 import { storeToRefs } from 'pinia'
