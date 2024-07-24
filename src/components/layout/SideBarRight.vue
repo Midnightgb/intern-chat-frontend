@@ -3,14 +3,7 @@
   <aside class="bg-background border-r border-gray-300 flex flex-col h-screen items-center gap-2 p-4 w-16 sm:w-64">
     <div class="flex flex-col items-center gap-2 w-full flex-grow overflow-y-auto">
       <div class="flex flex-col items-center gap-2 w-full">
-        <a class="bg-muted rounded-lg p-2 text-muted-foreground hover:bg-accent hover:text-accent-foreground w-full" href="#">
-          <div class="flex items-center justify-center">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6">
-              <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"></path>
-            </svg>
-            <span class="ml-2 text-sm font-medium hidden sm:inline">Direct Messages</span>
-          </div>
-        </a>
+        <DirectMessages />
       </div>
       <!-- Aquí agregar los mensajes directos -->
     </div>
@@ -34,11 +27,13 @@
 </template>
 
 <script setup>
-import ToolTip from '../common/ToolTip.vue';
 import { FwbButton } from 'flowbite-vue'
 import { useAuthStore } from '@/stores/auth'
 import { storeToRefs } from 'pinia'
+
+import ToolTip from '@/components/common/ToolTip.vue'
 import useLogout from '@/composables/useLogout'
+import DirectMessages from '@/components/common/DirectMessages.vue'
 
 const authStore = useAuthStore()
 const { user } = storeToRefs(authStore)
