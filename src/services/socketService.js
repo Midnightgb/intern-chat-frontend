@@ -7,11 +7,14 @@ const SOCKET_URL = 'https://intern-chat-backend-production.onrender.com';
 class SocketService {
   constructor() {
     this.socket = null;
-    this.messageStore = useMessageStore();
-    this.authStore = useAuthStore();
+    this.messageStore = null;
+    this.authStore = null;
   }
 
   connect() {
+    this.messageStore = useMessageStore();
+    this.authStore = useAuthStore();
+
     this.socket = io(SOCKET_URL);
 
     this.socket.on('connect', () => {
@@ -44,7 +47,7 @@ class SocketService {
   }
 
   joinChannel(channelId) {
-    const token = this.authStore.token; // Asumiendo que tienes el token almacenado en el store de autenticación
+    const token = this.authStore.token;
     this.socket.emit('join_channel', { channelId, token });
   }
 
@@ -54,10 +57,11 @@ class SocketService {
     }
   }
 
-    // En socketService.js
+  
   sendMessage(channelId, content) {
+    console.log('sendMessage', channelId, content);
     this.socket.emit('new_message', { channelId, content, token: this.authStore.token });
   }
 }
 
-//export const socketService = new SocketService();
+export const socketService = new SocketService();

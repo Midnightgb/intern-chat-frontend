@@ -6,17 +6,19 @@
       </span>
       <div>
         <div class="font-medium">{{ user.name }}</div>
-        <div class="text-xs text-muted-foreground">{{ user.status }}</div>
+        <div class="text-xs text-muted-foreground">{{ user.message }}</div>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-const users = [
-  { name: 'John Doe', status: 'Online' },
-  { name: 'Jane Doe', status: 'Offline' },
-  { name: 'Bob Smith', status: 'Online' },
-  { name: 'Alice Johnson', status: 'Offline' },
-];
+import { ref } from 'vue';
+
+const props = defineProps({
+  users: {
+    type: Array,
+    required: true
+  }
+});
 </script>

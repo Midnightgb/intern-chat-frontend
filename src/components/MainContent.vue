@@ -117,6 +117,7 @@ onUnmounted(() => {
 
 watch(currentChannelId, (newChannelId) => {
   if (newChannelId) {
+    console.log('Joining channel:', newChannelId);
     socketService.joinChannel(newChannelId);
   }
 });

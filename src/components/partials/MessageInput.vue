@@ -19,9 +19,13 @@
 </template>
 
 <script setup>
-//import { socketService } from '@/services/socketService';
+import { socketService } from '@/services/socketService';
 import { ref } from 'vue';
+import { storeToRefs } from 'pinia';
+import { useCurrentChannelStore } from '@/stores/channels/currentChannelStore';
 
+const currentChannelStore = useCurrentChannelStore();
+const { currentChannelId } = storeToRefs(currentChannelStore);
 
 const message = ref('');
 
@@ -31,7 +35,8 @@ const sendMessage = () => {
   }
 
   console.log(message.value);
-  //socketService.sendMessage(currentChannelId.value, messageContent.value);
+  console.log(currentChannelId.value);
+  socketService.sendMessage(currentChannelId.value, message.value);
   message.value = ''; // Limpiar el input después de enviar
 };
 </script>
