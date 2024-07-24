@@ -1,8 +1,10 @@
 // src/stores/auth.js
 import { defineStore } from 'pinia'
 import { jwtDecode } from 'jwt-decode'
-import { useChannelStore } from './channels/channelStore'
 import { logout as apiLogout } from '@/services/api'
+import { useChannelStore } from './channels/channelStore'
+import { useMessageStore } from './messages/messageStore'
+import { useCurrentChannelStore } from './channels/currentChannelStore'
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
@@ -49,9 +51,9 @@ export const useAuthStore = defineStore('auth', {
         this.clearSessionCookie();
         this.$reset();
         
-        const channelStore = useChannelStore();
-        channelStore.$reset();
-
+        useChannelStore().$reset();
+        useMessageStore().$reset();
+        useCurrentChannelStore().$reset();
         localStorage.clear();
       }
     },

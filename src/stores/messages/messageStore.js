@@ -1,3 +1,4 @@
+//src/stores/messages/messageStore.js
 import { defineStore } from 'pinia';
 
 export const useMessageStore = defineStore('message', {

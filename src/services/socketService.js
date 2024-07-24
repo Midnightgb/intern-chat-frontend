@@ -1,8 +1,10 @@
+//src/services/socketService.js
 import { io } from 'socket.io-client';
 import { useMessageStore } from '@/stores/messages/messageStore';
 import { useAuthStore } from '@/stores/auth';
+import { API_ENDPOINTS } from '@/constants/apiEndpoints';
 
-const SOCKET_URL = 'https://intern-chat-backend-production.onrender.com';
+const SOCKET_URL = API_ENDPOINTS.SOCKET_URL;
 
 class SocketService {
   constructor() {
@@ -26,14 +28,17 @@ class SocketService {
     });
 
     this.socket.on('new_message_channel', (message) => {
+      //agregar consumo para enviar mensaje
       this.messageStore.addMessage(message);
     });
 
     this.socket.on('update_message_channel', (message) => {
+      //agregar consumo para actualizar mensaje
       this.messageStore.updateMessage(message);
     });
 
     this.socket.on('delete_message_channel', (message) => {
+      //agregar consumo para eliminar mensaje
       this.messageStore.deleteMessage(message.id_message);
     });
 
