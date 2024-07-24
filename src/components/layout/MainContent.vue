@@ -1,6 +1,6 @@
 //src/layout/MainContent.vue
 <template>
-  <main class="flex-1 border-r border-t border-gray-300 mt-2 rounded-tr-xl bg-background p-6">
+  <main class="flex-1 border-r border-t border-gray-300 mt-2 rounded-tr-xl bg-background p-6 flex flex-col h-[calc(100vh-4rem)]">
     <div class="flex flex-col h-full">
       <!-- Mostrar mensaje cuando el canal no esté seleccionado -->
       <div v-if="currentChannelId === null" class="flex items-center justify-center h-full">
@@ -11,14 +11,14 @@
         <fwb-spinner color="gray" size="10" />
       </div>
       <!-- Mostrar contenido del canal cuando los datos estén listos -->
-      <div v-else>
+      <div v-else class="flex flex-col h-full">
         <div class="flex items-center justify-between mb-4">
           <ServerHeader :serverName="currentChannelName" />
         </div>
-        <div class="flex-1 bg-muted rounded-lg p-4 overflow-auto">
-          <MessageList />
+        <div class="flex-1 bg-muted rounded-lg p-4 overflow-hidden flex flex-col">
+          <MessageList class="flex-1 overflow-y-auto" />
         </div>
-        <MessageInput />
+        <MessageInput class="mt-4" />
       </div>
     </div>
   </main>
