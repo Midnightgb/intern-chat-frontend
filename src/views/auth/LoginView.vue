@@ -11,7 +11,6 @@ import { useAuthHandlers } from '@/handlers/auth'
 const { handleLoginSuccess } = useAuthHandlers()
 
 const onLoginSuccess = () => {
-  console.log('Login success handled in LoginView')
   handleLoginSuccess()
 }
 </script>

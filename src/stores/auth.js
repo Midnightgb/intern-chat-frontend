@@ -25,7 +25,7 @@ export const useAuthStore = defineStore('auth', {
       try {
         const decodedToken = jwtDecode(token)
         // usar decodedToken para verificar la expiración, por ejemplo
-        console.log('Token decoded:', decodedToken)
+        console.log('Token decoded:', decodedToken);
       } catch (error) {
         console.error('Error decoding token:', error)
         // Manejar el error según sea necesario
@@ -33,10 +33,8 @@ export const useAuthStore = defineStore('auth', {
     },
     async logout() {
       try {
-        console.log('Logout en proceso...');
         // Realizar el logout en el servidor
         await apiLogout(this.token);
-        console.log('Logout exitoso');
       } catch (error) {
         console.error('Error durante el logout del servidor:', error);
         throw error; // Propagar el error para manejarlo en el componente

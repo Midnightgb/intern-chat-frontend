@@ -23,7 +23,7 @@ export default {
       icon: icon,
       title: message
     }).then(() => {
-      console.log('Toast mostrado exitosamente');
+      
     }).catch((error) => {
       console.error('Error al mostrar el toast:', error);
     });

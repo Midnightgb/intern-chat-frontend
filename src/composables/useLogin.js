@@ -26,9 +26,7 @@ export default function useLogin() {
           network_user: state.network_user,
           password: state.password
         })
-        
         console.log('Login successful', response.data)
-        
         // Actualiza el store de autenticación con los datos del usuario y el token
         authStore.login(response.data.user, response.data.token)
         

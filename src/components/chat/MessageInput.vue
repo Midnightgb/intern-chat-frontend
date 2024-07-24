@@ -35,8 +35,8 @@ const sendMessage = () => {
     return;
   }
 
-  console.log(message.value);
-  console.log(currentChannelId.value);
+  
+  
   socketService.sendMessage(currentChannelId.value, message.value);
   message.value = ''; // Limpiar el input después de enviar
 };

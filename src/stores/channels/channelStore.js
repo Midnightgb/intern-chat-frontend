@@ -29,7 +29,6 @@ export const useChannelStore = defineStore('channel', {
       this.loading = true;
       this.error = null;
       try {
-        console.log('Fetching channels');
         const response = await getChannels();
         this.channels = response.data;
         this.lastFetchTime = new Date().getTime();
