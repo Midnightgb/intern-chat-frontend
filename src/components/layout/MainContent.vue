@@ -20,6 +20,8 @@
         <div class="flex-1 bg-muted rounded-lg p-4 overflow-hidden flex flex-col">
           <MessageList class="flex-1 overflow-y-auto" />
         </div>
+        <DropDown/>
+
         <MessageInput class="mt-4" />
       </div>
     </div>
@@ -39,6 +41,7 @@ import { FwbSpinner } from 'flowbite-vue'
 import MessageInput from '@/components/chat/MessageInput.vue'
 import MessageList from '@/components/chat/MessageList.vue'
 import ServerHeader from '@/components/partials/ServerHeader.vue'
+import DropDown from '../common/DropDown.vue'
 
 const currentChannelStore = useCurrentChannelStore()
 const messageStore = useMessageStore()
