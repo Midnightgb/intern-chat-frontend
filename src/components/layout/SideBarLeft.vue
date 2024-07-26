@@ -1,7 +1,7 @@
 //src/components/layout/SideBarLeft.vue
 <template>
   <aside
-    class="bg-background border-r border-gray-300 flex flex-col items-center gap-2 p-4 w-16 sm:w-64 h-screen"
+    class="bg-background border-r border-gray-300 flex flex-col items-center gap-2 p-4 w-16 sm:w-44 h-screen"
   >
     <div class="flex flex-col items-center gap-2 w-full flex-grow">
       <button
@@ -9,21 +9,7 @@
         @click="onPrimaryButtonClick"
       >
         <div class="flex items-center justify-center">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            class="h-6 w-6"
-          >
-            <circle cx="12" cy="12" r="10"></circle>
-            <circle cx="12" cy="12" r="2"></circle>
-          </svg>
+          <CircleDot />
         </div>
       </button>
       <div class="flex flex-col items-center gap-2 w-full flex-grow">
@@ -65,7 +51,7 @@ import { useChannelStore } from '@/stores/channels/channelStore'
 import { useCurrentChannelStore } from '@/stores/channels/currentChannelStore'
 // Components
 import { FwbSpinner } from 'flowbite-vue'
-import { Server } from 'lucide-vue-next';
+import { Server, CircleDot } from 'lucide-vue-next';
 
 const channelStore = useChannelStore()
 const currentChannelStore = useCurrentChannelStore()
