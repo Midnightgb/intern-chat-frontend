@@ -1,4 +1,4 @@
-//src/services/socketService.js
+// src/services/socketService.js
 import { io } from 'socket.io-client'
 import { useMessageStore } from '@/stores/messages/messageStore'
 import { useAuthStore } from '@/stores/auth'
@@ -23,27 +23,28 @@ class SocketService {
       console.log('Connected to WebSocket server')
     })
 
+    // Recepción de mensajes del canal
     this.socket.on('messages_channel', (data) => {
       this.messageStore.setMessages(data)
+      this.messageStore.setLoading(false) 
     })
 
     this.socket.on('new_message_channel', (message) => {
-      //agregar consumo para enviar mensaje
       this.messageStore.addMessage(message)
     })
 
     this.socket.on('update_message_channel', (message) => {
-      //agregar consumo para actualizar mensaje
       this.messageStore.updateMessage(message)
     })
 
     this.socket.on('delete_message_channel', (message) => {
-      //agregar consumo para eliminar mensaje
       this.messageStore.deleteMessage(message.id_message)
     })
 
     this.socket.on('error', (error) => {
       console.error('WebSocket error:', error)
+      this.messageStore.setError(error)
+      this.messageStore.setLoading(false) 
     })
 
     this.socket.on('disconnect', () => {
@@ -53,6 +54,8 @@ class SocketService {
 
   joinChannel(channelId) {
     const token = this.authStore.token
+    this.messageStore.clearMessages()  
+    this.messageStore.setLoading(true) 
     this.socket.emit('join_channel', { channelId, token })
   }
 

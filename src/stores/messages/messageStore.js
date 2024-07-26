@@ -1,4 +1,4 @@
-//src/stores/messages/messageStore.js
+// src/stores/messages/messageStore.js
 import { defineStore } from 'pinia';
 
 export const useMessageStore = defineStore('message', {
@@ -23,5 +23,14 @@ export const useMessageStore = defineStore('message', {
     deleteMessage(messageId) {
       this.messages = this.messages.filter(m => m.id_message !== messageId);
     },
+    setLoading(loading) {
+      this.loading = loading;
+    },
+    setError(error) {
+      this.error = error;
+    },
+    clearMessages() {
+      this.messages = [];
+    }
   },
 });

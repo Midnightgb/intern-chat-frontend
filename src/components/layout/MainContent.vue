@@ -1,4 +1,4 @@
-//src/layout/MainContent.vue
+// src/layout/MainContent.vue
 <template>
   <main
     class="flex-1 border-r border-t border-gray-300 mt-2 rounded-tr-xl bg-background p-6 flex flex-col h-[calc(100vh-4rem)]"
