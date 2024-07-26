@@ -1,4 +1,3 @@
-// src/stores/messages/messageStore.js
 import { defineStore } from 'pinia';
 
 export const useMessageStore = defineStore('message', {
@@ -9,9 +8,11 @@ export const useMessageStore = defineStore('message', {
   }),
   actions: {
     setMessages(messages) {
+      console.log('Setting messages:', messages); // Agregado para depuración
       this.messages = messages;
     },
     addMessage(message) {
+      console.log('Adding message to store:', message); // Agregado para depuración
       this.messages.push(message);
     },
     updateMessage(updatedMessage) {

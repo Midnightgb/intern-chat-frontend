@@ -1,7 +1,7 @@
 // src/layout/MainContent.vue
 <template>
   <main
-    class="flex-1 border-r border-t border-gray-300 mt-2 rounded-tr-xl bg-background p-6 flex flex-col h-[calc(100vh-4rem)]"
+    class="flex-1 border-r border-t border-gray-300 rounded-tr-xl bg-background p-6 flex flex-col h-[calc(100vh-4rem)]"
   >
     <div class="flex flex-col h-full">
       <!-- Mostrar mensaje cuando el canal no esté seleccionado -->
@@ -62,3 +62,4 @@ watch(currentChannelId, (newChannelId) => {
   }
 })
 </script>
+
