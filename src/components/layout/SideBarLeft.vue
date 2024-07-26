@@ -39,29 +39,14 @@
         </template>
         <template v-else>
           <button
-            v-for="(channel, index) in channels"
+            v-for="(channel, index) in filteredChannels"
             :key="index"
             class="bg-muted rounded-lg p-2 text-muted-foreground hover:bg-accent hover:text-accent-foreground w-full"
             @click="onChannelClick(channel)"
           >
             <div class="flex items-center justify-center">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                class="h-6 w-6"
-              >
-                <rect width="20" height="8" x="2" y="2" rx="2" ry="2"></rect>
-                <rect width="20" height="8" x="2" y="14" rx="2" ry="2"></rect>
-                <line x1="6" x2="6.01" y1="6" y2="6"></line>
-                <line x1="6" x2="6.01" y1="18" y2="18"></line>
-              </svg>
+              <!-- Channel icon -->
+              <Server />
               <span class="ml-2 text-sm font-medium hidden sm:inline">{{ channel.name }}</span>
             </div>
           </button>
@@ -73,16 +58,21 @@
 
 <script setup>
 import { storeToRefs } from 'pinia'
-import { onMounted, onUnmounted } from 'vue'
+import { onMounted, onUnmounted, computed } from 'vue'
+
 // Stores
 import { useChannelStore } from '@/stores/channels/channelStore'
 import { useCurrentChannelStore } from '@/stores/channels/currentChannelStore'
 // Components
 import { FwbSpinner } from 'flowbite-vue'
+import { Server } from 'lucide-vue-next';
 
 const channelStore = useChannelStore()
 const currentChannelStore = useCurrentChannelStore()
-
+        
+const filteredChannels = computed(() => {
+      return channels.value.filter(channel => channel.status_channel)
+  })
 onMounted(() => {
   channelStore.initializeStore()
   const intervalId = setInterval(() => {
