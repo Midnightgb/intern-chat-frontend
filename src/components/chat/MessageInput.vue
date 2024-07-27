@@ -1,6 +1,6 @@
 //src/components/chat/MessageInput.vue
 <template>
-  <div class="mt-4 flex items-center gap-2">
+  <div class="flex items-center gap-2">
     <span class="relative flex shrink-0 overflow-hidden rounded-full w-8 h-8">
       <img
         class="aspect-square h-full w-full"
@@ -13,6 +13,7 @@
       class="flex h-10 w-full border border-input ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 flex-1 rounded-lg bg-muted px-4 py-2 text-sm"
       placeholder="Type your message..."
       type="text"
+      @keyup.enter="sendMessage"
     />
     <button
       @click="sendMessage"
@@ -30,13 +31,12 @@
         stroke-linejoin="round"
         class="h-5 w-5"
       >
-        <circle cx="11" cy="11" r="8"></circle>
-        <path d="m21 21-4.3-4.3"></path>
+        <path d="M22 2L11 13"></path>
+        <path d="M22 2l-7 20-4-9-9-4 20-7z"></path>
       </svg>
     </button>
   </div>
 </template>
-
 <script setup>
 import { ref } from 'vue'
 import { storeToRefs } from 'pinia'
