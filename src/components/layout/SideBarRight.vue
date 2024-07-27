@@ -1,7 +1,7 @@
 //src/components/partials/SideBarRight.vue
 <template>
   <aside
-    class="bg-background border-r border-gray-300 flex flex-col h-screen items-center gap-2 p-4 w-16 sm:w-64"
+    class="bg-background border-r border-gray-300 flex flex-col h-screen items-center gap-2 p-4 w-64 sm:w-56"
   >
     <div class="flex flex-col items-center gap-2 w-full flex-grow overflow-y-auto">
       <div class="flex flex-col items-center gap-2 w-full">
@@ -20,7 +20,7 @@
             src="/images/placeholder-user.png"
           />
         </span>
-        <div class="text-sm font-medium hidden sm:inline">{{ user.networkUser }}</div>
+        <div class="text-sm font-medium hidden sm:inline capitalize">{{ user.networkUser }}</div>
         <ToolTip triggerIcon="Settings" tooltipContent="Ajustes de usuario" />
       </div>
       <div>

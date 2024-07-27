@@ -1,7 +1,7 @@
 //src/components/layout/SideBarLeft.vue
 <template>
   <aside
-    class="bg-background border-r border-gray-300 flex flex-col items-center gap-2 p-4 w-16 sm:w-16 h-screen"
+    class="bg-background border-r border-gray-300 flex flex-col items-center gap-2 p-4 w-16 h-screen"
   >
     <div class="flex flex-col items-center gap-2 w-full flex-grow">
       <button
@@ -27,7 +27,7 @@
           <span
             v-for="(channel, index) in filteredChannels"
             :key="index"
-            class="bg-muted rounded-lg p-2 text-muted-foreground hover:bg-accent hover:text-accent-foreground w-full"
+            class="bg-muted rounded-lg text-muted-foreground hover:bg-accent hover:text-accent-foreground w-full"
             @click="onChannelClick(channel)"
           >
             <div class="flex items-center justify-center">
