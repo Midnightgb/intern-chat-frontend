@@ -32,8 +32,16 @@
           >
             <div class="flex items-center justify-center">
               <!-- Channel icon -->
-              <ToolTip triggerIcon="Server" :tooltipContent="channel.name" placement="right"/>
-              <span class="ml-2 text-sm font-medium hidden ">{{ channel.name }}</span>
+              <ToolTip
+                triggerIcon="Server"
+                :tooltipContent="channel.name"
+                placement="right"
+                color="dark"
+                :outline="true"
+                :pill="true"
+                :square="true"
+              />
+              <span class="ml-2 text-sm font-medium hidden">{{ channel.name }}</span>
             </div>
           </span>
         </template>
@@ -52,14 +60,14 @@ import { useCurrentChannelStore } from '@/stores/channels/currentChannelStore'
 // Components
 import { FwbSpinner } from 'flowbite-vue'
 import ToolTip from '@/components/common/ToolTip.vue'
-import { CircleDot } from 'lucide-vue-next';
+import { CircleDot } from 'lucide-vue-next'
 
 const channelStore = useChannelStore()
 const currentChannelStore = useCurrentChannelStore()
-        
+
 const filteredChannels = computed(() => {
-      return channels.value.filter(channel => channel.status_channel)
-  })
+  return channels.value.filter((channel) => channel.status_channel)
+})
 onMounted(() => {
   channelStore.initializeStore()
   const intervalId = setInterval(() => {

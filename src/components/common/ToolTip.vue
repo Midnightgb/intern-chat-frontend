@@ -2,7 +2,7 @@
 <template>
   <fwb-tooltip :placement="placement">
     <template #trigger>
-      <fwb-button color="dark" outline pill square>
+      <fwb-button :color="color" :outline="outline" :pill="pill" :square="square">
         {{ triggerText }}
         <component :is="iconComponent" v-if="iconComponent" />
       </fwb-button>
@@ -40,9 +40,25 @@ const props = defineProps({
     type: String,
     required: true
   },
+  color: {
+    type: String,
+    default: ''
+  },
   placement: {
     type: String,
     default: 'top'
+  },
+  outline: {
+    type: Boolean,
+    default: false
+  },
+  pill: {
+    type: Boolean,
+    default: false
+  },
+  square: {
+    type: Boolean,
+    default: false
   }
 })
 
