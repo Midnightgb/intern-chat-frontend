@@ -22,7 +22,7 @@
             }}</span>
           </div>
           <button class="p-1 hover:bg-gray-100 rounded-full">
-            <EllipsisVertical class="w-5 h-5 text-gray-500" />
+            <DropDown />
           </button>
         </div>
         <div class="text-muted-foreground mt-1">{{ message.content }}</div>
@@ -32,10 +32,12 @@
 </template>
 
 <script setup>
-import { EllipsisVertical } from 'lucide-vue-next'
 import { storeToRefs } from 'pinia'
 // Stores
 import { useMessageStore } from '@/stores/messages/messageStore'
+
+// drop down
+import DropDown from '@/components/common/DropDown.vue';
 
 const messageStore = useMessageStore()
 const { messages } = storeToRefs(messageStore)
@@ -65,3 +67,4 @@ const formatDate = (dateString) => {
   border: transparent;
 }
 </style>
+     
