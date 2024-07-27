@@ -1,8 +1,8 @@
 //src/components/common/ToolTip.vue
 <template>
-  <fwb-tooltip>
+  <fwb-tooltip :placement="placement">
     <template #trigger>
-      <fwb-button color="dark">
+      <fwb-button color="dark" outline pill square>
         {{ triggerText }}
         <component :is="iconComponent" v-if="iconComponent" />
       </fwb-button>
@@ -18,11 +18,12 @@ import { computed, defineAsyncComponent } from 'vue'
 
 import { FwbButton, FwbTooltip } from 'flowbite-vue'
 
-import { Settings, User } from 'lucide-vue-next'
+import { Settings, User, Server } from 'lucide-vue-next'
 
 const iconMap = {
   Settings,
-  User
+  User,
+  Server,
   // Agregar más iconos aquí
 }
 
@@ -38,6 +39,10 @@ const props = defineProps({
   tooltipContent: {
     type: String,
     required: true
+  },
+  placement: {
+    type: String,
+    default: 'top'
   }
 })
 
