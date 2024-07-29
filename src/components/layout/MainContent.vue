@@ -1,3 +1,4 @@
+//src/layout/MainContent.vue
 <template>
   <main class="flex-1 border-gray-300 rounded-tr-xl bg-background flex flex-col h-screen">
     <!-- Contenido principal -->
@@ -20,9 +21,9 @@
         </div>
       </div>
     </div>
-    
+
     <!-- Barra inferior con MessageInput -->
-    <div class="border-t border-gray-300 p-4 bg-background">
+    <div v-if="currentChannelId" class="border-t border-gray-300 p-4 bg-background">
       <MessageInput />
     </div>
   </main>

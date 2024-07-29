@@ -4,7 +4,7 @@
     <div
       v-for="message in messages"
       :key="message.id_message"
-      class="flex items-start gap-2 relative bg-gray-300 rounded-lg p-3"
+      class="flex items-start gap-2 relative bg-gray-300 rounded-lg p-3 break-words" 
     >
     <span class="relative flex shrink-0 overflow-hidden rounded-full w-8 h-8 z-10 bg-white">
       <img
@@ -65,5 +65,10 @@ const formatDate = (dateString) => {
   background-color: rgba(155, 155, 155, 0.5);
   border-radius: 20px;
   border: transparent;
+}
+
+.break-words {
+  word-wrap: break-word;
+  word-break: break-word;
 }
 </style>
