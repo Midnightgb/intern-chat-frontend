@@ -4,16 +4,20 @@
     <div
       v-for="message in messages"
       :key="message.id_message"
-      class="flex items-start gap-2 relative bg-gray-300 rounded-lg p-3 break-words" 
+      class="flex items-start gap-2 relative bg-gray-300 rounded-lg p-3 break-words"
     >
-    <span class="relative flex shrink-0 overflow-hidden rounded-full w-8 h-8 z-10 bg-white">
-      <img
-        class="aspect-square h-full w-full"
-        alt="User Avatar"
-        :src="getUserAvatar(message)"
-      />
-    </span>
-    <div class="flex-grow ">
+      <span class="relative flex shrink-0 overflow-hidden rounded-full w-8 h-8 z-10">
+        <img
+          v-if="getUserAvatar(message)"
+          class="aspect-square h-full w-full"
+          alt="User Avatar"
+          :src="getUserAvatar(message)"
+        />
+        <span v-else class="aspect-square h-full w-full">
+          <CircleUserRound size="32"/>
+        </span>
+      </span>
+      <div class="flex-grow">
         <div class="flex justify-between">
           <div>
             <span class="font-semibold">{{ getUserName(message) }}</span>
@@ -21,8 +25,8 @@
               formatDate(message.created_at)
             }}</span>
           </div>
-          <button class="pt-1 pr-1 hover:bg-gray-100 rounded-full">
-            <DropDown />
+          <button class="pt-1 pr-1 rounded-full">
+            <DropDown class="hover:text-black"/>
           </button>
         </div>
         <div class="text-muted-foreground">{{ message.content }}</div>
@@ -34,18 +38,19 @@
 <script setup>
 import { storeToRefs } from 'pinia'
 import { useMessageStore } from '@/stores/messages/messageStore'
-import DropDown from '@/components/common/DropDown.vue';
+import DropDown from '@/components/common/DropDown.vue'
+import { CircleUserRound } from 'lucide-vue-next';
 
 const messageStore = useMessageStore()
 const { messages } = storeToRefs(messageStore)
 
 const formatDate = (dateString) => {
-  const options = { hour: 'numeric', minute: 'numeric' };
-  return new Date(dateString).toLocaleString(undefined, options);
+  const options = { hour: 'numeric', minute: 'numeric' }
+  return new Date(dateString).toLocaleString(undefined, options)
 }
 
 const getUserAvatar = (message) => {
-  return message.users?.avatar_url || '/images/placeholder-user.png'
+  return message.users?.avatar_url || false
 }
 
 const getUserName = (message) => {
