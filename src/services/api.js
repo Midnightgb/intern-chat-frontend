@@ -14,7 +14,7 @@ const apiClient = axios.create({
   headers: {
     'Content-Type': 'application/json',
     Authorization: `Bearer`
-  }
+  },
 })
 
 // Interceptor para agregar el token a cada solicitud
@@ -45,8 +45,8 @@ export const getChannels = () => {
   return apiClient.get(API_ENDPOINTS.GET_CHANNELS)
 }
 
-export const getMessagesChannel = (channelId) => {
-  return apiClient.get(`${API_ENDPOINTS.GET_MESSAGES_CHANNEL}/${channelId}`)
+export const postMessage = (message) => {
+  return apiClient.post(API_ENDPOINTS.SEND_MESSAGE, message)
 }
 
 export default apiClient

@@ -3,6 +3,7 @@ import { io } from 'socket.io-client'
 import { useMessageStore } from '@/stores/messages/messageStore'
 import { useAuthStore } from '@/stores/auth'
 import { API_ENDPOINTS } from '@/constants/apiEndpoints'
+import { postMessage } from '@/services/api'
 
 const SOCKET_URL = API_ENDPOINTS.SOCKET_URL
 
@@ -42,7 +43,7 @@ class SocketService {
     })
 
     this.socket.on('error', (error) => {
-      console.error('WebSocket error:', error)
+      console.warn('WebSocket error:', error)
       this.messageStore.setError(error)
       this.messageStore.setLoading(false) 
     })
@@ -66,8 +67,9 @@ class SocketService {
   }
 
   sendMessage(channelId, content) {
-    console.log('sendMessage', channelId, content)
-    this.socket.emit('new_message', { channelId, content, token: this.authStore.token })
+    console.log('sendMessage', channelId, content, this.authStore.token)
+    postMessage(content)
+    this.socket.emit('new_message_channel', { channelId, content, token: this.authStore.token })
   }
 }
 
