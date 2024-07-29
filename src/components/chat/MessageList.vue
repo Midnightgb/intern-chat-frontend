@@ -10,13 +10,13 @@
       <img
         class="aspect-square h-full w-full"
         alt="User Avatar"
-        :src="message.users.avatar_url || '/images/placeholder-user.png'"
+        :src="getUserAvatar(message)"
       />
     </span>
     <div class="flex-grow ">
         <div class="flex justify-between">
           <div>
-            <span class="font-semibold">{{ message.users.full_name }}</span>
+            <span class="font-semibold">{{ getUserName(message) }}</span>
             <span class="text-xs text-muted-foreground ml-2">{{
               formatDate(message.created_at)
             }}</span>
@@ -33,20 +33,25 @@
 
 <script setup>
 import { storeToRefs } from 'pinia'
-// Stores
 import { useMessageStore } from '@/stores/messages/messageStore'
-
-// drop down
 import DropDown from '@/components/common/DropDown.vue';
 
 const messageStore = useMessageStore()
 const { messages } = storeToRefs(messageStore)
 
 const formatDate = (dateString) => {
-  return new Date(dateString).toLocaleString()
+  const options = { hour: 'numeric', minute: 'numeric' };
+  return new Date(dateString).toLocaleString(undefined, options);
+}
+
+const getUserAvatar = (message) => {
+  return message.users?.avatar_url || '/images/placeholder-user.png'
+}
+
+const getUserName = (message) => {
+  return message.users?.full_name || 'Unknown User'
 }
 </script>
-
 <style scoped>
 .overflow-y-auto {
   scrollbar-width: thin;
