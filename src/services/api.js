@@ -45,8 +45,9 @@ export const getChannels = () => {
   return apiClient.get(API_ENDPOINTS.GET_CHANNELS)
 }
 
-export const postMessage = (message) => {
-  return apiClient.post(API_ENDPOINTS.SEND_MESSAGE, message)
+export const postMessage = (content) => {
+  console.log(content);
+  return apiClient.post(API_ENDPOINTS.SEND_MESSAGE, content)
 }
 
 export default apiClient

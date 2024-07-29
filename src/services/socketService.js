@@ -66,10 +66,10 @@ class SocketService {
     }
   }
 
-  sendMessage(channelId, content) {
-    console.log('sendMessage', channelId, content, this.authStore.token)
-    postMessage(content)
-    this.socket.emit('new_message_channel', { channelId, content, token: this.authStore.token })
+  sendMessage(channel_id, message) {
+    console.log('sendMessage', channel_id, message, this.authStore.token)
+    postMessage({channel_id, content: message})
+    this.socket.emit('new_message_channel', { channel_id, message, token: this.authStore.token })
   }
 }
 
