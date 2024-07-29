@@ -67,4 +67,3 @@ const formatDate = (dateString) => {
   border: transparent;
 }
 </style>
-     

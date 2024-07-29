@@ -19,7 +19,7 @@
       >
         <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"></path>
       </svg>
-      <span class="ml-2 text-sm font-medium hidden sm:inline">Direct Messages</span>
+      <span class="ml-2 text-sm font-medium inline">Direct Messages</span>
     </div>
   </a>
 </template>
