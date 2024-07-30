@@ -16,19 +16,23 @@
         <div class="flex items-center justify-between">
           <span class="relative flex shrink-0 overflow-hidden rounded-full w-8 h-8">
             <img
+              v-if="user.profilePic"
               class="aspect-square h-full w-full"
               alt="User Avatar"
-              src="/images/placeholder-user.png"
+              :src="getUserAvatar({user})"
             />
+            <span v-else class="aspect-square h-full w-full">
+              <CircleUserRound size="32" />
+            </span>
           </span>
           <div class="text-sm font-medium inline capitalize">{{ user.networkUser }}</div>
           <ToolTip
-                triggerIcon="Settings"
-                tooltipContent="Ajustes de usuario"
-                :outline="true"
-                :pill="true"
-                :square="true"
-              />
+            triggerIcon="Settings"
+            tooltipContent="Ajustes de usuario"
+            :outline="true"
+            :pill="true"
+            :square="true"
+          />
         </div>
       </div>
       <div>
@@ -46,10 +50,12 @@ import { storeToRefs } from 'pinia'
 import { useAuthStore } from '@/stores/auth'
 // Components
 import { FwbButton } from 'flowbite-vue'
+import { CircleUserRound } from 'lucide-vue-next'
 import ToolTip from '@/components/common/ToolTip.vue'
 import useLogout from '@/composables/useLogout'
 import DirectMessages from '@/components/common/DirectMessages.vue'
-
+// Utils
+import { getUserAvatar } from '@/utils/helpers'
 const authStore = useAuthStore()
 const { user } = storeToRefs(authStore)
 const { handleLogout } = useLogout()
