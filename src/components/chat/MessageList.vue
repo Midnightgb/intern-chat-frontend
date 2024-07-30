@@ -13,10 +13,10 @@
       >
         <span class="relative flex shrink-0 overflow-hidden rounded-full w-8 h-8 z-10">
           <img
-            v-if="getUserAvatar(message)"
+            v-if="getUserAvatar(message, 'users')"
             class="aspect-square h-full w-full"
             alt="User Avatar"
-            :src="getUserAvatar(message)"
+            :src="getUserAvatar(message, 'users')"
           />
           <span v-else class="aspect-square h-full w-full">
             <CircleUserRound size="32" />
@@ -25,7 +25,7 @@
         <div class="flex-grow">
           <div class="flex justify-between">
             <div>
-              <span class="font-semibold">{{ getUserName(message) }}</span>
+              <span class="font-semibold">{{ getUserName(message, 'users') }}</span>
               <span class="text-xs text-muted-foreground ml-2">{{
                 formatDate(message.created_at)
               }}</span>
@@ -47,10 +47,14 @@
 
 <script setup>
 import { ref, onMounted, nextTick, watch } from 'vue'
+// Stores
 import { storeToRefs } from 'pinia'
 import { useMessageStore } from '@/stores/messages/messageStore'
-import DropDown from '@/components/common/DropDown.vue'
+// Utils
+import { formatDate, getUserAvatar, getUserName } from '@/utils/helpers'
+// Components
 import { CircleUserRound } from 'lucide-vue-next'
+import DropDown from '@/components/common/DropDown.vue'
 import NewMessageNotification from '@/components/common/NewMessageNotification.vue'
 
 const messageStore = useMessageStore()
@@ -59,25 +63,9 @@ const { messages } = storeToRefs(messageStore)
 const messageContainer = ref(null)
 const isScrolledToBottom = ref(true)
 const showNewMessageNotification = ref(false)
-const oldMessages = ref(0)
-
-const formatDate = (dateString) => {
-  const options = { hour: 'numeric', minute: 'numeric' }
-  return new Date(dateString).toLocaleString(undefined, options)
-}
-
-const getUserAvatar = (message) => {
-  return message.users?.avatar_url || false
-}
-
-const getUserName = (message) => {
-  return message.users?.full_name || 'Unknown User'
-}
-
 
 const scrollToBottom = (smooth) => {
   if (messageContainer.value) {
-    console.log('smooth', smooth);
     messageContainer.value.scrollTo({
       top: messageContainer.value.scrollHeight,
       behavior: smooth ? 'smooth' : 'auto',
@@ -106,7 +94,6 @@ const handleScroll = () => {
 }
 
 onMounted(() => {
-  oldMessages.value = messages.value.length
   scrollToBottom()
   nextTick(() => {
     if (messageContainer.value) {
