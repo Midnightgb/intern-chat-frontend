@@ -1,9 +1,10 @@
-//src/stores/messages/messageStore.js
+// src/stores/messages/messageStore.js
 import { defineStore } from 'pinia';
 
 export const useMessageStore = defineStore('message', {
   state: () => ({
     messages: [],
+    conversations: [],
     loading: false,
     error: null,
   }),
@@ -13,7 +14,6 @@ export const useMessageStore = defineStore('message', {
       this.messages = messages;
     },
     addMessage(message) {
-      console.log('Adding message to store:', message); // Agregado para depuración
       this.messages.push(message);
     },
     updateMessage(updatedMessage) {
@@ -24,6 +24,10 @@ export const useMessageStore = defineStore('message', {
     },
     deleteMessage(messageId) {
       this.messages = this.messages.filter(m => m.id_message !== messageId);
+    },
+    setConversations(conversations) {
+      console.log('Setting conversations:', conversations); // Agregado para depuración
+      this.conversations = conversations;
     },
     setLoading(loading) {
       this.loading = loading;

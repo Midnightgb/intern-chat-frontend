@@ -42,6 +42,10 @@ class SocketService {
       this.messageStore.deleteMessage(message.id_message)
     })
 
+    this.socket.on('conversations', (data) => {
+      this.messageStore.setConversations(data)
+    })
+
     this.socket.on('error', (error) => {
       console.warn('WebSocket error:', error)
       this.messageStore.setError(error)
@@ -68,8 +72,13 @@ class SocketService {
 
   sendMessage(channel_id, message) {
     console.log('sendMessage', channel_id, message, this.authStore.token)
-    postMessage({channel_id, content: message})
+    postMessage({ channel_id, content: message })
     this.socket.emit('new_message_channel', { channel_id, message, token: this.authStore.token })
+  }
+
+  getConversations() {
+    const token = this.authStore.token
+    this.socket.emit('get_conversations', { token })
   }
 }
 

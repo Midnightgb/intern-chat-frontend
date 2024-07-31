@@ -1,4 +1,4 @@
-//src/layout/MainContent.vue
+<!-- src/layout/MainContent.vue -->
 <template>
   <main class="flex-1 border-gray-300 rounded-tr-xl bg-background flex flex-col h-screen">
     <!-- Contenido principal -->
@@ -50,6 +50,7 @@ const { loading: isLoading } = storeToRefs(messageStore)
 
 onMounted(() => {
   socketService.connect()
+  socketService.getConversations() // Solicitar conversaciones al montar el componente
 })
 
 onUnmounted(() => {
