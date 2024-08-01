@@ -29,6 +29,7 @@
               id="network_user"
               v-model="state.network_user"
               type="text"
+              autocomplete="username"
               required
               class="bg-gray-100 focus:bg-transparent w-full text-sm px-4 py-3.5 rounded-md outline-gray-800 text-gray-600 placeholder-gray-400"
               placeholder="Usuario"
