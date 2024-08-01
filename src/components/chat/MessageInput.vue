@@ -2,11 +2,7 @@
 <template>
   <div class="flex items-center gap-2">
     <span class="relative flex shrink-0 overflow-hidden rounded-full w-8 h-8">
-      <img
-        class="aspect-square h-full w-full"
-        alt="User Avatar"
-        src="/images/placeholder-user.png"
-      />
+      <Paperclip class="absolute bottom-0 right-0 text-muted-foreground" />
     </span>
     <input
       v-model="message"
@@ -19,21 +15,7 @@
       @click="sendMessage"
       class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-10 w-10"
     >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        class="h-5 w-5"
-      >
-        <path d="M22 2L11 13"></path>
-        <path d="M22 2l-7 20-4-9-9-4 20-7z"></path>
-      </svg>
+      <Send class="h-5 w-5" />
     </button>
   </div>
 </template>
@@ -44,7 +26,8 @@ import { storeToRefs } from 'pinia'
 import { socketService } from '@/services/socketService'
 // Stores
 import { useCurrentChannelStore } from '@/stores/channels/currentChannelStore'
-
+// Components
+import { Paperclip, Send } from 'lucide-vue-next';
 const currentChannelStore = useCurrentChannelStore()
 const { currentChannelId } = storeToRefs(currentChannelStore)
 
