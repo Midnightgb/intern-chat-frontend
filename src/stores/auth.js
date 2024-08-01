@@ -17,7 +17,7 @@ export const useAuthStore = defineStore('auth', {
         id: userData.id_user,
         name: userData.full_name,
         networkUser: userData.network_user,
-        profilePic: userData.photo_url,
+        photo_url: userData.photo_url,
         role: userData.role
       }
       this.token = token

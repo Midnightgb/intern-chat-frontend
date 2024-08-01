@@ -45,7 +45,7 @@
           >
             <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"></path>
           </svg>
-          <span class="ml-2 text-sm font-medium inline">{{ conversation.users_receive.full_name }}</span>
+          <span class="ml-2 text-sm font-medium inline">{{ conversation.user_recipient.full_name }}</span>
         </div>
       </a>
     </div>

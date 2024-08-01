@@ -16,11 +16,12 @@
         <div class="flex items-center justify-between">
           <span class="relative flex shrink-0 overflow-hidden rounded-full w-8 h-8">
             <img
-              v-if="user.profilePic"
+              v-if="user.photo_url"
               class="aspect-square h-full w-full"
               alt="User Avatar"
-              :src="getUserAvatar({user})"
-            />
+              :src="getUserAvatar({user:user}, 'user')"
+              />
+              <!-- parametros que recibe la función getUserAvatar: user y path -->
             <span v-else class="aspect-square h-full w-full">
               <CircleUserRound size="32" />
             </span>
