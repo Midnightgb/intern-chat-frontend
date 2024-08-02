@@ -26,7 +26,7 @@ export const useMessageStore = defineStore('message', {
       this.messages = this.messages.filter(m => m.id_message !== messageId);
     },
     setConversations(conversations) {
-      console.log('Setting conversations:', conversations); // Agregado para depuración
+      console.log('Setting conversations:', conversations); // Agregado para depuración 
       this.conversations = conversations;
     },
     setLoading(loading) {

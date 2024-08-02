@@ -1,4 +1,3 @@
-<!-- src/components/common/DirectMessages.vue -->
 <template>
   <div class="space-y-2">
     <!-- Título de Direct Messages -->
@@ -22,13 +21,18 @@
       </div>
     </div>
 
+    <!-- Mostrar loader mientras se cargan las conversaciones -->
+    <div v-if="loading" class="flex items-center justify-center">
+      <fwb-spinner color="gray" size="10" />
+    </div>
+
     <!-- Lista de conversaciones -->
-    <div v-if="conversations.length > 0" class="space-y-2">
+    <div v-else-if="conversations.length > 0" class="space-y-2">
       <a
         v-for="conversation in conversations"
-        :key="conversation.recipient_id" 
+        :key="conversation.recipient_id"
         class="bg-muted rounded-lg p-2 text-muted-foreground hover:bg-accent hover:text-accent-foreground w-full"
-        :href="'#/direct/' + conversation.recipient_id" 
+        :href="'#/direct/' + conversation.recipient_id"
       >
         <div class="flex items-center">
           <svg
@@ -49,6 +53,8 @@
         </div>
       </a>
     </div>
+
+    <!-- Mostrar mensaje cuando no hay conversaciones -->
     <div v-else>
       <p>No hay conversaciones.</p>
     </div>
@@ -58,7 +64,9 @@
 <script setup>
 import { computed } from 'vue'
 import { useMessageStore } from '@/stores/messages/messageStore'
+import { FwbSpinner } from 'flowbite-vue'
 
 const messageStore = useMessageStore()
 const conversations = computed(() => messageStore.conversations)
+const loading = computed(() => messageStore.loading)
 </script>

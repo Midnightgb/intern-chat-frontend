@@ -44,6 +44,7 @@ class SocketService {
 
     this.socket.on('conversations', (data) => {
       this.messageStore.setConversations(data)
+      this.messageStore.setLoading(false) // Actualizar el estado de carga cuando las conversaciones estén listas
     })
 
     this.socket.on('error', (error) => {
@@ -78,6 +79,7 @@ class SocketService {
 
   getConversations() {
     const token = this.authStore.token
+    this.messageStore.setLoading(true) // Mostrar loader al solicitar conversaciones
     this.socket.emit('get_conversations', { token })
   }
 }
