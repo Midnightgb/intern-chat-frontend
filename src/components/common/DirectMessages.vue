@@ -29,11 +29,10 @@
 
     <!-- Lista de conversaciones -->
     <div v-else-if="conversations.length > 0" class="space-y-2">
-      <a
+      <button
         v-for="conversation in conversations"
         :key="conversation.user_recipient.id_user"
         class="bg-muted rounded-lg p-2 text-muted-foreground hover:bg-accent hover:text-accent-foreground w-full"
-        :href="'#/direct/' + conversation.user_recipient.id_user"
         @click="handleConversationClick(conversation)"
       >
         <div class="flex items-center">
@@ -53,7 +52,7 @@
           </svg>
           <span class="ml-2 text-sm font-medium inline">{{ conversation.user_recipient.full_name }}</span>
         </div>
-      </a>
+      </button>
     </div>
 
     <!-- Mostrar mensaje cuando no hay conversaciones -->
