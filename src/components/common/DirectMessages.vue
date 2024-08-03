@@ -30,9 +30,9 @@
     <div v-else-if="conversations.length > 0" class="space-y-2">
       <a
         v-for="conversation in conversations"
-        :key="conversation.recipient_id"
+        :key="conversation.user_recipient.id_user"
         class="bg-muted rounded-lg p-2 text-muted-foreground hover:bg-accent hover:text-accent-foreground w-full"
-        :href="'#/direct/' + conversation.recipient_id"
+        :href="'#/direct/' + conversation.user_recipient.id_user"
         @click="handleConversationClick(conversation)"
       >
         <div class="flex items-center">
