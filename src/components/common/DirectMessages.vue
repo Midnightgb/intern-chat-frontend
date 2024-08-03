@@ -33,6 +33,7 @@
         :key="conversation.recipient_id"
         class="bg-muted rounded-lg p-2 text-muted-foreground hover:bg-accent hover:text-accent-foreground w-full"
         :href="'#/direct/' + conversation.recipient_id"
+        @click="handleConversationClick(conversation)"
       >
         <div class="flex items-center">
           <svg
@@ -64,9 +65,18 @@
 <script setup>
 import { computed } from 'vue'
 import { useMessageStore } from '@/stores/messages/messageStore'
+import { socketService } from '@/services/socketService'
 import { FwbSpinner } from 'flowbite-vue'
 
 const messageStore = useMessageStore()
 const conversations = computed(() => messageStore.conversations)
 const loadingConversations = computed(() => messageStore.loadingConversations)
+
+function handleConversationClick(conversation) {
+  console.log('Conversation clicked:', conversation)
+  // Llama al método para obtener los mensajes directos
+  socketService.getDirectMessages(conversation.send_id, conversation.recipient_id)
+}
 </script>
+
+

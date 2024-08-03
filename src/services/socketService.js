@@ -46,6 +46,21 @@ class SocketService {
       this.messageStore.setLoadingConversations(false)
     })
 
+    this.socket.on('conversation_messages', (messages) => {
+      this.messageStore.setMessages(messages)
+      this.messageStore.setLoadingMessages(false)
+    })
+
+    this.socket.on('direct_message', (data) => {
+      this.messageStore.setMessages(data) // Actualiza los mensajes directos en el mismo estado
+      this.messageStore.setLoadingMessages(false)
+    })
+
+    this.socket.on('get_direct_messages', (data) => {
+      this.messageStore.setMessages(data) // Actualiza los mensajes directos en el mismo estado
+      this.messageStore.setLoadingMessages(false)
+    })
+
     this.socket.on('error', (error) => {
       console.warn('WebSocket error:', error)
       this.messageStore.setError(error)
@@ -65,12 +80,6 @@ class SocketService {
     this.socket.emit('join_channel', { channelId, token })
   }
 
-  disconnect() {
-    if (this.socket) {
-      this.socket.disconnect()
-    }
-  }
-
   sendMessage(channel_id, message) {
     console.log('sendMessage', channel_id, message, this.authStore.token)
     postMessage({ channel_id, content: message })
@@ -81,6 +90,18 @@ class SocketService {
     const token = this.authStore.token
     this.messageStore.setLoadingConversations(true) 
     this.socket.emit('get_conversations', { token })
+  }
+
+  getDirectMessages(send_id, recipient_id) {
+    const token = this.authStore.token
+    this.messageStore.setLoadingMessages(true)
+    this.socket.emit('direct_message', { send_id, recipient_id, token })
+  }
+
+  disconnect() {
+    if (this.socket) {
+      this.socket.disconnect()
+    }
   }
 }
 
