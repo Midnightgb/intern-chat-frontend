@@ -1,41 +1,19 @@
-//src/App.vue
 <template>
   <div class="min-h-screen flex flex-col">
-    <template v-if="showAuthContent">
-      <div class="flex flex-grow bg-gray-100">
-        <SidebarLeft />
-        <SideBarRight />
-        <MainContent>
-          <RouterView />
-        </MainContent>
-      </div>
-    </template>
-    <template v-else>
-      <div>
-        <RouterView />
-      </div>
-    </template>
+    <RouterView />
   </div>
 </template>
 
 <script setup>
-import { onMounted, computed } from 'vue'
-import { RouterView, useRoute } from 'vue-router'
+import { onMounted } from 'vue'
+import { RouterView } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { initFlowbite } from 'flowbite'
-import SidebarLeft from '@/components/layout/SideBarLeft.vue'
-import SideBarRight from '@/components/layout/SideBarRight.vue'
-import MainContent from '@/components/layout/MainContent.vue'
+
+const authStore = useAuthStore()
 
 onMounted(() => {
   initFlowbite()
   authStore.checkAuth()
-})
-
-const route = useRoute()
-const authStore = useAuthStore()
-
-const showAuthContent = computed(() => {
-  return authStore.isAuthenticated && route.name !== 'login'
 })
 </script>

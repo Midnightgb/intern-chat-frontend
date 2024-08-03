@@ -1,4 +1,3 @@
-// src/services/socketService.js
 import { io } from 'socket.io-client'
 import { useMessageStore } from '@/stores/messages/messageStore'
 import { useAuthStore } from '@/stores/auth'
@@ -51,13 +50,9 @@ class SocketService {
       this.messageStore.setLoadingMessages(false)
     })
 
-    this.socket.on('direct_message', (data) => {
-      this.messageStore.setMessages(data) // Actualiza los mensajes directos en el mismo estado
-      this.messageStore.setLoadingMessages(false)
-    })
-
     this.socket.on('get_direct_messages', (data) => {
-      this.messageStore.setMessages(data) // Actualiza los mensajes directos en el mismo estado
+      console.log('get_direct_messages', data);
+      this.messageStore.setMessages(data)
       this.messageStore.setLoadingMessages(false)
     })
 
@@ -94,8 +89,18 @@ class SocketService {
 
   getDirectMessages(send_id, recipient_id) {
     const token = this.authStore.token
+    this.messageStore.clearMessages()
     this.messageStore.setLoadingMessages(true)
     this.socket.emit('direct_message', { send_id, recipient_id, token })
+  }
+/*   getDirectMessages(send_id, recipient_id) {
+    const token = this.authStore.token
+    this.messageStore.setLoadingMessages(true)
+    this.socket.emit('direct_message', { send_id, recipient_id, token })
+  } */
+  sendDirectMessage(recipient_id, message) {
+    const token = this.authStore.token
+    this.socket.emit('send_direct_message', { recipient_id, message, token })
   }
 
   disconnect() {
