@@ -1,3 +1,4 @@
+//src/components/common/DirectMessages.vue
 <template>
   <div class="space-y-2">
     <!-- Título de Direct Messages -->

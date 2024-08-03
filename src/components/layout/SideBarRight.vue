@@ -55,9 +55,18 @@ import { CircleUserRound } from 'lucide-vue-next'
 import ToolTip from '@/components/common/ToolTip.vue'
 import useLogout from '@/composables/useLogout'
 import DirectMessages from '@/components/common/DirectMessages.vue'
+// Services
+import { socketService } from '@/services/socketService'
 // Utils
 import { getUserAvatar } from '@/utils/helpers'
+import { onMounted } from 'vue'
 const authStore = useAuthStore()
 const { user } = storeToRefs(authStore)
 const { handleLogout } = useLogout()
+
+onMounted(() => {
+  socketService.connect()
+  socketService.getConversations() // Solicitar conversaciones al montar el componente
+})
+
 </script>
