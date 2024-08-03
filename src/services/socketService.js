@@ -24,10 +24,9 @@ class SocketService {
       console.log('Connected to WebSocket server')
     })
 
-    // Recepción de mensajes del canal
     this.socket.on('messages_channel', (data) => {
       this.messageStore.setMessages(data)
-      this.messageStore.setLoading(false) 
+      this.messageStore.setLoadingMessages(false) 
     })
 
     this.socket.on('new_message_channel', (message) => {
@@ -44,13 +43,14 @@ class SocketService {
 
     this.socket.on('conversations', (data) => {
       this.messageStore.setConversations(data)
-      this.messageStore.setLoading(false) // Actualizar el estado de carga cuando las conversaciones estén listas
+      this.messageStore.setLoadingConversations(false)
     })
 
     this.socket.on('error', (error) => {
       console.warn('WebSocket error:', error)
       this.messageStore.setError(error)
-      this.messageStore.setLoading(false) 
+      this.messageStore.setLoadingMessages(false) 
+      this.messageStore.setLoadingConversations(false) 
     })
 
     this.socket.on('disconnect', () => {
@@ -61,7 +61,7 @@ class SocketService {
   joinChannel(channelId) {
     const token = this.authStore.token
     this.messageStore.clearMessages()  
-    this.messageStore.setLoading(true) 
+    this.messageStore.setLoadingMessages(true) 
     this.socket.emit('join_channel', { channelId, token })
   }
 
@@ -79,7 +79,7 @@ class SocketService {
 
   getConversations() {
     const token = this.authStore.token
-    this.messageStore.setLoading(true) // Mostrar loader al solicitar conversaciones
+    this.messageStore.setLoadingConversations(true) 
     this.socket.emit('get_conversations', { token })
   }
 }

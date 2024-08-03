@@ -5,12 +5,13 @@ export const useMessageStore = defineStore('message', {
   state: () => ({
     messages: [],
     conversations: [],
-    loading: false,
+    loadingMessages: false, // Estado de carga para mensajes
+    loadingConversations: false, // Estado de carga para conversaciones
     error: null,
   }),
   actions: {
     setMessages(messages) {
-      console.log('Setting messages:', messages); // Agregado para depuración
+      console.log('Setting messages:', messages);
       this.messages = messages;
     },
     addMessage(message) {
@@ -26,11 +27,14 @@ export const useMessageStore = defineStore('message', {
       this.messages = this.messages.filter(m => m.id_message !== messageId);
     },
     setConversations(conversations) {
-      console.log('Setting conversations:', conversations); // Agregado para depuración 
+      console.log('Setting conversations:', conversations);
       this.conversations = conversations;
     },
-    setLoading(loading) {
-      this.loading = loading;
+    setLoadingMessages(loading) {
+      this.loadingMessages = loading;
+    },
+    setLoadingConversations(loading) {
+      this.loadingConversations = loading;
     },
     setError(error) {
       this.error = error;

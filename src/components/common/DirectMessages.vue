@@ -22,7 +22,7 @@
     </div>
 
     <!-- Mostrar loader mientras se cargan las conversaciones -->
-    <div v-if="loading" class="flex items-center justify-center">
+    <div v-if="loadingConversations" class="flex items-center justify-center">
       <fwb-spinner color="gray" size="10" />
     </div>
 
@@ -68,5 +68,5 @@ import { FwbSpinner } from 'flowbite-vue'
 
 const messageStore = useMessageStore()
 const conversations = computed(() => messageStore.conversations)
-const loading = computed(() => messageStore.loading)
+const loadingConversations = computed(() => messageStore.loadingConversations)
 </script>

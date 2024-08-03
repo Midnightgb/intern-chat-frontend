@@ -1,4 +1,3 @@
-<!-- src/layout/MainContent.vue -->
 <template>
   <main class="flex-1 border-gray-300 rounded-tr-xl bg-background flex flex-col h-screen">
     <!-- Contenido principal -->
@@ -8,7 +7,7 @@
         <h2 class="text-2xl font-bold text-gray-500">Por favor, selecciona un canal.</h2>
       </div>
       <!-- Mostrar loader cuando el canal esté seleccionado pero los datos no se hayan cargado -->
-      <div v-else-if="isLoading" class="flex items-center justify-center h-full">
+      <div v-else-if="isLoadingMessages" class="flex items-center justify-center h-full">
         <fwb-spinner color="gray" size="10" />
       </div>
       <!-- Mostrar contenido del canal cuando los datos estén listos -->
@@ -46,7 +45,7 @@ import ServerHeader from '@/components/partials/ServerHeader.vue'
 const currentChannelStore = useCurrentChannelStore()
 const messageStore = useMessageStore()
 const { currentChannelId, currentChannelName } = storeToRefs(currentChannelStore)
-const { loading: isLoading } = storeToRefs(messageStore)
+const { loadingMessages: isLoadingMessages } = storeToRefs(messageStore)
 
 onMounted(() => {
   socketService.connect()

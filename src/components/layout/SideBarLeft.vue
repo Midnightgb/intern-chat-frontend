@@ -1,4 +1,3 @@
-//src/components/layout/SideBarLeft.vue
 <template>
   <aside
     class="bg-background border-r border-gray-300 flex flex-col items-center gap-2 p-4 w-16 h-screen"
@@ -13,16 +12,19 @@
         </div>
       </button>
       <div class="flex flex-col items-center gap-2 w-full flex-grow">
-        <template v-if="loading">
+        <!-- Mostrar loader mientras se cargan los canales -->
+        <template v-if="loadingChannels">
           <div class="flex items-center justify-center w-full h-full">
             <fwb-spinner color="gray" size="10" />
           </div>
         </template>
+        <!-- Mostrar mensaje de error si hay uno -->
         <template v-else-if="error">
           <div class="flex items-center justify-center w-full">
             <span class="text-red-500">Error: {{ error }}</span>
           </div>
         </template>
+        <!-- Mostrar lista de canales -->
         <template v-else>
           <span
             v-for="(channel, index) in filteredChannels"
@@ -65,9 +67,12 @@ import { CircleDot } from 'lucide-vue-next'
 const channelStore = useChannelStore()
 const currentChannelStore = useCurrentChannelStore()
 
+const { channels, loading: loadingChannels, error } = storeToRefs(channelStore)
+
 const filteredChannels = computed(() => {
   return channels.value.filter((channel) => channel.status_channel)
 })
+
 onMounted(() => {
   channelStore.initializeStore()
   const intervalId = setInterval(() => {
@@ -79,8 +84,6 @@ onMounted(() => {
     clearInterval(intervalId)
   })
 })
-
-const { channels, loading, error } = storeToRefs(channelStore)
 
 const onPrimaryButtonClick = () => {
   console.log('Primary button clicked')
