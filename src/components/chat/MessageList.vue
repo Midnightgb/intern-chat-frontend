@@ -91,6 +91,7 @@ const handleScroll = () => {
 }
 
 onMounted(() => {
+  console.log('MessageList mounted, initial messages:', messages.value)
   scrollToBottom()
   nextTick(() => {
     if (messageContainer.value) {
@@ -107,6 +108,7 @@ watch(
     nextTick(() => {
       const smooth = isScrolledToBottom.value
       if (newMessages.length > oldMessages.length) {
+        console.log('Messages updated:', newMessages)
         if (isScrolledToBottom.value) {
           scrollToBottom(smooth)
         } else {

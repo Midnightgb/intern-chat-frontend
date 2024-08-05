@@ -23,24 +23,7 @@ const router = createRouter({
       component: () => import('@/views/dashboard/DashboardView.vue'),
       meta: {
         requiresAuth: true
-      },
-      children: [
-        {
-          path: '',
-          name: 'dashboard',
-          component: () => import('@/components/layout/MainContent.vue')
-        },
-        {
-          path: 'channel/:channelId',
-          name: 'channel',
-          component: () => import('@/components/layout/MainContent.vue')
-        },
-        {
-          path: 'direct/:userId/:recipientId',
-          name: 'direct',
-          component: () => import('@/components/layout/MainContent.vue')
-        }
-      ]
+      }
     }
   ]
 })
