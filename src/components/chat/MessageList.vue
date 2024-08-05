@@ -13,19 +13,19 @@
       >
         <span class="relative flex shrink-0 overflow-hidden rounded-full w-8 h-8 z-10">
           <img
-            v-if="getUserAvatar(message, 'users')"
+            v-if="getUserAvatar(message, message.users_receive ? 'users_receive' : 'users')"
             class="aspect-square h-full w-full"
             alt="User Avatar"
-            :src="getUserAvatar(message, 'users')"
+            :src="getUserAvatar(message, message.users_receive ? 'users_receive' : 'users')"
           />
-          <span v-else class="aspect-square h-full w-full">
-            <CircleUserRound size="32" />
-          </span>
+          <CircleUserRound v-else size="32" class="aspect-square h-full w-full" />
         </span>
         <div class="flex-grow">
           <div class="flex justify-between">
             <div>
-              <span class="font-semibold">{{ getUserName(message, 'users') }}</span>
+              <span class="font-semibold">{{
+                getUserName(message, message.users_receive ? 'users_receive' : 'users')
+              }}</span>
               <span class="text-xs text-muted-foreground ml-2">{{
                 formatDate(message.created_at)
               }}</span>
@@ -68,11 +68,11 @@ const scrollToBottom = (smooth) => {
   if (messageContainer.value) {
     messageContainer.value.scrollTo({
       top: messageContainer.value.scrollHeight,
-      behavior: smooth ? 'smooth' : 'auto',
+      behavior: smooth ? 'smooth' : 'auto'
     })
     isScrolledToBottom.value = true
     showNewMessageNotification.value = false
-  }else {
+  } else {
     console.warn('[scrollToBottom] messageContainer.value is null')
   }
 }
@@ -81,10 +81,9 @@ const handleScroll = () => {
   if (messageContainer.value) {
     const { scrollTop, scrollHeight, clientHeight } = messageContainer.value
     const scrolledToBottom = Math.abs(scrollHeight - clientHeight - scrollTop) < 1
-    
-    
+
     isScrolledToBottom.value = scrolledToBottom
-    
+
     if (scrolledToBottom) {
       showNewMessageNotification.value = false
     }
@@ -104,20 +103,24 @@ onMounted(() => {
   })
 })
 
-watch(() => [...messages.value], (newMessages, oldMessages) => {
-  nextTick(() => {
-    const smooth = isScrolledToBottom.value
-    if (newMessages.length > oldMessages.length) {
-      if (isScrolledToBottom.value) {
-        scrollToBottom(smooth)
+watch(
+  () => [...messages.value],
+  (newMessages, oldMessages) => {
+    nextTick(() => {
+      const smooth = isScrolledToBottom.value
+      if (newMessages.length > oldMessages.length) {
+        if (isScrolledToBottom.value) {
+          scrollToBottom(smooth)
+        } else {
+          showNewMessageNotification.value = true
+        }
       } else {
-        showNewMessageNotification.value = true
+        console.log('No new messages')
       }
-    } else {
-      console.log('No new messages');
-    }
-  })
-}, { deep: true })
+    })
+  },
+  { deep: true }
+)
 </script>
 
 <style scoped>
