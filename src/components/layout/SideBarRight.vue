@@ -16,17 +16,17 @@
         <div class="flex items-center justify-between">
           <span class="relative flex shrink-0 overflow-hidden rounded-full w-8 h-8">
             <img
-              v-if="user.photo_url"
+              v-if="user && user.photo_url"
               class="aspect-square h-full w-full"
               alt="User Avatar"
-              :src="getUserAvatar({user:user}, 'user')"
-              />
-              <!-- parametros que recibe la función getUserAvatar: user y path -->
+              :src="getUserAvatar({ user: user }, 'user')"
+            />
+            <!-- parametros que recibe la función getUserAvatar: user y path -->
             <span v-else class="aspect-square h-full w-full">
               <CircleUserRound size="32" />
             </span>
           </span>
-          <div class="text-sm font-medium inline capitalize">{{ user.networkUser }}</div>
+          <div v-if="user" class="text-sm font-medium inline capitalize">{{ user.networkUser }}</div>
           <ToolTip
             triggerIcon="Settings"
             tooltipContent="Ajustes de usuario"
@@ -37,9 +37,9 @@
         </div>
       </div>
       <div>
-        <fwb-button color="red" class="w-full" outline @click="handleLogout"
-          >Cerrar Sesión</fwb-button
-        >
+        <fwb-button color="red" class="w-full" outline @click="handleLogout">
+          Cerrar Sesión
+        </fwb-button>
       </div>
     </div>
   </aside>
@@ -68,5 +68,4 @@ onMounted(() => {
   socketService.connect()
   socketService.getConversations() // Solicitar conversaciones al montar el componente
 })
-
 </script>
