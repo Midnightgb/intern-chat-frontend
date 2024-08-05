@@ -37,9 +37,9 @@
         </div>
       </div>
       <div>
-        <fwb-button color="red" class="w-full" outline @click="handleLogout"
-          >Cerrar Sesión</fwb-button
-        >
+        <fwb-button color="red" class="w-full transition-all" outline @click="handleLogout">
+          Cerrar Sesión
+        </fwb-button>
       </div>
     </div>
   </aside>
