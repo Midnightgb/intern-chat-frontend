@@ -94,7 +94,6 @@ class SocketService {
 
   getDirectMessages(send_id, recipient_id) {
     const token = this.authStore.token
-    this.messageStore.clearMessages()  
     this.messageStore.setLoadingMessages(true)
     this.socket.emit('direct_message', { send_id, recipient_id, token })
   }

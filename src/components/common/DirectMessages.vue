@@ -49,7 +49,7 @@
           <div class="flex flex-col items-start flex-grow ml-2">
             <div class="flex justify-between items-center w-full">
               <span class="text-sm font-medium">{{ conversation.user_recipient.full_name }}</span>
-              <span class="text-xs text-muted-foreground">{{ conversation.created_at }}</span>
+              <span class="text-xs text-muted-foreground">{{ formatDate(conversation.date) }}</span>
             </div>
             <span class="text-xs text-muted-foreground mt-1 truncate">
               {{ conversation.content }}
@@ -70,6 +70,7 @@ import { computed } from 'vue';
 import { useMessageStore } from '@/stores/messages/messageStore';
 import { useCurrentConversationStore } from '@/stores/conversations/currentConversationStore';
 import { FwbSpinner } from 'flowbite-vue';
+import { formatDate } from '@/utils/date/convertTime'; 
 
 const messageStore = useMessageStore();
 const currentConversationStore = useCurrentConversationStore();
