@@ -1,7 +1,5 @@
-//src/components/common/DirectMessages.vue
 <template>
-  <div class="space-y-2">
-    <!-- Título de Direct Messages -->
+  <div class="flex flex-col h-full">
     <div class="bg-muted rounded-lg p-2 text-muted-foreground">
       <div class="flex items-center justify-center">
         <svg
@@ -22,12 +20,10 @@
       </div>
     </div>
 
-    <!-- Mostrar loader mientras se cargan las conversaciones -->
     <div v-if="loadingConversations" class="flex items-center justify-center">
       <fwb-spinner color="gray" size="10" />
     </div>
 
-    <!-- Lista de conversaciones -->
     <div v-else-if="conversations.length > 0" class="space-y-2">
       <button
         v-for="conversation in conversations"
@@ -53,17 +49,16 @@
           <div class="flex flex-col items-start flex-grow ml-2">
             <div class="flex justify-between items-center w-full">
               <span class="text-sm font-medium">{{ conversation.user_recipient.full_name }}</span>
-              <span class="text-xs text-muted-foreground">{{ conversation.created_at }}24/06/2024</span>
+              <span class="text-xs text-muted-foreground">{{ conversation.created_at }}</span>
             </div>
             <span class="text-xs text-muted-foreground mt-1 truncate">
-              {{conversation.content}}
+              {{ conversation.content }}
             </span>
           </div>
         </div>
       </button>
     </div>
 
-    <!-- Mostrar mensaje cuando no hay conversaciones -->
     <div v-else>
       <p>No hay conversaciones.</p>
     </div>
@@ -71,18 +66,18 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
-import { useMessageStore } from '@/stores/messages/messageStore'
-import { socketService } from '@/services/socketService'
-import { FwbSpinner } from 'flowbite-vue'
+import { computed } from 'vue';
+import { useMessageStore } from '@/stores/messages/messageStore';
+import { useCurrentConversationStore } from '@/stores/conversations/currentConversationStore';
+import { FwbSpinner } from 'flowbite-vue';
 
-const messageStore = useMessageStore()
-const conversations = computed(() => messageStore.conversations)
-const loadingConversations = computed(() => messageStore.loadingConversations)
+const messageStore = useMessageStore();
+const currentConversationStore = useCurrentConversationStore();
+const conversations = computed(() => messageStore.conversations);
+const loadingConversations = computed(() => messageStore.loadingConversations);
 
 function handleConversationClick(conversation) {
-  console.log('Conversation clicked:', conversation)
-  // Llama al método para obtener los mensajes directos
-  socketService.getDirectMessages(conversation.send_id, conversation.recipient_id)
+  currentConversationStore.setCurrentConversationId(conversation.user_recipient.id_user);
+  currentConversationStore.setCurrentConversationName(conversation.user_recipient.full_name);
 }
 </script>
