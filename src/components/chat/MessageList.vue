@@ -23,12 +23,12 @@
         <div class="flex-grow">
           <div class="flex justify-between">
             <div>
-              <span class="font-semibold">{{
-                getUserName(message, message.users_receive ? 'users_receive' : 'users')
-              }}</span>
-              <span class="text-xs text-muted-foreground ml-2">{{
-                formatDate(message.created_at)
-              }}</span>
+              <span class="font-semibold">
+                {{ getUserName(message, message.users_receive ? 'users_receive' : 'users') }}
+              </span>
+              <span class="text-xs text-muted-foreground ml-2 truncate">
+                {{ formatDate(message.created_at) }}
+              </span>
             </div>
             <button class="pt-1 pr-1 rounded-full">
               <DropDown class="hover:text-black" />

@@ -16,10 +16,11 @@
         <div class="flex items-center justify-between">
           <span class="relative flex shrink-0 overflow-hidden rounded-full w-8 h-8">
             <img
-              v-if="user.photo_url"
+              v-if="userPhotoUrl"
               class="aspect-square h-full w-full"
               alt="User Avatar"
-              :src="getUserAvatar({user:user}, 'user')"
+              :src="userPhotoUrl"
+              @error="handleImageError"
               />
               <!-- parametros que recibe la función getUserAvatar: user y path -->
             <span v-else class="aspect-square h-full w-full">
@@ -55,18 +56,22 @@ import { CircleUserRound } from 'lucide-vue-next'
 import ToolTip from '@/components/common/ToolTip.vue'
 import useLogout from '@/composables/useLogout'
 import DirectMessages from '@/components/common/DirectMessages.vue'
-// Services
-import { socketService } from '@/services/socketService'
 // Utils
 import { getUserAvatar } from '@/utils/helpers'
-import { onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
 const authStore = useAuthStore()
 const { user } = storeToRefs(authStore)
 const { handleLogout } = useLogout()
 
-onMounted(() => {
-  socketService.connect()
-  socketService.getConversations() // Solicitar conversaciones al montar el componente
-})
+const userPhotoUrl = ref(null);
 
+const handleImageError = () => {
+  console.error('Error loading user avatar');
+  userPhotoUrl.value = null; // Esto hará que se muestre el icono por defecto
+};
+
+onMounted(() => {
+  userPhotoUrl.value = getUserAvatar({user:user}, 'user');
+  console.log(userPhotoUrl.value);
+});
 </script>

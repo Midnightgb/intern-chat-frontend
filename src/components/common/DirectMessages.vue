@@ -32,27 +32,22 @@
         @click="handleConversationClick(conversation)"
       >
         <div class="flex items-center w-full">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            class="h-6 w-6 flex-shrink-0"
-          >
-            <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"></path>
-          </svg>
+          <span class="relative flex shrink-0 overflow-hidden rounded-full w-8 h-8 z-10">
+            <img
+              v-if="getUserAvatar(conversation, conversation.user_recipient ? 'user_recipient' : 'users')"
+              class="aspect-square h-full w-full"
+              alt="User Avatar"
+              :src="getUserAvatar(conversation, conversation.user_recipient ? 'user_recipient' : 'users')"
+            />
+            <CircleUserRound v-else size="32" class="aspect-square h-full w-full" />
+          </span>
           <div class="flex flex-col items-start flex-grow ml-2">
             <div class="flex justify-between items-center w-full">
               <span class="text-sm font-medium">{{ conversation.user_recipient.full_name }}</span>
               <span class="text-xs text-muted-foreground">{{ conversation.created_at }}</span>
             </div>
-            <span class="text-xs text-muted-foreground mt-1 truncate">
-              {{ conversation.content }}
+            <span class="text-xs text-muted-foreground mt-1">
+              <TruncatedMessage :content="conversation.content" :maxLength="20" />
             </span>
           </div>
         </div>
@@ -66,18 +61,24 @@
 </template>
 
 <script setup>
-import { computed } from 'vue';
-import { useMessageStore } from '@/stores/messages/messageStore';
-import { useCurrentConversationStore } from '@/stores/conversations/currentConversationStore';
-import { FwbSpinner } from 'flowbite-vue';
+import { computed } from 'vue'
+// Stores
+import { useMessageStore } from '@/stores/messages/messageStore'
+import { useCurrentConversationStore } from '@/stores/conversations/currentConversationStore'
+// Components
+import TruncatedMessage from '@/components/common/TruncatedMessage.vue'
+import { FwbSpinner } from 'flowbite-vue'
+import { CircleUserRound } from 'lucide-vue-next'
+import { getUserAvatar  } from '@/utils/helpers'
 
-const messageStore = useMessageStore();
-const currentConversationStore = useCurrentConversationStore();
-const conversations = computed(() => messageStore.conversations);
-const loadingConversations = computed(() => messageStore.loadingConversations);
+
+const messageStore = useMessageStore()
+const currentConversationStore = useCurrentConversationStore()
+const conversations = computed(() => messageStore.conversations)
+const loadingConversations = computed(() => messageStore.loadingConversations)
 
 function handleConversationClick(conversation) {
-  currentConversationStore.setCurrentConversationId(conversation.user_recipient.id_user);
-  currentConversationStore.setCurrentConversationName(conversation.user_recipient.full_name);
+  currentConversationStore.setCurrentConversationId(conversation.user_recipient.id_user)
+  currentConversationStore.setCurrentConversationName(conversation.user_recipient.full_name)
 }
 </script>
