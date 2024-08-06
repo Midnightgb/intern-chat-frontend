@@ -1,5 +1,5 @@
 <template>
-  <span class="text-xs text-muted-foreground mt-1">
+  <span class="text-muted-foreground">
     {{ truncatedContent }}
   </span>
 </template>
@@ -8,7 +8,7 @@
 import { computed } from 'vue';
 
 export default {
-  name: 'TruncatedMessage',
+  name: 'TruncatedContent',
   props: {
     content: {
       type: String,

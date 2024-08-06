@@ -41,13 +41,13 @@
             />
             <CircleUserRound v-else size="32" class="aspect-square h-full w-full" />
           </span>
-          <div class="flex flex-col items-start flex-grow ml-2">
+          <div class="flex flex-col items-start flex-grow border border-red-500">
             <div class="flex justify-between items-center w-full">
-              <span class="text-sm font-medium">{{ conversation.user_recipient.full_name }}</span>
-              <span class="text-xs text-muted-foreground">{{ formatDate(conversation.date) }}</span>
+              <TruncatedContent :content="conversation.user_recipient.full_name" :maxLength="12" class="text-sm font-medium" />
+              <span class="ml-1 text-xs text-muted-foreground">{{ formatDate(conversation.date) }}</span>
             </div>
             <span class="text-xs text-muted-foreground mt-1">
-              <TruncatedMessage :content="conversation.content" :maxLength="20" />
+              <TruncatedContent :content="conversation.content" />
             </span>
           </div>
         </div>
@@ -66,7 +66,7 @@ import { computed } from 'vue'
 import { useMessageStore } from '@/stores/messages/messageStore'
 import { useCurrentConversationStore } from '@/stores/conversations/currentConversationStore'
 // Components
-import TruncatedMessage from '@/components/common/TruncatedMessage.vue'
+import TruncatedContent from '@/components/common/TruncatedContent.vue'
 import { FwbSpinner } from 'flowbite-vue'
 import { CircleUserRound } from 'lucide-vue-next'
 import { getUserAvatar  } from '@/utils/helpers'
