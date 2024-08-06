@@ -44,7 +44,7 @@
           <div class="flex flex-col items-start flex-grow ml-2">
             <div class="flex justify-between items-center w-full">
               <span class="text-sm font-medium">{{ conversation.user_recipient.full_name }}</span>
-              <span class="text-xs text-muted-foreground">{{ conversation.created_at }}</span>
+              <span class="text-xs text-muted-foreground">{{ formatDate(conversation.date) }}</span>
             </div>
             <span class="text-xs text-muted-foreground mt-1">
               <TruncatedMessage :content="conversation.content" :maxLength="20" />
@@ -71,6 +71,7 @@ import { FwbSpinner } from 'flowbite-vue'
 import { CircleUserRound } from 'lucide-vue-next'
 import { getUserAvatar  } from '@/utils/helpers'
 
+import { formatDate } from '@/utils/date/convertTime'; 
 
 const messageStore = useMessageStore()
 const currentConversationStore = useCurrentConversationStore()
