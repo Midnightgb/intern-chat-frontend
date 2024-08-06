@@ -56,6 +56,8 @@ const isLoadingMessages = computed(() => messageStore.loadingMessages)
 
 onMounted(() => {
   socketService.connect()
+  socketService.getConversations() // Solicitar conversaciones al montar el componente
+
 })
 
 onUnmounted(() => {
