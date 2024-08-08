@@ -1,3 +1,4 @@
+<!-- src/components/common/DirectMessages.vue -->
 <template>
   <div class="flex flex-col h-full">
     <div class="bg-muted rounded-lg p-2 text-muted-foreground">
@@ -65,6 +66,7 @@ import { computed } from 'vue'
 // Stores
 import { useMessageStore } from '@/stores/messages/messageStore'
 import { useCurrentConversationStore } from '@/stores/conversations/currentConversationStore'
+import { useCurrentChannelStore } from '@/stores/channels/currentChannelStore'
 // Components
 import TruncatedMessage from '@/components/common/TruncatedMessage.vue'
 import { FwbSpinner } from 'flowbite-vue'
@@ -75,11 +77,13 @@ import { formatDate } from '@/utils/date/convertTime';
 
 const messageStore = useMessageStore()
 const currentConversationStore = useCurrentConversationStore()
+const currentChannelStore = useCurrentChannelStore()
 const conversations = computed(() => messageStore.conversations)
 const loadingConversations = computed(() => messageStore.loadingConversations)
 
 function handleConversationClick(conversation) {
   currentConversationStore.setCurrentConversationId(conversation.user_recipient.id_user)
   currentConversationStore.setCurrentConversationName(conversation.user_recipient.full_name)
+  currentChannelStore.setCurrentChannelId(null)
 }
 </script>

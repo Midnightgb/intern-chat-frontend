@@ -66,11 +66,13 @@ onUnmounted(() => {
 })
 
 watch([currentChannelId, currentConversationId], ([newChannelId, newConversationId]) => {
+  console.log("ID ACTUAL DEL CANAL", currentChannelId.value);
+  console.log("ID ACTUAL DE LA CONVERSACION", currentConversationId.value);
+  
+  
   if (newChannelId) {
-    console.log("nuevo canal", newChannelId);
     socketService.joinChannel(newChannelId)
   } else if (newConversationId) {
-    console.log("nueva conversación", newConversationId);
     socketService.getDirectMessages(newConversationId, newConversationId)
   }
 })

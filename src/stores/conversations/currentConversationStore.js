@@ -1,5 +1,4 @@
 // src/stores/conversations/currentConversationStore.js
-// NO SE ESTÁ USANDO
 
 import { defineStore } from 'pinia'
 

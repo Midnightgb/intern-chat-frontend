@@ -12,6 +12,7 @@ export const useMessageStore = defineStore('message', {
   actions: {
     setMessages(messages) {
       console.log('Setting messages:', messages);
+      console.log("-------------------------------------");
       this.messages = messages;
     },
     addMessage(message) {
@@ -27,7 +28,7 @@ export const useMessageStore = defineStore('message', {
       this.messages = this.messages.filter(m => m.id_message !== messageId);
     },
     setConversations(conversations) {
-      console.log('Setting conversations:', conversations);
+      //console.log('Setting conversations:', conversations);
       this.conversations = conversations;
     },
     setLoadingMessages(loading) {
@@ -40,7 +41,6 @@ export const useMessageStore = defineStore('message', {
       this.error = error;
     },
     clearMessages() {
-      console.log('SE LIMPIARON LOS MENSAJES');
       this.messages = [];
     }
   },

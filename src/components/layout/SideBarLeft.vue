@@ -1,3 +1,4 @@
+<!-- src/components/layout/SideBarLeft.vue -->
 <template>
   <aside
     class="bg-background border-r border-gray-300 flex flex-col items-center gap-2 p-4 w-16 h-screen"
@@ -59,6 +60,7 @@ import { onMounted, onUnmounted, computed } from 'vue'
 // Stores
 import { useChannelStore } from '@/stores/channels/channelStore'
 import { useCurrentChannelStore } from '@/stores/channels/currentChannelStore'
+import { useCurrentConversationStore } from '@/stores/conversations/currentConversationStore'
 // Components
 import { FwbSpinner } from 'flowbite-vue'
 import ToolTip from '@/components/common/ToolTip.vue'
@@ -66,6 +68,7 @@ import { CircleDot } from 'lucide-vue-next'
 
 const channelStore = useChannelStore()
 const currentChannelStore = useCurrentChannelStore()
+const currentConversationStore = useCurrentConversationStore()
 
 const { channels, loading: loadingChannels, error } = storeToRefs(channelStore)
 
@@ -90,8 +93,8 @@ const onPrimaryButtonClick = () => {
 }
 
 const onChannelClick = (channel) => {
-  console.log('Channel clicked:', channel.id_channel, channel.name)
   currentChannelStore.setCurrentChannelId(channel.id_channel)
   currentChannelStore.setCurrentChannelName(channel.name)
+  currentConversationStore.setCurrentConversationId(null)
 }
 </script>

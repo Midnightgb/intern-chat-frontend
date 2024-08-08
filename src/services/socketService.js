@@ -74,10 +74,11 @@ class SocketService {
   }
 
   joinChannel(channelId) {
-    const token = this.authStore.token
     this.messageStore.clearMessages()  
+    const token = this.authStore.token
     this.messageStore.setLoadingMessages(true) 
     this.socket.emit('join_channel', { channelId, token })
+    
   }
 
   sendMessage(channel_id, message) {
@@ -93,6 +94,7 @@ class SocketService {
   }
 
   getDirectMessages(send_id, recipient_id) {
+    this.messageStore.clearMessages()  
     const token = this.authStore.token
     this.messageStore.setLoadingMessages(true)
     this.socket.emit('direct_message', { send_id, recipient_id, token })
