@@ -1,17 +1,16 @@
 //src/components/partials/SideBarRight.vue
 <template>
   <aside
-    class="bg-background border-r border-gray-300 flex flex-col h-screen items-center gap-2 p-4 w-48 sm:w-56"
+    class="bg-background border-r border-gray-300 flex flex-col h-screen items-center gap-2 pt-4 w-48 sm:w-56"
   >
-    <div class="flex flex-col items-center gap-2 w-full flex-grow overflow-y-auto">
-      <div class="flex flex-col items-center gap-2 w-full">
-        <DirectMessages />
-      </div>
-      <!-- Aquí agregar los mensajes directos -->
+    <div>
+      <DirectMessages />
     </div>
 
     <!-- Bloque de configuraciones de usuario -->
-    <div class="mt-auto w-full flex-shrink-0">
+    <div
+      class="mt-auto w-full flex-shrink-0 p-4 bg-gradient-to-t from-gray-100 to-gray-200 rounded-lg"
+    >
       <div class="flex-grow">
         <div class="flex items-center justify-between">
           <span class="relative flex shrink-0 overflow-hidden rounded-full w-8 h-8">
@@ -21,8 +20,8 @@
               alt="User Avatar"
               :src="userPhotoUrl"
               @error="handleImageError"
-              />
-              <!-- parametros que recibe la función getUserAvatar: user y path -->
+            />
+            <!-- parametros que recibe la función getUserAvatar: user y path -->
             <span v-else class="aspect-square h-full w-full">
               <CircleUserRound size="32" />
             </span>
@@ -63,15 +62,15 @@ const authStore = useAuthStore()
 const { user } = storeToRefs(authStore)
 const { handleLogout } = useLogout()
 
-const userPhotoUrl = ref(null);
+const userPhotoUrl = ref(null)
 
 const handleImageError = () => {
-  console.error('Error loading user avatar');
-  userPhotoUrl.value = null; // Esto hará que se muestre el icono por defecto
-};
+  console.error('Error loading user avatar')
+  userPhotoUrl.value = null // Esto hará que se muestre el icono por defecto
+}
 
 onMounted(() => {
-  userPhotoUrl.value = getUserAvatar({user:user}, 'user');
-  console.log(userPhotoUrl.value);
-});
+  userPhotoUrl.value = getUserAvatar({ user: user }, 'user')
+  console.log(userPhotoUrl.value)
+})
 </script>

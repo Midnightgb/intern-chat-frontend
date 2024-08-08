@@ -1,3 +1,4 @@
+//src/components/common/TruncatedContent.vue
 <template>
   <span class="text-muted-foreground">
     {{ truncatedContent }}
