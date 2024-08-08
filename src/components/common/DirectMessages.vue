@@ -1,3 +1,4 @@
+//src/components/common/DirectMessages.vue
 <template>
   <div class="flex flex-col h-full">
     <div class="bg-muted rounded-lg p-2 text-muted-foreground">
@@ -20,10 +21,25 @@
       </div>
     </div>
 
-    <div v-if="loadingConversations" class="flex items-center justify-center">
-      <fwb-spinner color="gray" size="10" />
+    <div v-if="loadingConversations" class="">
+      <!-- <fwb-spinner color="gray" size="10" /> -->
+      <!--       <v-skeleton-loader
+        type="list-item-two-line"
+        :loading="true"
+        height="64"
+        width="100%"
+        
+      /> -->
+      <button class="bg-muted p-0.5 text-muted-foreground hover:bg-slate-200 transition-all hover:text-accent-foreground w-full">
+        <v-skeleton-loader
+        :loading="true"
+        type="list-item-avatar-three-line"
+        height="64"
+        width="100%"
+        ></v-skeleton-loader>
+      </button>
     </div>
-
+    
     <div v-else-if="conversations.length > 0">
       <button
         v-for="conversation in conversations"
@@ -31,6 +47,7 @@
         class="bg-muted p-0.5 text-muted-foreground hover:bg-slate-200 transition-all hover:text-accent-foreground w-full"
         @click="handleConversationClick(conversation)"
       >
+
         <div class="flex items-center w-full">
           <span class="relative flex shrink-0 overflow-hidden rounded-full w-8 h-8 z-10">
             <img
@@ -53,16 +70,12 @@
           </span>
           <div class="flex flex-col items-start flex-grow p-1">
             <div class="flex justify-between items-center w-full">
-                <div
-                  class="text-sm font-medium inline capitalize truncate"
-                >
-                  {{ conversation.user_recipient.full_name }}
-                </div>
-                <span class="text-xs text-muted-foreground">{{
-                  formatDate(conversation.date)
-                }}</span>
+              <div class="text-sm font-medium inline capitalize truncate">
+                {{ conversation.user_recipient.full_name }}
+              </div>
+              <span class="text-xs text-muted-foreground">{{ formatDate(conversation.date) }}</span>
             </div>
-            <span class="text-xs text-muted-foreground mt-1 ">
+            <span class="text-xs text-muted-foreground mt-1">
               <TruncatedContent :content="conversation.content" />
             </span>
           </div>
