@@ -51,7 +51,8 @@ import { ref, onMounted, nextTick, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useMessageStore } from '@/stores/messages/messageStore'
 // Utils
-import { formatDate, getUserAvatar, getUserName } from '@/utils/helpers'
+import { getUserAvatar, getUserName } from '@/utils/helpers'
+import { formatDate } from '@/utils/date/convertTime'
 // Components
 import { CircleUserRound } from 'lucide-vue-next'
 import DropDown from '@/components/common/DropDown.vue'
