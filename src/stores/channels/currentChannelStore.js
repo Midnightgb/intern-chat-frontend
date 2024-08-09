@@ -1,17 +1,17 @@
 // src/stores/currentChannelStore.js
-import { defineStore } from 'pinia'
+import { defineStore } from 'pinia';
 
-export const useCurrentChannelStore = defineStore('currentChannel', {
+export const useCurrentChannelStore = defineStore('currentChannelStore', {
   state: () => ({
     currentChannelId: null,
-    currentChannelName: null
+    currentChannelName: '',
   }),
   actions: {
     setCurrentChannelId(id) {
-      this.currentChannelId = id
+      this.currentChannelId = id;
     },
     setCurrentChannelName(name) {
-      this.currentChannelName = name
-    }
-  }
-})
+      this.currentChannelName = name;
+    },
+  },
+});

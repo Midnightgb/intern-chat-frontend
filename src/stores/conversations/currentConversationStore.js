@@ -1,6 +1,6 @@
 // src/stores/conversations/currentConversationStore.js
 
-import { defineStore } from 'pinia'
+import { defineStore } from 'pinia';
 
 export const useCurrentConversationStore = defineStore('currentConversationStore', {
   state: () => ({
@@ -8,11 +8,11 @@ export const useCurrentConversationStore = defineStore('currentConversationStore
     currentConversationName: '',
   }),
   actions: {
-    setCurrentConversationId(conversationId) {
-      this.currentConversationId = conversationId
+    setCurrentConversationId(id) {
+      this.currentConversationId = id;
     },
-    setCurrentConversationName(conversationName) {
-      this.currentConversationName = conversationName
+    setCurrentConversationName(name) {
+      this.currentConversationName = name;
     },
-  }
-})
+  },
+});
