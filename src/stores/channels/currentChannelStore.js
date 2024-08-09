@@ -1,17 +1,18 @@
-// src/stores/currentChannelStore.js
-import { defineStore } from 'pinia'
+import { defineStore } from 'pinia';
 
 export const useCurrentChannelStore = defineStore('currentChannel', {
   state: () => ({
     currentChannelId: null,
-    currentChannelName: null
+    currentChannelName: '',
   }),
   actions: {
-    setCurrentChannelId(id) {
-      this.currentChannelId = id
+    updateCurrentChannel(id, name) {
+      this.currentChannelId = id;
+      this.currentChannelName = name;
     },
-    setCurrentChannelName(name) {
-      this.currentChannelName = name
+    clearCurrentChannel() {
+      this.currentChannelId = null;
+      this.currentChannelName = null;
     }
-  }
-})
+  },
+});

@@ -94,6 +94,7 @@ import { computed } from 'vue'
 // Stores
 import { useMessageStore } from '@/stores/messages/messageStore'
 import { useCurrentConversationStore } from '@/stores/conversations/currentConversationStore'
+import { useCurrentChannelStore } from '@/stores/channels/currentChannelStore'
 // Components
 import TruncatedContent from '@/components/common/TruncatedContent.vue'
 import { CircleUserRound } from 'lucide-vue-next'
@@ -103,11 +104,12 @@ import { formatDate } from '@/utils/date/convertTime'
 
 const messageStore = useMessageStore()
 const currentConversationStore = useCurrentConversationStore()
+const currentChannelStore = useCurrentChannelStore()
 const conversations = computed(() => messageStore.conversations)
 const loadingConversations = computed(() => messageStore.loadingConversations)
 
 function handleConversationClick(conversation) {
-  currentConversationStore.setCurrentConversationId(conversation.user_recipient.id_user)
-  currentConversationStore.setCurrentConversationName(conversation.user_recipient.full_name)
+  currentConversationStore.updateCurrentConversation(conversation.user_recipient.id_user, conversation.user_recipient.full_name)
+  currentChannelStore.clearCurrentChannel()
 }
 </script>

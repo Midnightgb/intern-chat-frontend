@@ -57,7 +57,7 @@ const isLoadingMessages = computed(() => messageStore.loadingMessages)
 
 onMounted(() => {
   socketService.connect()
-  socketService.getConversations() // Solicitar conversaciones al montar el componente
+  socketService.getConversations()
 
 })
 
@@ -67,10 +67,8 @@ onUnmounted(() => {
 
 watch([currentChannelId, currentConversationId], ([newChannelId, newConversationId]) => {
   if (newChannelId) {
-    console.log("nuevo canal", newChannelId);
     socketService.joinChannel(newChannelId)
   } else if (newConversationId) {
-    console.log("nueva conversación", newConversationId);
     socketService.getDirectMessages(newConversationId, newConversationId)
   }
 })

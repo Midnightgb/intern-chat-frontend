@@ -3,15 +3,16 @@ import { defineStore } from 'pinia';
 
 export const useMessageStore = defineStore('message', {
   state: () => ({
-    messages: [], // Mensajes de canales y mensajes directos
+    messages: [], 
     conversations: [],
-    loadingMessages: false, // Estado de carga para mensajes
-    loadingConversations: false, // Estado de carga para conversaciones
+    loadingMessages: false,
+    loadingConversations: false,
     error: null,
   }),
   actions: {
     setMessages(messages) {
       console.log('Setting messages:', messages);
+      console.log("-------------------------------------");
       this.messages = messages;
     },
     addMessage(message) {
@@ -40,7 +41,6 @@ export const useMessageStore = defineStore('message', {
       this.error = error;
     },
     clearMessages() {
-      console.log('SE LIMPIARON LOS MENSAJES');
       this.messages = [];
     }
   },
