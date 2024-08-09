@@ -1,26 +1,31 @@
 <template>
   <aside
-    class="bg-background border-r border-gray-300 flex flex-col items-center gap-2 p-4 w-16 h-screen"
+    class="bg-background border-r border-gray-300 flex flex-col items-center gap-2 w-16 h-screen"
   >
-    <div class="flex flex-col items-center gap-2 w-full flex-grow">
-      <button
-        class="bg-primary rounded-lg p-2 text-primary-foreground w-full"
-        @click="onPrimaryButtonClick"
-      >
+    <div class="flex flex-col items-center gap-2 w-full h-full">
+      <button class="rounded-lg p-2 w-full" @click="onPrimaryButtonClick">
         <div class="flex items-center justify-center">
           <CircleDot />
         </div>
       </button>
-      <div class="flex flex-col items-center gap-2 w-full flex-grow">
+      <div class="flex flex-col items-center p-2 gap-2 w-full flex-grow overflow-y-auto hide-scrollbar snap-y snap-mandatory">
         <!-- Mostrar loader mientras se cargan los canales -->
         <template v-if="loadingChannels">
-          <div class="flex items-center justify-center w-full h-full">
-            <fwb-spinner color="gray" size="10" />
+          <div class="w-full snap-always snap-start">
+            <v-skeleton-loader
+              v-for="index in 8"
+              :key="index"
+              :loading="true"
+              type="avatar"
+              height="64"
+              width="100%"
+              class="select-none flex items-center justify-center scroll-m-2"
+            ></v-skeleton-loader>
           </div>
         </template>
         <!-- Mostrar mensaje de error si hay uno -->
         <template v-else-if="error">
-          <div class="flex items-center justify-center w-full">
+          <div class="flex items-center justify-center w-full snap-always snap-start">
             <span class="text-red-500">Error: {{ error }}</span>
           </div>
         </template>
@@ -29,7 +34,7 @@
           <span
             v-for="(channel, index) in filteredChannels"
             :key="index"
-            class="bg-muted rounded-lg text-muted-foreground hover:bg-accent hover:text-accent-foreground w-full"
+            class="bg-muted rounded-lg text-muted-foreground hover:bg-accent hover:text-accent-foreground w-full select-none snap-always snap-start"
             @click="onChannelClick(channel)"
           >
             <div class="flex items-center justify-center">
@@ -60,7 +65,6 @@ import { onMounted, onUnmounted, computed } from 'vue'
 import { useChannelStore } from '@/stores/channels/channelStore'
 import { useCurrentChannelStore } from '@/stores/channels/currentChannelStore'
 // Components
-import { FwbSpinner } from 'flowbite-vue'
 import ToolTip from '@/components/common/ToolTip.vue'
 import { CircleDot } from 'lucide-vue-next'
 
@@ -95,3 +99,27 @@ const onChannelClick = (channel) => {
   currentChannelStore.setCurrentChannelName(channel.name)
 }
 </script>
+
+
+<style scoped>
+.hide-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.snap-y {
+  scroll-snap-type: y mandatory;
+}
+
+.snap-always {
+  scroll-snap-stop: always;
+}
+
+.snap-start {
+  scroll-snap-align: start;
+}
+</style>
