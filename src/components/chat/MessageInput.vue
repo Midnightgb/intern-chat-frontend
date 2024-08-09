@@ -26,10 +26,13 @@ import { storeToRefs } from 'pinia'
 import { socketService } from '@/services/socketService'
 // Stores
 import { useCurrentChannelStore } from '@/stores/channels/currentChannelStore'
+import { useCurrentConversationStore } from '@/stores/conversations/currentConversationStore'
 // Components
 import { Paperclip, Send } from 'lucide-vue-next';
 const currentChannelStore = useCurrentChannelStore()
+const currentConversationStore = useCurrentConversationStore()
 const { currentChannelId } = storeToRefs(currentChannelStore)
+const { currentConversationId } = storeToRefs(currentConversationStore)
 
 const message = ref('')
 
@@ -38,7 +41,12 @@ const sendMessage = () => {
     return
   }
 
-  socketService.sendMessage(currentChannelId.value, message.value)
+  if (currentChannelId.value) {
+    console.log("SE ESTA ENVIANDO UN MENSAJE A UN CANAL",);
+    socketService.sendMessage(currentChannelId.value, message.value)
+  } else if (currentConversationId.value) {
+    console.log('%cSE ESTA MANDANDO UN MENSAJE A UNA CONVERSACION', 'color: darkblue;');
+  }
   message.value = '' // Limpiar el input después de enviar
 }
 </script>
