@@ -96,7 +96,6 @@ import { useMessageStore } from '@/stores/messages/messageStore'
 import { useCurrentConversationStore } from '@/stores/conversations/currentConversationStore'
 // Components
 import TruncatedContent from '@/components/common/TruncatedContent.vue'
-import { FwbSpinner } from 'flowbite-vue'
 import { CircleUserRound } from 'lucide-vue-next'
 import { getUserAvatar } from '@/utils/helpers'
 
