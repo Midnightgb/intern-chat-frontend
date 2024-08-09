@@ -102,26 +102,6 @@ const onChannelClick = (channel) => {
 }
 </script>
 
-
-<style scoped>
-.hide-scrollbar {
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-
-.hide-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-
-.snap-y {
-  scroll-snap-type: y mandatory;
-}
-
-.snap-always {
-  scroll-snap-stop: always;
-}
-
-.snap-start {
-  scroll-snap-align: start;
-}
+<style>
+@import '@/assets/sidebar-scrollbar.css';
 </style>

@@ -74,3 +74,7 @@ onMounted(() => {
   console.log(userPhotoUrl.value)
 })
 </script>
+
+<style>
+@import '@/assets/sidebar-scrollbar.css';
+</style>

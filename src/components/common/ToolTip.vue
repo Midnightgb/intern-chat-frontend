@@ -8,7 +8,7 @@
       </fwb-button>
     </template>
     <template #content>
-      {{ tooltipContent }}
+      <TruncatedContent :content="tooltipContent" :maxLength="32" />
     </template>
   </fwb-tooltip>
 </template>
@@ -19,6 +19,7 @@ import { computed, defineAsyncComponent } from 'vue'
 import { FwbButton, FwbTooltip } from 'flowbite-vue'
 
 import { Settings, User, Server } from 'lucide-vue-next'
+import TruncatedContent from './TruncatedContent.vue';
 
 const iconMap = {
   Settings,

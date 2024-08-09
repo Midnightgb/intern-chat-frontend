@@ -30,14 +30,15 @@
         width="100%"
         
       /> -->
-      <button class="bg-muted p-0.5 text-muted-foreground hover:bg-slate-200 transition-all hover:text-accent-foreground w-full">
         <v-skeleton-loader
-        :loading="true"
-        type="list-item-avatar-three-line"
-        height="64"
-        width="100%"
+          v-for="index in 8"
+          :key="index"
+          :loading="true"
+          type="list-item-avatar-two-line"
+          height="58"
+          width="100%"
+          class="select-none flex items-center justify-center scroll-m-2"
         ></v-skeleton-loader>
-      </button>
     </div>
     
     <div v-else-if="conversations.length > 0">
