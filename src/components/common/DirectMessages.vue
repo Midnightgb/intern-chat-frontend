@@ -82,8 +82,7 @@ const conversations = computed(() => messageStore.conversations)
 const loadingConversations = computed(() => messageStore.loadingConversations)
 
 function handleConversationClick(conversation) {
-  currentConversationStore.setCurrentConversationId(conversation.user_recipient.id_user)
-  currentConversationStore.setCurrentConversationName(conversation.user_recipient.full_name)
-  currentChannelStore.setCurrentChannelId(null)
+  currentConversationStore.updateCurrentConversation(conversation.user_recipient.id_user, conversation.user_recipient.full_name)
+  currentChannelStore.clearCurrentChannel()
 }
 </script>

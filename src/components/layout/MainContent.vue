@@ -66,8 +66,10 @@ onUnmounted(() => {
 })
 
 watch([currentChannelId, currentConversationId], ([newChannelId, newConversationId]) => {
-  console.log("ID ACTUAL DEL CANAL", currentChannelId.value);
-  console.log("ID ACTUAL DE LA CONVERSACION", currentConversationId.value);
+    console.log('ID ACTUAL DEL CANAL', currentChannelId.value);
+    console.log('NOMBRE ACTUAL DEL CANAL', currentChannelName.value);
+    console.log('ID ACTUAL DE LA CONVERSACIÓN', currentConversationId.value);
+    console.log('NOMBRE ACTUAL DE LA CONVERSACIÓN', currentConversationName.value);
   
   
   if (newChannelId) {

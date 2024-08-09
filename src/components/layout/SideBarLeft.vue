@@ -93,8 +93,7 @@ const onPrimaryButtonClick = () => {
 }
 
 const onChannelClick = (channel) => {
-  currentChannelStore.setCurrentChannelId(channel.id_channel)
-  currentChannelStore.setCurrentChannelName(channel.name)
-  currentConversationStore.setCurrentConversationId(null)
+  currentChannelStore.updateCurrentChannel(channel.id_channel, channel.name)
+  currentConversationStore.clearCurrentConversation()
 }
 </script>

@@ -8,11 +8,13 @@ export const useCurrentConversationStore = defineStore('currentConversationStore
     currentConversationName: '',
   }),
   actions: {
-    setCurrentConversationId(id) {
+    updateCurrentConversation(id, name) {
       this.currentConversationId = id;
-    },
-    setCurrentConversationName(name) {
       this.currentConversationName = name;
     },
+    clearCurrentConversation() {
+      this.currentConversationId = null;
+      this.currentConversationName = null;
+    }
   },
 });
