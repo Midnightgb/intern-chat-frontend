@@ -1,15 +1,15 @@
 //src/components/partials/SideBarRight.vue
 <template>
   <aside
-    class="bg-background border-r border-gray-300 flex flex-col h-screen items-center gap-2 pt-4 w-48 sm:w-56"
+  class="bg-background border-r border-gray-300 flex flex-col h-screen w-48 sm:w-56"
   >
-    <div>
+    <div class="flex-grow overflow-hidden">
       <DirectMessages />
     </div>
 
     <!-- Bloque de configuraciones de usuario -->
     <div
-      class="mt-auto w-full flex-shrink-0 p-4 bg-gradient-to-t from-gray-100 to-gray-200 rounded-lg"
+      class="flex-shrink-0 w-full p-4 bg-gradient-to-t from-gray-100 to-gray-200 rounded-lg"
     >
       <div class="flex-grow">
         <div class="flex items-center justify-between">

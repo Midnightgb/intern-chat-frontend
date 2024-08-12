@@ -1,35 +1,14 @@
-//src/components/common/DirectMessages.vue
 <template>
-  <div class="flex flex-col h-full">
-    <div class="bg-muted rounded-lg p-2 text-muted-foreground">
+  <div class="flex flex-col h-full w-full">
+    <div class="bg-muted rounded-lg p-2 text-muted-foreground mb-2">
       <div class="flex items-center justify-center">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          class="h-6 w-6"
-        >
-          <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"></path>
-        </svg>
+        <MessageCircle />
         <span class="ml-2 text-sm font-medium inline">Direct Messages</span>
       </div>
     </div>
 
-    <div v-if="loadingConversations" class="">
-      <!-- <fwb-spinner color="gray" size="10" /> -->
-      <!--       <v-skeleton-loader
-        type="list-item-two-line"
-        :loading="true"
-        height="64"
-        width="100%"
-        
-      /> -->
+    <div class="flex-grow overflow-y-auto hide-scrollbar">
+      <div v-if="loadingConversations" class="space-y-2">
         <v-skeleton-loader
           v-for="index in 8"
           :key="index"
@@ -39,68 +18,67 @@
           width="100%"
           class="select-none flex items-center justify-center scroll-m-2"
         ></v-skeleton-loader>
-    </div>
-    
-    <div v-else-if="conversations.length > 0">
-      <button
-        v-for="conversation in conversations"
-        :key="conversation.user_recipient.id_user"
-        class="bg-muted p-0.5 text-muted-foreground hover:bg-slate-200 transition-all hover:text-accent-foreground w-full"
-        @click="handleConversationClick(conversation)"
-      >
+      </div>
 
-        <div class="flex items-center w-full">
-          <span class="relative flex shrink-0 overflow-hidden rounded-full w-8 h-8 z-10">
-            <img
-              v-if="
-                getUserAvatar(
-                  conversation,
-                  conversation.user_recipient ? 'user_recipient' : 'users'
-                )
-              "
-              class="aspect-square h-full w-full"
-              alt="User Avatar"
-              :src="
-                getUserAvatar(
-                  conversation,
-                  conversation.user_recipient ? 'user_recipient' : 'users'
-                )
-              "
-            />
-            <CircleUserRound v-else size="32" class="aspect-square h-full w-full" />
-          </span>
-          <div class="flex flex-col items-start flex-grow p-1">
-            <div class="flex justify-between items-center w-full">
-              <div class="text-sm font-medium inline capitalize truncate">
-                {{ conversation.user_recipient.full_name }}
-              </div>
-              <span class="text-xs text-muted-foreground">{{ formatDate(conversation.date) }}</span>
-            </div>
-            <span class="text-xs text-muted-foreground mt-1">
-              <TruncatedContent :content="conversation.content" />
+      <div v-else-if="conversations.length > 0" class="space-y-1">
+        <button
+          v-for="conversation in conversations"
+          :key="conversation.user_recipient.id_user"
+          class="bg-muted p-2 text-muted-foreground hover:bg-slate-200 transition-all hover:text-accent-foreground w-full rounded-lg"
+          @click="handleConversationClick(conversation)"
+        >
+          <div class="flex items-center w-full">
+            <span class="relative flex shrink-0 overflow-hidden rounded-full w-8 h-8 z-10">
+              <img
+                v-if="
+                  getUserAvatar(
+                    conversation,
+                    conversation.user_recipient ? 'user_recipient' : 'users'
+                  )
+                "
+                class="aspect-square h-full w-full object-cover"
+                alt="User Avatar"
+                :src="
+                  getUserAvatar(
+                    conversation,
+                    conversation.user_recipient ? 'user_recipient' : 'users'
+                  )
+                "
+              />
+              <CircleUserRound v-else size="32" class="aspect-square h-full w-full" />
             </span>
+            <div class="flex flex-col items-start flex-grow ml-2">
+              <div class="flex justify-between items-center w-full">
+                <div class="text-sm font-medium inline capitalize truncate">
+                  <TruncatedContent :content="conversation.user_recipient.full_name" />
+                </div>
+                <span class="text-xs text-muted-foreground">{{
+                  formatDate(conversation.date)
+                }}</span>
+              </div>
+              <span class="flex text-xs text-muted-foreground mt-1 truncate w-full">
+                <TruncatedContent :content="conversation.content" />
+              </span>
+            </div>
           </div>
-        </div>
-      </button>
-    </div>
+        </button>
+      </div>
 
-    <div v-else>
-      <p>No hay conversaciones.</p>
+      <div v-else class="text-center py-4 text-muted-foreground">
+        <p>No hay conversaciones.</p>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
 import { computed } from 'vue'
-// Stores
 import { useMessageStore } from '@/stores/messages/messageStore'
 import { useCurrentConversationStore } from '@/stores/conversations/currentConversationStore'
 import { useCurrentChannelStore } from '@/stores/channels/currentChannelStore'
-// Components
 import TruncatedContent from '@/components/common/TruncatedContent.vue'
-import { CircleUserRound } from 'lucide-vue-next'
+import { CircleUserRound, MessageCircle } from 'lucide-vue-next'
 import { getUserAvatar } from '@/utils/helpers'
-
 import { formatDate } from '@/utils/date/convertTime'
 
 const messageStore = useMessageStore()
@@ -110,7 +88,31 @@ const conversations = computed(() => messageStore.conversations)
 const loadingConversations = computed(() => messageStore.loadingConversations)
 
 function handleConversationClick(conversation) {
-  currentConversationStore.updateCurrentConversation(conversation.user_recipient.id_user, conversation.user_recipient.full_name)
+  currentConversationStore.updateCurrentConversation(
+    conversation.user_recipient.id_user,
+    conversation.user_recipient.full_name
+  )
   currentChannelStore.clearCurrentChannel()
 }
 </script>
+
+<style scoped>
+/* .overflow-y-auto {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(155, 155, 155, 0.5) transparent;
+}
+
+.overflow-y-auto::-webkit-scrollbar {
+  width: 6px;
+}
+
+.overflow-y-auto::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.overflow-y-auto::-webkit-scrollbar-thumb {
+  background-color: rgba(155, 155, 155, 0.5);
+  border-radius: 20px;
+  border: transparent;
+} */
+</style>
