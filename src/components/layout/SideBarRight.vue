@@ -3,7 +3,7 @@
   <aside
   class="bg-background border-r border-gray-300 flex flex-col h-screen w-48 sm:w-56"
   >
-    <div class="flex-grow overflow-hidden">
+    <div class="flex-grow overflow-hidden ">
       <DirectMessages />
     </div>
 

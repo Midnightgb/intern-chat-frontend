@@ -13,10 +13,10 @@
       >
         <span class="relative flex shrink-0 overflow-hidden rounded-full w-8 h-8 z-10">
           <img
-            v-if="getUserAvatar(message, message.users_receive ? 'users_receive' : 'users')"
-            class="aspect-square h-full w-full"
+            v-if="getUserAvatar(message, message.users_send ? 'users_send' : 'users')"
+            class="aspect-square h-full w-full object-cover"
             alt="User Avatar"
-            :src="getUserAvatar(message, message.users_receive ? 'users_receive' : 'users')"
+            :src="getUserAvatar(message, message.users_send ? 'users_send' : 'users')"
           />
           <CircleUserRound v-else size="32" class="aspect-square h-full w-full" />
         </span>
@@ -24,7 +24,7 @@
           <div class="flex justify-between">
             <div>
               <span class="font-semibold">
-                {{ getUserName(message, message.users_receive ? 'users_receive' : 'users') }}
+                {{ getUserName(message, message.users_send ? 'users_send' : 'users') }}
               </span>
               <span class="text-xs text-muted-foreground ml-2 truncate">
                 {{ formatDate(message.created_at) }}

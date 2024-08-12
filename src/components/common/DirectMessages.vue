@@ -24,7 +24,7 @@
         <button
           v-for="conversation in conversations"
           :key="conversation.user_recipient.id_user"
-          class="bg-muted p-2 text-muted-foreground hover:bg-slate-200 transition-all hover:text-accent-foreground w-full rounded-lg"
+          class="p-2 text-muted-foreground hover:bg-slate-200 hover:text-accent-foreground w-full rounded-lg"
           @click="handleConversationClick(conversation)"
         >
           <div class="flex items-center w-full">
