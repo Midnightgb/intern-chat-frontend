@@ -1,8 +1,8 @@
 //src/components/chat/MessageInput.vue
 <template>
   <div class="flex items-center gap-2">
-    <span class="relative flex shrink-0 overflow-hidden rounded-full w-8 h-8">
-      <Paperclip class="absolute bottom-0 right-0 text-muted-foreground" />
+    <span class="relative flex shrink-0 w-8 h-8">
+      <UploadFileTest class="absolute bottom-0 right-0" />
     </span>
     <input
       v-model="message"
@@ -28,7 +28,8 @@ import { socketService } from '@/services/socketService'
 import { useCurrentChannelStore } from '@/stores/channels/currentChannelStore'
 import { useCurrentConversationStore } from '@/stores/conversations/currentConversationStore'
 // Components
-import { Paperclip, Send } from 'lucide-vue-next';
+import { Send } from 'lucide-vue-next';
+import UploadFileTest from '@/components/common/UploadFileDropdown.vue'
 const currentChannelStore = useCurrentChannelStore()
 const currentConversationStore = useCurrentConversationStore()
 const { currentChannelId } = storeToRefs(currentChannelStore)
