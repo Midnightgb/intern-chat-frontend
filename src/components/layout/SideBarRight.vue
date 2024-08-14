@@ -70,8 +70,7 @@ const handleImageError = () => {
 }
 
 onMounted(() => {
-  userPhotoUrl.value = getUserAvatar({ user: user }, 'user')
-  console.log(userPhotoUrl.value)
+  userPhotoUrl.value = getUserAvatar({ user: user.value }, 'user')
 })
 </script>
 
