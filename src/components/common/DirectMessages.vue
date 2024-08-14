@@ -28,25 +28,7 @@
           @click="handleConversationClick(conversation)"
         >
           <div class="flex items-center w-full">
-            <span class="relative flex shrink-0 overflow-hidden rounded-full w-8 h-8 z-10">
-              <img
-                v-if="
-                  getUserAvatar(
-                    conversation,
-                    conversation.user_recipient ? 'user_recipient' : 'users'
-                  )
-                "
-                class="aspect-square h-full w-full object-cover"
-                alt="User Avatar"
-                :src="
-                  getUserAvatar(
-                    conversation,
-                    conversation.user_recipient ? 'user_recipient' : 'users'
-                  )
-                "
-              />
-              <CircleUserRound v-else size="32" class="aspect-square h-full w-full" />
-            </span>
+            <ImageLoader :conversation="conversation" />
             <div class="flex flex-col items-start flex-grow ml-2">
               <div class="flex justify-between items-center w-full">
                 <div class="text-sm font-medium inline capitalize truncate">
@@ -73,12 +55,16 @@
 
 <script setup>
 import { computed } from 'vue'
+// Stores
 import { useMessageStore } from '@/stores/messages/messageStore'
 import { useCurrentConversationStore } from '@/stores/conversations/currentConversationStore'
 import { useCurrentChannelStore } from '@/stores/channels/currentChannelStore'
+// Icons
+import { MessageCircle } from 'lucide-vue-next'
+// Components
 import TruncatedContent from '@/components/common/TruncatedContent.vue'
-import { CircleUserRound, MessageCircle } from 'lucide-vue-next'
-import { getUserAvatar } from '@/utils/helpers'
+import ImageLoader from '@/components/common/ImageLoader.vue'
+// Utils
 import { formatDate } from '@/utils/date/convertTime'
 
 const messageStore = useMessageStore()
@@ -95,24 +81,3 @@ function handleConversationClick(conversation) {
   currentChannelStore.clearCurrentChannel()
 }
 </script>
-
-<style scoped>
-/* .overflow-y-auto {
-  scrollbar-width: thin;
-  scrollbar-color: rgba(155, 155, 155, 0.5) transparent;
-}
-
-.overflow-y-auto::-webkit-scrollbar {
-  width: 6px;
-}
-
-.overflow-y-auto::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.overflow-y-auto::-webkit-scrollbar-thumb {
-  background-color: rgba(155, 155, 155, 0.5);
-  border-radius: 20px;
-  border: transparent;
-} */
-</style>
