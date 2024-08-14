@@ -4,10 +4,7 @@ const getNestedValue = (obj, path) => {
 }
 
 export const getUserAvatar = (data, path = 'users') => {
-  //console.log('data', data);
-  //console.log('path', path);
   const userData = getNestedValue(data, path);
-  //console.log('userData', userData);
   return userData?.photo_url || false;
 }
 
