@@ -1,4 +1,3 @@
-//src/components/chat/MessageList.vue
 <template>
   <div class="relative flex flex-col h-full">
     <div
@@ -31,10 +30,23 @@
               </span>
             </div>
             <button class="pt-1 pr-1 rounded-full">
-              <DropDown class="hover:text-black" />
+              <DropDown class="hover:text-black" 
+              @edit="editMessage(message)" 
+              @delete="deleteMessage(message.id_message)" />
             </button>
           </div>
-          <div class="text-muted-foreground">{{ message.content }}</div>
+          <div v-if="editingMessage === message.id_message">
+            <input 
+              v-model="editedContent" 
+              @keyup.enter="confirmEditMessage(message.id_message)"
+              class="w-full px-2 py-1 border border-gray-300 rounded-md"
+            />
+            <div class="flex justify-end mt-1">
+              <button @click="confirmEditMessage(message.id_message)" class="text-sm text-blue-500">Guardar</button>
+              <button @click="cancelEdit" class="ml-2 text-sm text-red-500">Cancelar</button>
+            </div>
+          </div>
+          <div v-else class="text-muted-foreground">{{ message.content }}</div>
         </div>
       </div>
     </div>
@@ -50,6 +62,7 @@ import { ref, onMounted, nextTick, watch } from 'vue'
 // Stores
 import { storeToRefs } from 'pinia'
 import { useMessageStore } from '@/stores/messages/messageStore'
+//import { useCurrentUserStore } from '@/stores/user/currentUserStore';
 // Utils
 import { getUserAvatar, getUserName } from '@/utils/helpers'
 import { formatDate } from '@/utils/date/convertTime'
@@ -61,9 +74,17 @@ import NewMessageNotification from '@/components/common/NewMessageNotification.v
 const messageStore = useMessageStore()
 const { messages } = storeToRefs(messageStore)
 
+console.log(messages.value)
+
+//const currentUserStore = useCurrentUserStore();
+//const { currentUserId } = storeToRefs(currentUserStore); 
+
 const messageContainer = ref(null)
 const isScrolledToBottom = ref(true)
 const showNewMessageNotification = ref(false)
+
+const editingMessage = ref(null)
+const editedContent = ref('')
 
 const scrollToBottom = (smooth) => {
   if (messageContainer.value) {
@@ -91,6 +112,23 @@ const handleScroll = () => {
   } else {
     console.warn('[handleScroll] messageContainer.value is null')
   }
+}
+
+const editMessage = (message) => {
+  editingMessage.value = message.id_message
+  editedContent.value = message.content
+}
+
+const confirmEditMessage = (messageId) => {
+  messageStore.updateMessage({
+    id_message: messageId,
+    content: editedContent.value
+  })
+  editingMessage.value = null
+}
+
+const cancelEdit = () => {
+  editingMessage.value = null
 }
 
 onMounted(() => {
@@ -123,29 +161,3 @@ watch(
   { deep: true }
 )
 </script>
-
-<style scoped>
-.overflow-y-auto {
-  scrollbar-width: thin;
-  scrollbar-color: rgba(204, 203, 203, 0.5) transparent;
-}
-
-.overflow-y-auto::-webkit-scrollbar {
-  width: 6px;
-}
-
-.overflow-y-auto::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.overflow-y-auto::-webkit-scrollbar-thumb {
-  background-color: rgba(155, 155, 155, 0.5);
-  border-radius: 20px;
-  border: transparent;
-}
-
-.break-words {
-  word-wrap: break-word;
-  word-break: break-word;
-}
-</style>

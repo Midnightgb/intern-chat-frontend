@@ -19,7 +19,6 @@ export const imageCache = {
         reader.readAsDataURL(blob);
       });
     } catch (error) {
-      console.error('Error caching image:', error);
       return null;
     }
   },

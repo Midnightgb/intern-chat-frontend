@@ -1,5 +1,7 @@
 // src/stores/messages/messageStore.js
 import { defineStore } from 'pinia';
+import { updateMessage as updateMessageApi } from '@/services/api';
+import { useCurrentUserStore } from '@/stores/user/currentUserStore';
 
 export const useMessageStore = defineStore('message', {
   state: () => ({
@@ -10,18 +12,35 @@ export const useMessageStore = defineStore('message', {
     error: null,
   }),
   actions: {
-    setMessages(messages) {
+    async setMessages(messages) {
       console.log('Setting messages:', messages);
-      console.log("-------------------------------------");
       this.messages = messages;
+      const idUser = messages[0].users.id_user;
+      console.log(idUser);
+
+      const currentUserStore = useCurrentUserStore();
+      currentUserStore.updateCurrentUser(idUser);
+
     },
     addMessage(message) {
       this.messages.push(message);
     },
-    updateMessage(updatedMessage) {
-      const index = this.messages.findIndex(m => m.id_message === updatedMessage.id_message);
-      if (index !== -1) {
-        this.messages[index] = updatedMessage;
+    async updateMessage(updatedMessage) {
+      try {
+        // Actualizar el mensaje en el estado
+        const index = this.messages.findIndex(m => m.id_message === updatedMessage.id_message);
+        if (index !== -1) {
+          this.messages[index] = { 
+            ...this.messages[index], 
+            ...updatedMessage 
+          };
+        }
+
+        // Enviar solicitud de actualización al backend
+        await updateMessageApi(updatedMessage);
+      } catch (error) {
+        this.error = 'No se pudo actualizar el mensaje';
+        console.error('Error updating message in store:', error);
       }
     },
     deleteMessage(messageId) {
