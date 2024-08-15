@@ -9,7 +9,9 @@
           <CircleDot />
         </div>
       </button>
-      <div class="flex flex-col items-center p-2 gap-2 w-full flex-grow overflow-y-auto hide-scrollbar snap-y snap-mandatory">
+      <div
+        class="flex flex-col items-center p-2 gap-2 w-full flex-grow overflow-y-auto hide-scrollbar snap-y snap-mandatory"
+      >
         <!-- Mostrar loader mientras se cargan los canales -->
         <template v-if="loadingChannels">
           <div class="w-full snap-always snap-start">
@@ -20,7 +22,7 @@
               type="avatar"
               height="64"
               width="100%"
-              class="select-none flex items-center justify-center scroll-m-2"
+              class="select-none flex items-center justify-center scroll-m-2 custom-avatar-loader"
             ></v-skeleton-loader>
           </div>
         </template>
@@ -104,4 +106,9 @@ const onChannelClick = (channel) => {
 
 <style>
 @import '@/assets/sidebar-scrollbar.css';
+/* .custom-avatar-loader .v-skeleton-loader__avatar {
+  margin: 8px 16px !important;
+  width: 42px !important;
+  height: 42px !important;
+} */
 </style>

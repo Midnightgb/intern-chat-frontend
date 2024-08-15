@@ -4,8 +4,6 @@
     <v-skeleton-loader
       v-if="loading"
       type="avatar"
-      width="32"
-      height="32"
       class="absolute inset-0"
     />
     <img
@@ -31,7 +29,7 @@ import { imageCache } from '@/utils/imageCache'
 import { getUserAvatar } from '@/utils/helpers'
 
 const props = defineProps({
-  conversation: {
+  message: {
     type: Object,
     required: true
   }
@@ -43,8 +41,8 @@ const cachedAvatarSrc = ref(null)
 
 const avatarSrc = computed(() => {
   return getUserAvatar(
-    props.conversation,
-    props.conversation.user_recipient ? 'user_recipient' : 'users'
+    props.message,
+    props.message.user_recipient ? 'user_recipient' : props.message.users ? 'users' : 'users_send'
   )
 })
 

@@ -12,11 +12,10 @@
         class="flex items-start gap-2 relative bg-gray-300 rounded-lg p-3 break-words"
       >
         <span class="relative flex shrink-0 overflow-hidden rounded-full w-8 h-8 z-10">
-          <img
-            v-if="getUserAvatar(message, message.users_send ? 'users_send' : 'users')"
-            class="aspect-square h-full w-full object-cover"
-            alt="User Avatar"
-            :src="getUserAvatar(message, message.users_send ? 'users_send' : 'users')"
+          <ImageLoader
+            v-if="message.users || message.users_send"
+            :message="message"
+            class="aspect-square h-full w-full"
           />
           <CircleUserRound v-else size="32" class="aspect-square h-full w-full" />
         </span>
@@ -51,12 +50,13 @@ import { ref, onMounted, nextTick, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useMessageStore } from '@/stores/messages/messageStore'
 // Utils
-import { getUserAvatar, getUserName } from '@/utils/helpers'
+import { getUserName } from '@/utils/helpers'
 import { formatDate } from '@/utils/date/convertTime'
 // Components
 import { CircleUserRound } from 'lucide-vue-next'
 import DropDown from '@/components/common/DropDown.vue'
 import NewMessageNotification from '@/components/common/NewMessageNotification.vue'
+import ImageLoader from '@/components/common/ImageLoader.vue'
 
 const messageStore = useMessageStore()
 const { messages } = storeToRefs(messageStore)
