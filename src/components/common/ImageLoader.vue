@@ -1,7 +1,8 @@
-// ImageLoader.vue
+//src/components/common/ImageLoader.vue
 <template>
   <span class="relative flex shrink-0 overflow-hidden rounded-full w-8 h-8 z-10">
     <v-skeleton-loader
+      v-if="loading"
       type="avatar"
       width="32"
       height="32"
@@ -47,7 +48,6 @@ const avatarSrc = computed(() => {
   )
 })
 
-
 function onImageLoad() {
   loading.value = false
 }
@@ -69,9 +69,3 @@ onMounted(async () => {
   loading.value = false
 })
 </script>
-<style lang="scss" scoped>
-  .v-skeleton-loader .v-skeleton-loader__avatar {
-    margin: 0 !important;
-    background: #0055ff;
-  }
-</style>
