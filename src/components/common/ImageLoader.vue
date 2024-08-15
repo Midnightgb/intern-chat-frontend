@@ -4,7 +4,7 @@
     <v-skeleton-loader
       v-if="loading"
       type="avatar"
-      class="absolute inset-0"
+      class="absolute inset-0 custom-margin-avatar-loader"
     />
     <img
       v-if="cachedAvatarSrc"
@@ -29,7 +29,7 @@ import { imageCache } from '@/utils/imageCache'
 import { getUserAvatar } from '@/utils/helpers'
 
 const props = defineProps({
-  message: {
+  conversation: {
     type: Object,
     required: true
   }
@@ -67,3 +67,8 @@ onMounted(async () => {
   loading.value = false
 })
 </script>
+<style lang="scss">
+.custom-margin-avatar-loader .v-skeleton-loader__avatar {
+  margin: 0 !important;
+}
+</style>
