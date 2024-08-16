@@ -9,7 +9,9 @@
           <CircleDot />
         </div>
       </button>
-      <div class="flex flex-col items-center p-2 gap-2 w-full flex-grow overflow-y-auto hide-scrollbar snap-y snap-mandatory">
+      <div
+        class="flex flex-col items-center p-2 gap-2 w-full flex-grow overflow-y-auto hide-scrollbar snap-y snap-mandatory"
+      >
         <!-- Mostrar loader mientras se cargan los canales -->
         <template v-if="loadingChannels">
           <div class="w-full snap-always snap-start">
@@ -20,7 +22,7 @@
               type="avatar"
               height="64"
               width="100%"
-              class="select-none flex items-center justify-center scroll-m-2"
+              class="select-none flex items-center justify-center scroll-m-2 custom-avatar-loader"
             ></v-skeleton-loader>
           </div>
         </template>
@@ -35,7 +37,7 @@
           <span
             v-for="(channel, index) in filteredChannels"
             :key="index"
-            class="bg-muted rounded-lg text-muted-foreground hover:bg-accent hover:text-accent-foreground w-full select-none snap-always snap-start"
+            class="bg-muted rounded-lg text-muted-foreground hover:bg-accent hover:text-accent-foreground w-full select-none"
             @click="onChannelClick(channel)"
           >
             <div class="flex items-center justify-center">
@@ -102,6 +104,16 @@ const onChannelClick = (channel) => {
 }
 </script>
 
-<style>
+<style lang="scss">
 @import '@/assets/sidebar-scrollbar.css';
+.custom-avatar-loader .v-skeleton-loader__avatar {
+  max-height: 42px !important;
+  min-height: 42px !important;
+
+  max-width: 42px !important;
+  min-width: 42px !important;
+  
+  width: 42px !important;
+  height: 42px !important;
+}
 </style>

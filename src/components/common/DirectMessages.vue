@@ -28,7 +28,7 @@
           @click="handleConversationClick(conversation)"
         >
           <div class="flex items-center w-full">
-            <ImageLoader :conversation="conversation" />
+            <ImageLoader :message="conversation" />
             <div class="flex flex-col items-start flex-grow ml-2">
               <div class="flex justify-between items-center w-full">
                 <div class="text-sm font-medium inline capitalize truncate">

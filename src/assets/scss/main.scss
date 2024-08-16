@@ -1,0 +1,6 @@
+//src/assets/scss/main.scss
+@use 'vuetify/settings' with (
+  $skeleton-loader-avatar-width: 32px,
+  $skeleton-loader-avatar-height: 32px,
+  $skeleton-loader-avatar-margin: 0 8px,
+);

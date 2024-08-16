@@ -1,11 +1,10 @@
-// ImageLoader.vue
+//src/components/common/ImageLoader.vue
 <template>
   <span class="relative flex shrink-0 overflow-hidden rounded-full w-8 h-8 z-10">
     <v-skeleton-loader
+      v-if="loading"
       type="avatar"
-      width="32"
-      height="32"
-      class="absolute inset-0"
+      class="absolute inset-0 custom-margin-avatar-loader"
     />
     <img
       v-if="cachedAvatarSrc"
@@ -42,11 +41,10 @@ const cachedAvatarSrc = ref(null)
 
 const avatarSrc = computed(() => {
   return getUserAvatar(
-    props.conversation,
-    props.conversation.user_recipient ? 'user_recipient' : 'users'
+    props.message,
+    props.message.user_recipient ? 'user_recipient' : props.message.users ? 'users' : 'users_send'
   )
 })
-
 
 function onImageLoad() {
   loading.value = false
@@ -69,9 +67,8 @@ onMounted(async () => {
   loading.value = false
 })
 </script>
-<style lang="scss" scoped>
-  .v-skeleton-loader .v-skeleton-loader__avatar {
-    margin: 0 !important;
-    background: #0055ff;
-  }
+<style lang="scss">
+.custom-margin-avatar-loader .v-skeleton-loader__avatar {
+  margin: 0 !important;
+}
 </style>
