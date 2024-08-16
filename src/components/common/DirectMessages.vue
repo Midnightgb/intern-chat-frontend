@@ -6,11 +6,11 @@
         <MessageCircle />
         <span class="ml-2 text-sm font-medium inline">Direct Messages</span>
       </div>
-              <!-- Botón para crear un nuevo mensaje directo y input para buscar usuarios -->
+    <!-- Botón para crear un nuevo mensaje directo y input para buscar usuarios -->
       <div class="flex items-center justify-between mt-2">
         <button
           class="ml-auto p-2 rounded-full hover:bg-slate-200 hover:text-accent-foreground"
-          @click="handleNewConversation">
+          @click="nada">
           <CirclePlus />
         </button>
         <input
@@ -26,6 +26,7 @@
           <CircleX />
         </button>
       </div>
+      <!--  -->
     </div>
 
     <div class="flex-grow overflow-y-auto hide-scrollbar">
@@ -81,7 +82,7 @@ import { useMessageStore } from '@/stores/messages/messageStore'
 import { useCurrentConversationStore } from '@/stores/conversations/currentConversationStore'
 import { useCurrentChannelStore } from '@/stores/channels/currentChannelStore'
 // Icons
-import { MessageCircle,CirclePlus,CircleX } from 'lucide-vue-next'
+import { MessageCircle, CirclePlus, CircleX } from 'lucide-vue-next'
 // Components
 import TruncatedContent from '@/components/common/TruncatedContent.vue'
 import ImageLoader from '@/components/common/ImageLoader.vue'
@@ -109,11 +110,6 @@ function handleConversationClick(conversation) {
     conversation.user_recipient.id_user,
     conversation.user_recipient.full_name
   )
-  currentChannelStore.clearCurrentChannel()
-}
-
-function handleNewConversation() {
-  currentConversationStore.clearCurrentConversation()
   currentChannelStore.clearCurrentChannel()
 }
 
