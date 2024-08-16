@@ -28,10 +28,12 @@
                 {{ formatDate(message.created_at) }}
               </span>
             </div>
-            <button class="pt-1 pr-1 rounded-full">
-              <DropDown class="hover:text-black" 
-              @edit="editMessage(message)" 
-              @delete="deleteMessage(message.id_message)" />
+            <!-- Verificamos si el id_message es igual a 2 para mostrar el botón de editar -->
+            <button v-if="message.users.id_user === currentUserId" class="pt-1 pr-1 rounded-full">
+              <DropDown
+                :canEdit="true"
+                @edit="editMessage(message)" 
+                @delete="deleteMessage(message.id_message)" />
             </button>
           </div>
           <div v-if="editingMessage === message.id_message">
@@ -56,12 +58,14 @@
   </div>
 </template>
 
+
+
 <script setup>
 import { ref, onMounted, nextTick, watch } from 'vue'
 // Stores
 import { storeToRefs } from 'pinia'
 import { useMessageStore } from '@/stores/messages/messageStore'
-//import { useCurrentUserStore } from '@/stores/user/currentUserStore';
+import { useCurrentUserStore } from '@/stores/user/currentUserStore';
 // Utils
 import { getUserName } from '@/utils/helpers'
 import { formatDate } from '@/utils/date/convertTime'
@@ -74,10 +78,10 @@ import ImageLoader from '@/components/common/ImageLoader.vue'
 const messageStore = useMessageStore()
 const { messages } = storeToRefs(messageStore)
 
-console.log(messages.value)
+console.log(messages.value);
 
-//const currentUserStore = useCurrentUserStore();
-//const { currentUserId } = storeToRefs(currentUserStore); 
+const currentUserStore = useCurrentUserStore();
+const { currentUserId } = storeToRefs(currentUserStore); 
 
 const messageContainer = ref(null)
 const isScrolledToBottom = ref(true)

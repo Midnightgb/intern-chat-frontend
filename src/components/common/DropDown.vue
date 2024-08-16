@@ -4,13 +4,13 @@
       <EllipsisVertical class="w-5 h-5 text-gray-500 cursor-pointer focus:outline-none hover:text-blue-600 focus:text-blue-600 active:text-blue-950 focus:border-none transition-all" />
     </template>
     <fwb-list-group>
-      <fwb-list-group-item v-if="props.canEdit" hover>
+      <fwb-list-group-item v-if="props.canEdit" hover @click="$emit('edit')">
         <template #prefix>
           <Pencil size="16"/> 
         </template>
         Editar
       </fwb-list-group-item>
-      <fwb-list-group-item hover>
+      <fwb-list-group-item hover @click="$emit('delete')">
         <template #prefix>
           <Trash2 size="16"/> 
         </template>
@@ -31,7 +31,6 @@ import { EllipsisVertical, Copy, Pencil, Trash2 } from 'lucide-vue-next'
 import { FwbDropdown, FwbListGroup, FwbListGroupItem } from 'flowbite-vue'
 import { defineProps } from 'vue'
 
-// Definir las props usando defineProps
 const props = defineProps({
   canEdit: Boolean,
 })
