@@ -1,9 +1,30 @@
+//src/components/common/DirectMessages.vue
 <template>
   <div class="flex flex-col h-full w-full">
     <div class="bg-muted rounded-lg p-2 text-muted-foreground mb-2">
       <div class="flex items-center justify-center">
         <MessageCircle />
         <span class="ml-2 text-sm font-medium inline">Direct Messages</span>
+      </div>
+              <!-- Botón para crear un nuevo mensaje directo y input para buscar usuarios -->
+      <div class="flex items-center justify-between mt-2">
+        <button
+          class="ml-auto p-2 rounded-full hover:bg-slate-200 hover:text-accent-foreground"
+          @click="handleNewConversation">
+          <CirclePlus />
+        </button>
+        <input
+          v-model="search"
+          type="text"
+          placeholder="Buscar..."
+          class="w-1/2 p-2 rounded-lg bg-slate-200 text-muted-foreground"
+        />
+        <button
+          v-if="search"
+          class="p-2 rounded-full hover:bg-slate-200 hover:text-accent-foreground"
+          @click="clearSearch">
+          <CircleX />
+        </button>
       </div>
     </div>
 
@@ -20,9 +41,9 @@
         ></v-skeleton-loader>
       </div>
 
-      <div v-else-if="conversations.length > 0" class="space-y-1">
+      <div v-else-if="filteredConversations.length > 0" class="space-y-1">
         <button
-          v-for="conversation in conversations"
+          v-for="conversation in filteredConversations"
           :key="conversation.user_recipient.id_user"
           class="p-2 text-muted-foreground hover:bg-slate-200 hover:text-accent-foreground w-full rounded-lg"
           @click="handleConversationClick(conversation)"
@@ -54,13 +75,13 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 // Stores
 import { useMessageStore } from '@/stores/messages/messageStore'
 import { useCurrentConversationStore } from '@/stores/conversations/currentConversationStore'
 import { useCurrentChannelStore } from '@/stores/channels/currentChannelStore'
 // Icons
-import { MessageCircle } from 'lucide-vue-next'
+import { MessageCircle,CirclePlus,CircleX } from 'lucide-vue-next'
 // Components
 import TruncatedContent from '@/components/common/TruncatedContent.vue'
 import ImageLoader from '@/components/common/ImageLoader.vue'
@@ -73,11 +94,30 @@ const currentChannelStore = useCurrentChannelStore()
 const conversations = computed(() => messageStore.conversations)
 const loadingConversations = computed(() => messageStore.loadingConversations)
 
+const search = ref('')
+
+const filteredConversations = computed(() => {
+  if (!search.value) return conversations.value
+  return conversations.value.filter(conversation => 
+    conversation.user_recipient.full_name.toLowerCase().includes(search.value.toLowerCase()) ||
+    conversation.content.toLowerCase().includes(search.value.toLowerCase())
+  )
+})
+
 function handleConversationClick(conversation) {
   currentConversationStore.updateCurrentConversation(
     conversation.user_recipient.id_user,
     conversation.user_recipient.full_name
   )
   currentChannelStore.clearCurrentChannel()
+}
+
+function handleNewConversation() {
+  currentConversationStore.clearCurrentConversation()
+  currentChannelStore.clearCurrentChannel()
+}
+
+function clearSearch() {
+  search.value = ''
 }
 </script>
