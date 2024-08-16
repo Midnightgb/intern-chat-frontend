@@ -1,3 +1,4 @@
+//src/components/chat/MessageList.vue
 <template>
   <div class="relative flex flex-col h-full">
     <div
@@ -28,7 +29,7 @@
                 {{ formatDate(message.created_at) }}
               </span>
             </div>
-            <button v-if="message.user_id === currentUserId" class="pt-1 pr-1 rounded-full">
+            <button v-if="message.user_id ? message.user_id === currentUserId : message.send_id === currentUserId" class="pt-1 pr-1 rounded-full">
               <DropDown
                 :canEdit="true"
                 @edit="editMessage(message)" 
