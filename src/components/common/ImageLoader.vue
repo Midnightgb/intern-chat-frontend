@@ -29,7 +29,7 @@ import { imageCache } from '@/utils/imageCache'
 import { getUserAvatar } from '@/utils/helpers'
 
 const props = defineProps({
-  conversation: {
+  message: {
     type: Object,
     required: true
   }
