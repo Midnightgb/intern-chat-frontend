@@ -28,8 +28,7 @@
                 {{ formatDate(message.created_at) }}
               </span>
             </div>
-            <!-- Verificamos si el id_message es igual a 2 para mostrar el botón de editar -->
-            <button v-if="message.users.id_user === currentUserId" class="pt-1 pr-1 rounded-full">
+            <button v-if="message.user_id === currentUserId" class="pt-1 pr-1 rounded-full">
               <DropDown
                 :canEdit="true"
                 @edit="editMessage(message)" 
