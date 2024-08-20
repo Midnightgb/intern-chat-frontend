@@ -78,10 +78,11 @@ import ImageLoader from '@/components/common/ImageLoader.vue'
 const messageStore = useMessageStore()
 const { messages } = storeToRefs(messageStore)
 
-console.log(messages.value);
-
 const currentUserStore = useCurrentUserStore();
-const { currentUserId } = storeToRefs(currentUserStore); 
+const { currentUserId } = storeToRefs(currentUserStore);
+
+console.log("ESTE ES EL ID DEL USUARIO ACTUAL", currentUserId.value);
+
 
 const messageContainer = ref(null)
 const isScrolledToBottom = ref(true)

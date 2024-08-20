@@ -16,7 +16,6 @@ export const useMessageStore = defineStore('message', {
       console.log('Setting messages:', messages);
       this.messages = messages;
       const idUser = messages[0].users.id_user;
-      console.log(idUser);
 
       const currentUserStore = useCurrentUserStore();
       currentUserStore.updateCurrentUser(idUser);
