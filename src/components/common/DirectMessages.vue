@@ -1,29 +1,33 @@
 //src/components/common/DirectMessages.vue
 <template>
   <div class="flex flex-col h-full w-full">
-    <div class="bg-muted rounded-lg p-2 text-muted-foreground mb-2">
+    <div class="bg-muted rounded-lg p-2 text-muted-foreground my-2">
       <div class="flex items-center justify-center">
         <MessageCircle />
-        <span class="ml-2 text-sm font-medium inline">Direct Messages</span>
+        <span class="ml-2 text-sm font-medium inline">Mensajes Directos</span>
       </div>
-    <!-- Botón para crear un nuevo mensaje directo y input para buscar usuarios -->
+      <!-- Botón para crear un nuevo mensaje directo y input para buscar usuarios -->
       <div class="flex items-center justify-between mt-2">
+        <div class="relative w-10/12">
+          <input
+            v-model="search"
+            type="text"
+            placeholder="Buscar..."
+            class="w-full p-2 rounded-lg bg-slate-200 text-muted-foreground"
+          />
+          <button
+            v-if="search"
+            class="absolute right-2 top-1/2 transform -translate-y-1/2 p-2 rounded-full transition-all hover:text-slate-600 text-slate-400"
+            @click="clearSearch"
+          >
+            <CircleX />
+          </button>
+        </div>
         <button
-          class="ml-auto p-2 rounded-full hover:bg-slate-200 hover:text-accent-foreground"
-          @click="nada">
+          class="ml-auto p-2 rounded-full transition-all hover:bg-slate-200 hover:text-accent-foreground"
+          @click="nada"
+        >
           <CirclePlus />
-        </button>
-        <input
-          v-model="search"
-          type="text"
-          placeholder="Buscar..."
-          class="w-1/2 p-2 rounded-lg bg-slate-200 text-muted-foreground"
-        />
-        <button
-          v-if="search"
-          class="p-2 rounded-full hover:bg-slate-200 hover:text-accent-foreground"
-          @click="clearSearch">
-          <CircleX />
         </button>
       </div>
       <!--  -->
@@ -99,9 +103,10 @@ const search = ref('')
 
 const filteredConversations = computed(() => {
   if (!search.value) return conversations.value
-  return conversations.value.filter(conversation => 
-    conversation.user_recipient.full_name.toLowerCase().includes(search.value.toLowerCase()) ||
-    conversation.content.toLowerCase().includes(search.value.toLowerCase())
+  return conversations.value.filter(
+    (conversation) =>
+      conversation.user_recipient.full_name.toLowerCase().includes(search.value.toLowerCase()) ||
+      conversation.content.toLowerCase().includes(search.value.toLowerCase())
   )
 })
 
