@@ -13,14 +13,14 @@
             v-model="search"
             type="text"
             placeholder="Buscar..."
-            class="w-full p-2 rounded-lg bg-slate-200 text-muted-foreground"
+            class="w-full p-1 rounded-lg bg-slate-200 text-muted-foreground placeholder:text-xs"
           />
           <button
             v-if="search"
-            class="absolute right-2 top-1/2 transform -translate-y-1/2 p-2 rounded-full transition-all hover:text-slate-600 text-slate-400"
+            class="absolute right-2 top-1/2 transform -translate-y-1/2 rounded-full transition-all hover:text-slate-600 text-slate-400"
             @click="clearSearch"
           >
-            <CircleX />
+            <CircleX class="w-6 h-6"/>
           </button>
         </div>
         <button
@@ -50,7 +50,7 @@
         <button
           v-for="conversation in filteredConversations"
           :key="conversation.user_recipient.id_user"
-          class="p-2 text-muted-foreground hover:bg-slate-200 hover:text-accent-foreground w-full rounded-lg"
+          class="p-2 text-muted-foreground border-b-2 hover:bg-slate-200 hover:text-accent-foreground w-full"
           @click="handleConversationClick(conversation)"
         >
           <div class="flex items-center w-full">
@@ -80,7 +80,7 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue'
+import { computed, ref, watchEffect } from 'vue'
 // Stores
 import { useMessageStore } from '@/stores/messages/messageStore'
 import { useCurrentConversationStore } from '@/stores/conversations/currentConversationStore'
@@ -92,6 +92,8 @@ import TruncatedContent from '@/components/common/TruncatedContent.vue'
 import ImageLoader from '@/components/common/ImageLoader.vue'
 // Utils
 import { formatDate } from '@/utils/date/convertTime'
+// API
+import { getUserByName } from '@/services/api.js'
 
 const messageStore = useMessageStore()
 const currentConversationStore = useCurrentConversationStore()
@@ -100,15 +102,42 @@ const conversations = computed(() => messageStore.conversations)
 const loadingConversations = computed(() => messageStore.loadingConversations)
 
 const search = ref('')
+const filteredConversations = ref([])
 
-const filteredConversations = computed(() => {
-  if (!search.value) return conversations.value
-  return conversations.value.filter(
+watchEffect(async () => {
+  if (!search.value) {
+    filteredConversations.value = conversations.value
+    return
+  }
+
+  const localResults = conversations.value.filter(
     (conversation) =>
       conversation.user_recipient.full_name.toLowerCase().includes(search.value.toLowerCase()) ||
-      conversation.content.toLowerCase().includes(search.value.toLowerCase())
+      conversation.content.toLowerCase().includes(search.value.toLowerCase()) || 
+      conversation.user_recipient.network_user.toLowerCase().includes(search.value.toLowerCase())
   )
+
+  if (localResults.length > 0) {
+    filteredConversations.value = localResults
+  } else {
+    const apiResults = await searchUsersInAPI(search.value)
+    filteredConversations.value = apiResults
+    console.log('apiResults:', apiResults);
+    console.log('search:', search.value);
+  }
 })
+
+async function searchUsersInAPI(query) {
+  try {
+    const response = await getUserByName(query)
+    console.log('query:', query);
+    console.log('API response:', response);
+    return response.data
+  } catch (error) {
+    console.warn('User not found')
+    return []
+  }
+}
 
 function handleConversationClick(conversation) {
   currentConversationStore.updateCurrentConversation(
@@ -121,4 +150,9 @@ function handleConversationClick(conversation) {
 function clearSearch() {
   search.value = ''
 }
+
+function nada() {
+  console.log('nada')
+}
+
 </script>
