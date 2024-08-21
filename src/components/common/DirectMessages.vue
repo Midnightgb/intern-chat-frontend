@@ -103,8 +103,12 @@ const loadingConversations = computed(() => messageStore.loadingConversations)
 
 const search = ref('')
 const filteredConversations = ref([])
+let debounceTimeout = null
 
 watchEffect(async () => {
+  if (debounceTimeout) {
+    clearTimeout(debounceTimeout)
+  }
   if (!search.value) {
     filteredConversations.value = conversations.value
     return
@@ -119,15 +123,26 @@ watchEffect(async () => {
 
   if (localResults.length > 0) {
     filteredConversations.value = localResults
+    const timestamp = new Date().getTime()
+    const formattedDate = new Date(timestamp).toLocaleString()
+    console.log('search:', search.value, 'time:', formattedDate);
+    console.log('localResults:', localResults);
   } else {
-    const apiResults = await searchUsersInAPI(search.value)
-    filteredConversations.value = apiResults
-    console.log('apiResults:', apiResults);
-    console.log('search:', search.value);
+    debounceTimeout = setTimeout(async () => {
+      if (search.value == '') {
+        return
+      }
+      const apiResults = await searchUserInDB(search.value)
+      filteredConversations.value = apiResults
+      const timestamp = new Date().getTime()
+      const formattedDate = new Date(timestamp).toLocaleString()
+      console.log('search:', search.value, 'time:', formattedDate);
+      console.log('apiResults:', apiResults);
+    }, 200)
   }
 })
 
-async function searchUsersInAPI(query) {
+async function searchUserInDB(query) {
   try {
     const response = await getUserByName(query)
     console.log('query:', query);
