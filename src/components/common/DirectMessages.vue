@@ -46,26 +46,32 @@
         ></v-skeleton-loader>
       </div>
 
-      <div v-else-if="filteredConversations.length > 0" class="space-y-1">
+      <div v-else-if="filteredResults.length > 0" class="space-y-1">
         <button
-          v-for="conversation in filteredConversations"
-          :key="conversation.user_recipient.id_user"
+          v-for="result in filteredResults"
+          :key="getKey(result)"
           class="p-2 text-muted-foreground border-b-2 hover:bg-slate-200 hover:text-accent-foreground w-full"
-          @click="handleConversationClick(conversation)"
+          @click="handleResultClick(result)"
         >
           <div class="flex items-center w-full">
-            <ImageLoader :message="conversation" />
+            <ImageLoader :message="result" v-if="isConversation(result)" />
+            <img
+              v-else
+              :src="result.photo_url || 'path/to/default/avatar.png'"
+              alt="User avatar"
+              class="w-10 h-10 rounded-full object-cover"
+            />
             <div class="flex flex-col items-start flex-grow ml-2">
               <div class="flex justify-between items-center w-full">
                 <div class="text-sm font-medium inline capitalize truncate">
-                  <TruncatedContent :content="conversation.user_recipient.full_name" />
+                  <TruncatedContent :content="getName(result)" />
                 </div>
-                <span class="text-xs text-muted-foreground">{{
-                  formatDate(conversation.date)
-                }}</span>
+                <span class="text-xs text-muted-foreground">
+                  {{ getSubtitle(result) }}
+                </span>
               </div>
               <span class="flex text-xs text-muted-foreground mt-1 truncate w-full">
-                <TruncatedContent :content="conversation.content" />
+                <TruncatedContent :content="getContent(result)" />
               </span>
             </div>
           </div>
@@ -102,7 +108,7 @@ const conversations = computed(() => messageStore.conversations)
 const loadingConversations = computed(() => messageStore.loadingConversations)
 
 const search = ref('')
-const filteredConversations = ref([])
+const filteredResults = ref([])
 let debounceTimeout = null
 
 watchEffect(async () => {
@@ -110,7 +116,7 @@ watchEffect(async () => {
     clearTimeout(debounceTimeout)
   }
   if (!search.value) {
-    filteredConversations.value = conversations.value
+    filteredResults.value = conversations.value
     return
   }
 
@@ -122,22 +128,15 @@ watchEffect(async () => {
   )
 
   if (localResults.length > 0) {
-    filteredConversations.value = localResults
-    const timestamp = new Date().getTime()
-    const formattedDate = new Date(timestamp).toLocaleString()
-    console.log('search:', search.value, 'time:', formattedDate);
-    console.log('localResults:', localResults);
+    filteredResults.value = localResults
   } else {
     debounceTimeout = setTimeout(async () => {
-      if (search.value == '') {
+      if (search.value === '') {
         return
       }
       const apiResults = await searchUserInDB(search.value)
-      filteredConversations.value = apiResults
-      const timestamp = new Date().getTime()
-      const formattedDate = new Date(timestamp).toLocaleString()
-      console.log('search:', search.value, 'time:', formattedDate);
-      console.log('apiResults:', apiResults);
+      filteredResults.value = Array.isArray(apiResults) ? apiResults : [apiResults]
+      console.log('API results:', apiResults)
     }, 200)
   }
 })
@@ -154,12 +153,50 @@ async function searchUserInDB(query) {
   }
 }
 
-function handleConversationClick(conversation) {
-  currentConversationStore.updateCurrentConversation(
-    conversation.user_recipient.id_user,
-    conversation.user_recipient.full_name
-  )
+function handleResultClick(result) {
+  if (isConversation(result)) {
+    currentConversationStore.updateCurrentConversation(
+      result.user_recipient.id_user,
+      result.user_recipient.full_name
+    )
+  } else {
+    currentConversationStore.updateCurrentConversation(
+      result.id_user,
+      result.full_name
+    )
+  }
   currentChannelStore.clearCurrentChannel()
+}
+
+function isConversation(result) {
+  return result && result.user_recipient !== undefined
+}
+
+function getKey(result) {
+  console.log("1isConversation: ", isConversation(result))
+  
+  return isConversation(result) ? result.user_recipient.id_user : result.id_user
+}
+
+function getName(result) {
+  console.log("2isConversation: ", isConversation(result))
+  
+  return isConversation(result) ? result.user_recipient.full_name : result.full_name
+}
+
+function getSubtitle(result) {
+  console.log("3isConversation: ", isConversation(result))
+  
+  if (isConversation(result)) {
+    return formatDate(result.date)
+  } else {
+    return result.network_user
+  }
+}
+
+function getContent(result) {
+  console.log("4isConversation: ", isConversation(result))
+  return isConversation(result) ? result.content : (result.dominio || 'No domain specified')
 }
 
 function clearSearch() {
