@@ -84,8 +84,8 @@
         </button>
       </div>
 
-      <div v-else class="text-center py-4 text-muted-foreground">
-        <p>No hay conversaciones.</p>
+      <div v-else class="text-center text-sm font-bold p-4 text-slate-400">
+        <p>No hay conversaciones o usuarios que coincidan con tu búsqueda.</p>
       </div>
     </div>
   </div>
