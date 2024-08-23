@@ -5,7 +5,7 @@ const getNestedValue = (obj, path) => {
 
 export const getUserAvatar = (data, path = 'users') => {
   const userData = getNestedValue(data, path);
-  return userData?.photo_url || false;
+  return userData ? (userData.photo_url || userData) : false;
 }
 
 export const getUserName = (data, path = 'users') => {
