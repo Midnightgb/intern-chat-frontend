@@ -8,7 +8,7 @@
       </div>
       <!-- Botón para crear un nuevo mensaje directo y input para buscar usuarios -->
       <div class="flex items-center justify-between mt-2">
-        <div class="relative w-10/12">
+        <div class="relative w-full">
           <input
             v-model="search"
             type="text"
@@ -20,15 +20,15 @@
             class="absolute right-2 top-1/2 transform -translate-y-1/2 rounded-full transition-all hover:text-slate-600 text-slate-400"
             @click="clearSearch"
           >
-            <CircleX class="w-6 h-6"/>
+            <CircleX class="w-6 h-6" />
           </button>
         </div>
-        <button
+<!--         <button
           class="ml-auto p-2 rounded-full transition-all hover:bg-slate-200 hover:text-accent-foreground"
           @click="nada"
         >
           <CirclePlus />
-        </button>
+        </button> -->
       </div>
       <!--  -->
     </div>
@@ -45,7 +45,19 @@
           class="select-none flex items-center justify-center scroll-m-2"
         ></v-skeleton-loader>
       </div>
-
+      <div v-else-if="loading" class="flex-grow overflow-y-auto hide-scrollbar">
+        <div class="space-y-2">
+          <v-skeleton-loader
+            v-for="index in 3"
+            :key="index"
+            :loading="true"
+            type="list-item-avatar-two-line"
+            height="58"
+            width="100%"
+            class="select-none flex items-center justify-center scroll-m-2"
+          ></v-skeleton-loader>
+        </div>
+      </div>
       <div v-else-if="filteredResults.length > 0" class="space-y-1">
         <button
           v-for="result in filteredResults"
@@ -54,13 +66,7 @@
           @click="handleResultClick(result)"
         >
           <div class="flex items-center w-full">
-            <ImageLoader :message="result" v-if="isConversation(result)" />
-            <img
-              v-else
-              :src="result.photo_url || 'path/to/default/avatar.png'"
-              alt="User avatar"
-              class="w-10 h-10 rounded-full object-cover"
-            />
+            <ImageLoader :message="result" />
             <div class="flex flex-col items-start flex-grow ml-2">
               <div class="flex justify-between items-center w-full">
                 <div class="text-sm font-medium inline capitalize truncate">
@@ -109,6 +115,7 @@ const loadingConversations = computed(() => messageStore.loadingConversations)
 
 const search = ref('')
 const filteredResults = ref([])
+const loading = ref(false)
 let debounceTimeout = null
 
 watchEffect(async () => {
@@ -123,7 +130,7 @@ watchEffect(async () => {
   const localResults = conversations.value.filter(
     (conversation) =>
       conversation.user_recipient.full_name.toLowerCase().includes(search.value.toLowerCase()) ||
-      conversation.content.toLowerCase().includes(search.value.toLowerCase()) || 
+      conversation.content.toLowerCase().includes(search.value.toLowerCase()) ||
       conversation.user_recipient.network_user.toLowerCase().includes(search.value.toLowerCase())
   )
 
@@ -134,8 +141,10 @@ watchEffect(async () => {
       if (search.value === '') {
         return
       }
+      loading.value = true
       const apiResults = await searchUserInDB(search.value)
       filteredResults.value = Array.isArray(apiResults) ? apiResults : [apiResults]
+      loading.value = false
       console.log('API results:', apiResults)
     }, 200)
   }
@@ -144,8 +153,8 @@ watchEffect(async () => {
 async function searchUserInDB(query) {
   try {
     const response = await getUserByName(query)
-    console.log('query:', query);
-    console.log('API response:', response);
+    console.log('query:', query)
+    console.log('API response:', response)
     return response.data
   } catch (error) {
     console.warn('User not found')
@@ -160,10 +169,7 @@ function handleResultClick(result) {
       result.user_recipient.full_name
     )
   } else {
-    currentConversationStore.updateCurrentConversation(
-      result.id_user,
-      result.full_name
-    )
+    currentConversationStore.updateCurrentConversation(result.id_user, result.full_name)
   }
   currentChannelStore.clearCurrentChannel()
 }
@@ -173,20 +179,14 @@ function isConversation(result) {
 }
 
 function getKey(result) {
-  console.log("1isConversation: ", isConversation(result))
-  
   return isConversation(result) ? result.user_recipient.id_user : result.id_user
 }
 
 function getName(result) {
-  console.log("2isConversation: ", isConversation(result))
-  
   return isConversation(result) ? result.user_recipient.full_name : result.full_name
 }
 
 function getSubtitle(result) {
-  console.log("3isConversation: ", isConversation(result))
-  
   if (isConversation(result)) {
     return formatDate(result.date)
   } else {
@@ -195,16 +195,11 @@ function getSubtitle(result) {
 }
 
 function getContent(result) {
-  console.log("4isConversation: ", isConversation(result))
-  return isConversation(result) ? result.content : (result.dominio || 'No domain specified')
+  return isConversation(result) ? result.content : result.dominio || 'No domain specified'
 }
 
 function clearSearch() {
   search.value = ''
-}
-
-function nada() {
-  console.log('nada')
 }
 
 </script>
