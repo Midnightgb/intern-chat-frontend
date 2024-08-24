@@ -6,7 +6,6 @@
         <MessageCircle />
         <span class="ml-2 text-sm font-medium inline">Mensajes Directos</span>
       </div>
-      <!-- Botón para crear un nuevo mensaje directo y input para buscar usuarios -->
       <div class="flex items-center justify-between mt-2">
         <div class="relative w-full">
           <input
@@ -23,14 +22,7 @@
             <CircleX class="w-6 h-6" />
           </button>
         </div>
-<!--         <button
-          class="ml-auto p-2 rounded-full transition-all hover:bg-slate-200 hover:text-accent-foreground"
-          @click="nada"
-        >
-          <CirclePlus />
-        </button> -->
       </div>
-      <!--  -->
     </div>
 
     <div class="flex-grow overflow-y-auto hide-scrollbar">
@@ -45,18 +37,16 @@
           class="select-none flex items-center justify-center scroll-m-2"
         ></v-skeleton-loader>
       </div>
-      <div v-else-if="loading" class="flex-grow overflow-y-auto hide-scrollbar">
-        <div class="space-y-2">
-          <v-skeleton-loader
-            v-for="index in 3"
-            :key="index"
-            :loading="true"
-            type="list-item-avatar-two-line"
-            height="58"
-            width="100%"
-            class="select-none flex items-center justify-center scroll-m-2"
-          ></v-skeleton-loader>
-        </div>
+      <div v-else-if="loading" class="space-y-2">
+        <v-skeleton-loader
+          v-for="index in 3"
+          :key="index"
+          :loading="true"
+          type="list-item-avatar-two-line"
+          height="58"
+          width="100%"
+          class="select-none flex items-center justify-center scroll-m-2"
+        ></v-skeleton-loader>
       </div>
       <div v-else-if="filteredResults.length > 0" class="space-y-1">
         <button
@@ -92,13 +82,13 @@
 </template>
 
 <script setup>
-import { computed, ref, watchEffect } from 'vue'
+import { computed, ref, watch, onMounted } from 'vue'
 // Stores
 import { useMessageStore } from '@/stores/messages/messageStore'
 import { useCurrentConversationStore } from '@/stores/conversations/currentConversationStore'
 import { useCurrentChannelStore } from '@/stores/channels/currentChannelStore'
 // Icons
-import { MessageCircle, CirclePlus, CircleX } from 'lucide-vue-next'
+import { MessageCircle, CircleX } from 'lucide-vue-next'
 // Components
 import TruncatedContent from '@/components/common/TruncatedContent.vue'
 import ImageLoader from '@/components/common/ImageLoader.vue'
@@ -116,12 +106,27 @@ const loadingConversations = computed(() => messageStore.loadingConversations)
 const search = ref('')
 const filteredResults = ref([])
 const loading = ref(false)
-let debounceTimeout = null
 
-watchEffect(async () => {
-  if (debounceTimeout) {
-    clearTimeout(debounceTimeout)
+function debounce(fn, wait) {
+  // fn: función a la que se le aplicará el debounce y wait: tiempo de espera
+  let timer // Inicializar el temporizador
+  return function (...args) {
+    // Devolver una función que recibe argumentos
+    if (timer) clearTimeout(timer) // Si el temporizador está activo, limpiarlo
+    timer = setTimeout(() => {
+      // Establecer un nuevo temporizador
+      fn(...args) // Llamar a la función con los argumentos
+    }, wait) // Esperar el tiempo especificado
   }
+}
+
+watch(conversations, (newConversations) => {
+  if (!search.value.trim()) {
+    filteredResults.value = newConversations
+  }
+})
+
+const debouncedSearch = debounce(async () => {
   if (!search.value.trim()) {
     filteredResults.value = conversations.value
     loading.value = false
@@ -139,28 +144,25 @@ watchEffect(async () => {
 
   if (localResults.length === 0) {
     loading.value = true
-    debounceTimeout = setTimeout(async () => {
-      if (search.value.trim() === '') {
-        return
-      }
-      const apiResults = await searchUserInDB(search.value)
-      if (Object.prototype.hasOwnProperty.call(apiResults, 'status') && apiResults.status === false) {
-        console.log('API error:', apiResults);
-        filteredResults.value = []
-        loading.value = false
-      }else{
-        filteredResults.value = Array.isArray(apiResults) ? apiResults : [apiResults]
-      }
-      loading.value = false
-      console.log('API results:', apiResults)
-    }, 300)
+    const apiResults = await searchUserInDB(search.value)
+    if (Object.prototype.hasOwnProperty.call(apiResults, 'status') && apiResults.status === false) {
+      console.log('API error:', apiResults)
+      filteredResults.value = []
+    } else {
+      filteredResults.value = Array.isArray(apiResults) ? apiResults : [apiResults]
+    }
+    loading.value = false
+    console.log('API results:', apiResults)
   }
+}, 300)
+
+watch(search, () => {
+  debouncedSearch()
 })
 
 async function searchUserInDB(query) {
   try {
     const response = await getUserByName(query)
-    console.log('query:', query)
     return response.data
   } catch (error) {
     return []
@@ -207,9 +209,5 @@ function clearSearch() {
   search.value = ''
   filteredResults.value = conversations.value
   loading.value = false
-  if (debounceTimeout) {
-    clearTimeout(debounceTimeout)
-  }
 }
-
 </script>
