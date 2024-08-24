@@ -122,8 +122,9 @@ watchEffect(async () => {
   if (debounceTimeout) {
     clearTimeout(debounceTimeout)
   }
-  if (!search.value) {
+  if (!search.value.trim()) {
     filteredResults.value = conversations.value
+    loading.value = false
     return
   }
 
@@ -134,25 +135,25 @@ watchEffect(async () => {
       conversation.user_recipient.network_user.toLowerCase().includes(search.value.toLowerCase())
   )
 
-  if (localResults.length > 0) {
-    filteredResults.value = localResults
-  } else {
+  filteredResults.value = localResults
+
+  if (localResults.length === 0) {
+    loading.value = true
     debounceTimeout = setTimeout(async () => {
-      if (search.value === '') {
+      if (search.value.trim() === '') {
         return
       }
-      loading.value = true
       const apiResults = await searchUserInDB(search.value)
       if (Object.prototype.hasOwnProperty.call(apiResults, 'status') && apiResults.status === false) {
         console.log('API error:', apiResults);
-        filteredResults.value = localResults
+        filteredResults.value = []
         loading.value = false
-        return []
+      }else{
+        filteredResults.value = Array.isArray(apiResults) ? apiResults : [apiResults]
       }
-      filteredResults.value = Array.isArray(apiResults) ? apiResults : [apiResults]
       loading.value = false
       console.log('API results:', apiResults)
-    }, 200)
+    }, 300)
   }
 })
 
@@ -204,6 +205,11 @@ function getContent(result) {
 
 function clearSearch() {
   search.value = ''
+  filteredResults.value = conversations.value
+  loading.value = false
+  if (debounceTimeout) {
+    clearTimeout(debounceTimeout)
+  }
 }
 
 </script>
