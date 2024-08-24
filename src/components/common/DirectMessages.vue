@@ -105,7 +105,7 @@ import ImageLoader from '@/components/common/ImageLoader.vue'
 // Utils
 import { formatDate } from '@/utils/date/convertTime'
 // API
-import { getUserByName } from '@/services/api.js'
+import { getUserByName } from '@/services/api'
 
 const messageStore = useMessageStore()
 const currentConversationStore = useCurrentConversationStore()
@@ -143,6 +143,12 @@ watchEffect(async () => {
       }
       loading.value = true
       const apiResults = await searchUserInDB(search.value)
+      if (Object.prototype.hasOwnProperty.call(apiResults, 'status') && apiResults.status === false) {
+        console.log('API error:', apiResults);
+        filteredResults.value = localResults
+        loading.value = false
+        return []
+      }
       filteredResults.value = Array.isArray(apiResults) ? apiResults : [apiResults]
       loading.value = false
       console.log('API results:', apiResults)
@@ -154,10 +160,8 @@ async function searchUserInDB(query) {
   try {
     const response = await getUserByName(query)
     console.log('query:', query)
-    console.log('API response:', response)
     return response.data
   } catch (error) {
-    console.warn('User not found')
     return []
   }
 }
