@@ -69,6 +69,7 @@ const debouncedSearch = debounce(async () => {
 
   if (localResults.length > 0) {
     filteredResults.value = localResults
+    searchCancelled.value = true
     return
   }
 
