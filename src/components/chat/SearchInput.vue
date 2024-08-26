@@ -1,3 +1,4 @@
+//src/components/chat/SearchInput.vue
 <template>
   <div class="flex items-center justify-between mt-2">
     <div class="relative w-full">

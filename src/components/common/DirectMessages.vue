@@ -1,3 +1,4 @@
+//src/components/common/DirectMessages.vue
 <template>
   <div class="flex flex-col h-full w-full">
     <div class="bg-muted rounded-lg p-2 text-muted-foreground my-2">

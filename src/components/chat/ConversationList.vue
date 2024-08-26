@@ -1,3 +1,4 @@
+//src/components/chat/ConversationList.vue
 <template>
   <div class="flex-grow overflow-y-auto hide-scrollbar">
     <div v-if="loading" class="space-y-2">

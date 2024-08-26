@@ -1,3 +1,4 @@
+//src/components/chat/ConversationItem.vue
 <template>
   <button
     class="p-2 text-muted-foreground border-b-2 hover:bg-slate-200 hover:text-accent-foreground w-full"
