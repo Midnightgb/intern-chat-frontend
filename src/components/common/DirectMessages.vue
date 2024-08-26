@@ -38,14 +38,13 @@ const loadingConversations = computed(() => messageStore.loadingConversations)
 const search = ref('')
 const filteredResults = ref([])
 const loading = ref(false)
+let searchCancelled = ref(false)
 
 function debounce(fn, wait) {
   let timer
   return function (...args) {
-    if (timer) clearTimeout(timer)
-    timer = setTimeout(() => {
-      fn(...args)
-    }, wait)
+    clearTimeout(timer)
+    timer = setTimeout(() => fn(...args), wait)
   }
 }
 
@@ -56,34 +55,49 @@ watch(conversations, (newConversations) => {
 })
 
 const debouncedSearch = debounce(async () => {
-  if (!search.value.trim()) {
-    filteredResults.value = conversations.value
-    loading.value = false
+  if (searchCancelled.value || !search.value.trim()) {
+    clearSearch()
     return
   }
+
   const localResults = conversations.value.filter(
     (conversation) =>
       conversation.user_recipient.full_name.toLowerCase().includes(search.value.toLowerCase()) ||
       conversation.content.toLowerCase().includes(search.value.toLowerCase()) ||
       conversation.user_recipient.network_user.toLowerCase().includes(search.value.toLowerCase())
   )
-  filteredResults.value = localResults
-  if (localResults.length === 0) {
-    loading.value = true
+
+  if (localResults.length > 0) {
+    filteredResults.value = localResults
+    return
+  }
+
+  loading.value = true
+  try {
     const apiResults = await searchUserInDB(search.value)
-    if (Object.prototype.hasOwnProperty.call(apiResults, 'status') && apiResults.status === false) {
-      console.log('API error:', apiResults)
-      filteredResults.value = []
-    } else {
-      filteredResults.value = Array.isArray(apiResults) ? apiResults : [apiResults]
+    if (!searchCancelled.value) {
+      if (apiResults.status === false) {
+        console.log('API Response:', apiResults)
+        filteredResults.value = []
+      } else {
+        filteredResults.value = Array.isArray(apiResults) ? apiResults : [apiResults]
+      }
     }
+  } catch (error) {
+    console.error('Error en la búsqueda:', error)
+    filteredResults.value = []
+  } finally {
     loading.value = false
-    console.log('API results:', apiResults)
   }
 }, 300)
 
-watch(search, () => {
-  debouncedSearch()
+watch(search, (newSearch) => {
+  searchCancelled.value = false
+  if (newSearch.trim() === '') {
+    clearSearch()
+  } else {
+    debouncedSearch()
+  }
 })
 
 async function searchUserInDB(query) {
@@ -91,6 +105,7 @@ async function searchUserInDB(query) {
     const response = await getUserByName(query)
     return response.data
   } catch (error) {
+    console.error('Error en searchUserInDB:', error)
     return []
   }
 }
@@ -113,6 +128,7 @@ function isConversation(result) {
 
 function clearSearch() {
   search.value = ''
+  searchCancelled.value = true
   filteredResults.value = conversations.value
   loading.value = false
 }
