@@ -27,6 +27,14 @@ export const useAuthStore = defineStore('auth', {
         const decodedToken = jwtDecode(token)
         // usar decodedToken para verificar la expiración, por ejemplo
         console.log('Token decoded:', decodedToken)
+        const expiration = new Date(decodedToken.exp * 1000)
+        if (expiration < new Date()) {
+          console.warn('Token expirado:', expiration)
+        }else if (expiration < new Date(Date.now() + 1000 * 60 * 5)) {
+          console.warn('Token expirará en menos de 5 minutos:', expiration)
+        }
+        console.warn('Token:', expiration)
+      
       } catch (error) {
         console.error('Error decoding token:', error)
         // Manejar el error según sea necesario
