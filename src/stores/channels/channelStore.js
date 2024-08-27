@@ -17,7 +17,8 @@ export const useChannelStore = defineStore('channel', {
   actions: {
     async fetchChannelsIfNeeded() {
       if (this.shouldFetchChannels()) {
-        await this.fetchChannels()
+        const showLoading = false
+        await this.fetchChannels(showLoading)
       }
     },
     shouldFetchChannels() {
@@ -25,8 +26,8 @@ export const useChannelStore = defineStore('channel', {
       const now = new Date().getTime()
       return now - this.lastFetchTime > CACHE_EXPIRATION
     },
-    async fetchChannels() {
-      this.loading = true
+    async fetchChannels(showLoading) {
+      this.loading = showLoading
       this.error = null
       try {
         const response = await getChannels()
@@ -45,7 +46,8 @@ export const useChannelStore = defineStore('channel', {
     },
     initializeStore() {
       if (this.shouldFetchChannels()) {
-        this.fetchChannels()
+        const showLoading = true
+        this.fetchChannels(showLoading)
       }
     }
   },

@@ -5,6 +5,7 @@
       <fwb-button :color="color" :outline="outline" :pill="pill" :square="square">
         {{ triggerText }}
         <component :is="iconComponent" v-if="iconComponent" />
+        <!-- <img :src="triggerIcon" v-if="triggerIcon" class="w-4 h-4" /> -->
       </fwb-button>
     </template>
     <template #content>

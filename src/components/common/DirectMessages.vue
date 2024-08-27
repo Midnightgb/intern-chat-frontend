@@ -6,119 +6,132 @@
         <MessageCircle />
         <span class="ml-2 text-sm font-medium inline">Mensajes Directos</span>
       </div>
-      <!-- Botón para crear un nuevo mensaje directo y input para buscar usuarios -->
-      <div class="flex items-center justify-between mt-2">
-        <div class="relative w-10/12">
-          <input
-            v-model="search"
-            type="text"
-            placeholder="Buscar..."
-            class="w-full p-2 rounded-lg bg-slate-200 text-muted-foreground"
-          />
-          <button
-            v-if="search"
-            class="absolute right-2 top-1/2 transform -translate-y-1/2 p-2 rounded-full transition-all hover:text-slate-600 text-slate-400"
-            @click="clearSearch"
-          >
-            <CircleX />
-          </button>
-        </div>
-        <button
-          class="ml-auto p-2 rounded-full transition-all hover:bg-slate-200 hover:text-accent-foreground"
-          @click="nada"
-        >
-          <CirclePlus />
-        </button>
-      </div>
-      <!--  -->
+      <SearchInput v-model="search" @clear="clearSearch" />
     </div>
-
-    <div class="flex-grow overflow-y-auto hide-scrollbar">
-      <div v-if="loadingConversations" class="space-y-2">
-        <v-skeleton-loader
-          v-for="index in 8"
-          :key="index"
-          :loading="true"
-          type="list-item-avatar-two-line"
-          height="58"
-          width="100%"
-          class="select-none flex items-center justify-center scroll-m-2"
-        ></v-skeleton-loader>
-      </div>
-
-      <div v-else-if="filteredConversations.length > 0" class="space-y-1">
-        <button
-          v-for="conversation in filteredConversations"
-          :key="conversation.user_recipient.id_user"
-          class="p-2 text-muted-foreground hover:bg-slate-200 hover:text-accent-foreground w-full rounded-lg"
-          @click="handleConversationClick(conversation)"
-        >
-          <div class="flex items-center w-full">
-            <ImageLoader :message="conversation" />
-            <div class="flex flex-col items-start flex-grow ml-2">
-              <div class="flex justify-between items-center w-full">
-                <div class="text-sm font-medium inline capitalize truncate">
-                  <TruncatedContent :content="conversation.user_recipient.full_name" />
-                </div>
-                <span class="text-xs text-muted-foreground">{{
-                  formatDate(conversation.date)
-                }}</span>
-              </div>
-              <span class="flex text-xs text-muted-foreground mt-1 truncate w-full">
-                <TruncatedContent :content="conversation.content" />
-              </span>
-            </div>
-          </div>
-        </button>
-      </div>
-
-      <div v-else class="text-center py-4 text-muted-foreground">
-        <p>No hay conversaciones.</p>
-      </div>
-    </div>
+    <ConversationList
+      :conversations="filteredResults"
+      :loading="loadingConversations || loading"
+      @select="handleResultClick"
+    />
   </div>
 </template>
 
 <script setup>
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 // Stores
 import { useMessageStore } from '@/stores/messages/messageStore'
 import { useCurrentConversationStore } from '@/stores/conversations/currentConversationStore'
 import { useCurrentChannelStore } from '@/stores/channels/currentChannelStore'
 // Icons
-import { MessageCircle, CirclePlus, CircleX } from 'lucide-vue-next'
+import { MessageCircle } from 'lucide-vue-next'
 // Components
-import TruncatedContent from '@/components/common/TruncatedContent.vue'
-import ImageLoader from '@/components/common/ImageLoader.vue'
-// Utils
-import { formatDate } from '@/utils/date/convertTime'
+import SearchInput from '@/components/chat/SearchInput.vue'
+import ConversationList from '@/components/chat/ConversationList.vue'
+// API
+import { getUserByName } from '@/services/api'
 
 const messageStore = useMessageStore()
 const currentConversationStore = useCurrentConversationStore()
 const currentChannelStore = useCurrentChannelStore()
+
 const conversations = computed(() => messageStore.conversations)
 const loadingConversations = computed(() => messageStore.loadingConversations)
-
 const search = ref('')
+const filteredResults = ref([])
+const loading = ref(false)
+let searchCancelled = ref(false)
 
-const filteredConversations = computed(() => {
-  if (!search.value) return conversations.value
-  return conversations.value.filter(
-    (conversation) =>
-      conversation.user_recipient.full_name.toLowerCase().includes(search.value.toLowerCase()) ||
-      conversation.content.toLowerCase().includes(search.value.toLowerCase())
-  )
+function debounce(fn, wait) {
+  let timer
+  return function (...args) {
+    clearTimeout(timer)
+    timer = setTimeout(() => fn(...args), wait)
+  }
+}
+
+watch(conversations, (newConversations) => {
+  if (!search.value.trim()) {
+    filteredResults.value = newConversations
+  }
 })
 
-function handleConversationClick(conversation) {
-  currentConversationStore.updateCurrentConversation(
-    conversation.user_recipient.id_user,
-    conversation.user_recipient.full_name
+const debouncedSearch = debounce(async () => {
+  if (searchCancelled.value || !search.value.trim()) {
+    clearSearch()
+    return
+  }
+
+  const localResults = conversations.value.filter(
+    (conversation) =>
+      conversation.user_recipient.full_name.toLowerCase().includes(search.value.toLowerCase()) ||
+      conversation.content.toLowerCase().includes(search.value.toLowerCase()) ||
+      conversation.user_recipient.network_user.toLowerCase().includes(search.value.toLowerCase())
   )
+
+  if (localResults.length > 0) {
+    filteredResults.value = localResults
+    searchCancelled.value = true
+    return
+  }
+
+  loading.value = true
+  try {
+    const apiResults = await searchUserInDB(search.value)
+    if (!searchCancelled.value) {
+      if (apiResults.status === false) {
+        console.log('API Response:', apiResults)
+        filteredResults.value = []
+      } else {
+        filteredResults.value = Array.isArray(apiResults) ? apiResults : [apiResults]
+      }
+    }
+  } catch (error) {
+    console.error('Error en la búsqueda:', error)
+    filteredResults.value = []
+  } finally {
+    loading.value = false
+  }
+}, 300)
+
+watch(search, (newSearch) => {
+  searchCancelled.value = false
+  if (newSearch.trim() === '') {
+    clearSearch()
+  } else {
+    debouncedSearch()
+  }
+})
+
+async function searchUserInDB(query) {
+  try {
+    const response = await getUserByName(query)
+    return response.data
+  } catch (error) {
+    console.error('Error en searchUserInDB:', error)
+    return []
+  }
+}
+
+function handleResultClick(result) {
+  if (isConversation(result)) {
+    currentConversationStore.updateCurrentConversation(
+      result.user_recipient.id_user,
+      result.user_recipient.full_name
+    )
+  } else {
+    currentConversationStore.updateCurrentConversation(result.id_user, result.full_name)
+  }
   currentChannelStore.clearCurrentChannel()
+}
+
+function isConversation(result) {
+  return result && result.user_recipient !== undefined
 }
 
 function clearSearch() {
   search.value = ''
+  searchCancelled.value = true
+  filteredResults.value = conversations.value
+  loading.value = false
 }
 </script>

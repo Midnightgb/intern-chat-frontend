@@ -14,6 +14,9 @@ export const useMessageStore = defineStore('message', {
     async setMessages(messages) {
       console.log('Setting messages:', messages);
       this.messages = messages;
+      const idUser = messages[0].user_id? messages[0].user_id : messages[0].send_id;
+      const currentUserStore = useCurrentUserStore();
+      currentUserStore.updateCurrentUser(idUser);
 
     },
     addMessage(message) {

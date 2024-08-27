@@ -56,4 +56,8 @@ export const updateMessage = (message) => {
   });
 };
 
+export const getUserByName = (network_user) => {
+  return apiClient.get(API_ENDPOINTS.GET_USER_BY_NAME.replace(':network_user', network_user));
+};
+
 export default apiClient;
