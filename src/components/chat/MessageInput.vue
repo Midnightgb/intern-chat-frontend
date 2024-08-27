@@ -1,8 +1,7 @@
-//src/components/chat/MessageInput.vue
 <template>
   <div class="flex items-center gap-2">
     <span class="relative flex shrink-0 w-8 h-8">
-      <UploadFileTest class="absolute bottom-0 right-0" />
+      <UploadFileTest class="absolute bottom-0 right-0" :resetFile="resetFile" />
     </span>
     <input
       v-model="message"
@@ -19,6 +18,7 @@
     </button>
   </div>
 </template>
+
 <script setup>
 import { ref } from 'vue'
 import { storeToRefs } from 'pinia'
@@ -30,12 +30,14 @@ import { useCurrentConversationStore } from '@/stores/conversations/currentConve
 // Components
 import { Send } from 'lucide-vue-next';
 import UploadFileTest from '@/components/common/UploadFileDropdown.vue'
+
 const currentChannelStore = useCurrentChannelStore()
 const currentConversationStore = useCurrentConversationStore()
 const { currentChannelId } = storeToRefs(currentChannelStore)
 const { currentConversationId } = storeToRefs(currentConversationStore)
 
 const message = ref('')
+const resetFile = ref(false)
 
 const sendMessage = () => {
   if (message.value.trim() === '') {
@@ -48,6 +50,11 @@ const sendMessage = () => {
   } else if (currentConversationId.value) {
     console.log('%cSE ESTA MANDANDO UN MENSAJE A UNA CONVERSACION', 'color: darkblue;');
   }
-  message.value = '' // Limpiar el input después de enviar
+  message.value = ''
+  
+  resetFile.value = true
+  setTimeout(() => {
+    resetFile.value = false
+  }, 100)
 }
 </script>

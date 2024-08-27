@@ -29,7 +29,6 @@
 <script setup>
 import { EllipsisVertical, Copy, Pencil, Trash2 } from 'lucide-vue-next'
 import { FwbDropdown, FwbListGroup, FwbListGroupItem } from 'flowbite-vue'
-import { defineProps } from 'vue'
 
 const props = defineProps({
   canEdit: Boolean,

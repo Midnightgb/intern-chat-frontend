@@ -1,4 +1,3 @@
-//src/components/common/UploadFileTest.vue
 <template>
   <fwb-dropdown placement="top" text="top">
     <template #trigger>
@@ -11,11 +10,21 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { FwbFileInput } from 'flowbite-vue'
 import { Paperclip } from 'lucide-vue-next';
 
 const file = ref(null)
+
+const props = defineProps({
+  resetFile: Boolean,
+})
+
+watch(() => props.resetFile, (newVal) => {
+  if (newVal) {
+    file.value = null
+  }
+})
 
 import { FwbDropdown, FwbListGroup } from 'flowbite-vue'
 </script>
