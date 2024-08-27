@@ -1,7 +1,6 @@
 // src/stores/messages/messageStore.js
 import { defineStore } from 'pinia';
 import { updateMessage as updateMessageApi } from '@/services/api';
-import { useCurrentUserStore } from '@/stores/user/currentUserStore';
 
 export const useMessageStore = defineStore('message', {
   state: () => ({
@@ -15,10 +14,6 @@ export const useMessageStore = defineStore('message', {
     async setMessages(messages) {
       console.log('Setting messages:', messages);
       this.messages = messages;
-      const idUser = messages[0].users.id_user;
-
-      const currentUserStore = useCurrentUserStore();
-      currentUserStore.updateCurrentUser(idUser);
 
     },
     addMessage(message) {
@@ -46,7 +41,6 @@ export const useMessageStore = defineStore('message', {
       this.messages = this.messages.filter(m => m.id_message !== messageId);
     },
     setConversations(conversations) {
-      console.log('Setting conversations:', conversations);
       this.conversations = conversations;
     },
     setLoadingMessages(loading) {

@@ -49,6 +49,7 @@
 import { storeToRefs } from 'pinia'
 // Stores
 import { useAuthStore } from '@/stores/auth'
+import {useCurrentUserStore} from '@/stores/user/currentUserStore'
 // Components
 import { FwbButton } from 'flowbite-vue'
 import { CircleUserRound } from 'lucide-vue-next'
@@ -58,9 +59,14 @@ import DirectMessages from '@/components/common/DirectMessages.vue'
 // Utils
 import { getUserAvatar } from '@/utils/helpers'
 import { onMounted, ref } from 'vue'
+
 const authStore = useAuthStore()
+const currentUserStore = useCurrentUserStore()
+
 const { user } = storeToRefs(authStore)
 const { handleLogout } = useLogout()
+
+currentUserStore.updateCurrentUser(user.value.id);
 
 const userPhotoUrl = ref(null)
 
