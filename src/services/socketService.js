@@ -26,7 +26,7 @@ class SocketService {
 
     this.socket.on('messages_channel', (data) => {
       this.messageStore.setMessages(data)
-      this.messageStore.setLoadingMessages(false) 
+      this.messageStore.setLoadingMessages(false)
     })
 
     this.socket.on('new_message_channel', (message) => {
@@ -64,21 +64,25 @@ class SocketService {
     this.socket.on('error', (error) => {
       console.warn('WebSocket error:', error)
       this.messageStore.setError(error)
-      this.messageStore.setLoadingMessages(false) 
-      this.messageStore.setLoadingConversations(false) 
+      this.messageStore.setLoadingMessages(false)
+      this.messageStore.setLoadingConversations(false)
     })
 
     this.socket.on('disconnect', () => {
       console.log('Disconnected from WebSocket server')
     })
+    this.socket.on('token_renewed', (data) => {
+      console.log('h ', data)
+      console.log('Nuevo Token:', data.token_new) // Imprime el nuevo token en la consola
+      this.authStore.setSessionCookie(data.token_new);
+    })
   }
 
   joinChannel(channelId) {
-    this.messageStore.clearMessages()  
+    this.messageStore.clearMessages()
     const token = this.authStore.token
-    this.messageStore.setLoadingMessages(true) 
+    this.messageStore.setLoadingMessages(true)
     this.socket.emit('join_channel', { channelId, token })
-    
   }
 
   sendMessage(channel_id, message) {
@@ -88,12 +92,12 @@ class SocketService {
 
   getConversations() {
     const token = this.authStore.token
-    this.messageStore.setLoadingConversations(true) 
+    this.messageStore.setLoadingConversations(true)
     this.socket.emit('get_conversations', { token })
   }
 
   getDirectMessages(send_id, recipient_id) {
-    this.messageStore.clearMessages()  
+    this.messageStore.clearMessages()
     const token = this.authStore.token
     this.messageStore.setLoadingMessages(true)
     this.socket.emit('direct_message', { send_id, recipient_id, token })

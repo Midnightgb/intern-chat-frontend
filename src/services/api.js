@@ -9,7 +9,7 @@ const publicApi = axios.create({
   }
 });
 
-const apiClient = axios.create({
+export const apiClient = axios.create({
   baseURL: API_ENDPOINTS.BASE_URL,
   headers: {
     'Content-Type': 'application/json',
@@ -22,12 +22,15 @@ apiClient.interceptors.request.use(
   (config) => {
     const cookie = document.cookie.split(';').find((cookie) => cookie.trim().startsWith('session='));
     const token = cookie ? cookie.split('=')[1] : null;
+    console.log('Token en la cookie:', token);
     if (token) {
+      console.log('Token en la solicitud:', token);
       config.headers['Authorization'] = `Bearer ${token}`;
     }
     return config;
   },
   (error) => {
+    console.log('Error en la solicitud:', error);
     return Promise.reject(error);
   }
 );

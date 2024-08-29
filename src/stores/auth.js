@@ -3,6 +3,7 @@ import { defineStore } from 'pinia'
 import { jwtDecode } from 'jwt-decode'
 import { logout as apiLogout } from '@/services/api'
 import { cleanupSession } from '@/utils/sessionCleanup'
+import { apiClient } from '@/services/api'
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
@@ -65,7 +66,11 @@ export const useAuthStore = defineStore('auth', {
       }
     },
     setSessionCookie(token) {
+      console.log("Seteando token auth.js ", token);
       document.cookie = `session=${token}; path=/; secure; samesite=strict`
+      apiClient.defaults.headers.common['Authorization'] = `Bearer ${token}`
+      console.log("token en apiClient ", apiClient.defaults.headers.common['Authorization']);
+      this.checkAuth()
     },
     getSessionCookie() {
       const cookies = document.cookie.split(';')
