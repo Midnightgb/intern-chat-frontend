@@ -18,10 +18,21 @@ class SocketService {
     this.messageStore = useMessageStore()
     this.authStore = useAuthStore()
 
-    this.socket = io(SOCKET_URL)
+    this.socket = io(SOCKET_URL, {
+      auth: {
+        token: this.authStore.token
+      }
+    })
 
     this.socket.on('connect', () => {
       console.log('Connected to WebSocket server')
+    })
+
+    this.socket.on('token_renewed', (data) => {
+      console.log('Data emitida: ', data);
+      console.log('Nuevo Token recibido emitido: ', data.token_new)
+      this.authStore.setSessionCookie(data.token_new)
+      this.socket.auth.token = data.token_new
     })
 
     this.socket.on('messages_channel', (data) => {
@@ -70,11 +81,6 @@ class SocketService {
 
     this.socket.on('disconnect', () => {
       console.log('Disconnected from WebSocket server')
-    })
-    this.socket.on('token_renewed', (data) => {
-      console.log('h ', data)
-      console.log('Nuevo Token:', data.token_new) // Imprime el nuevo token en la consola
-      this.authStore.setSessionCookie(data.token_new);
     })
   }
 
