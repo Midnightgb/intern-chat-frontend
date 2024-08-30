@@ -56,7 +56,6 @@ const { currentConversationId, currentConversationName } = storeToRefs(currentCo
 const isLoadingMessages = computed(() => messageStore.loadingMessages)
 
 onMounted(() => {
-  socketService.connect()
   socketService.getConversations()
 
 })
