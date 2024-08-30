@@ -77,7 +77,7 @@ apiClient.interceptors.response.use(
       const authStore = useAuthStore();
       
       try {
-        // Aquí podrías implementar una lógica para obtener un nuevo token si es necesario
+        // Aquí podría implementar una lógica para obtener un nuevo token si es necesario
         // Por ejemplo, hacer una llamada a un endpoint de refresh token
         // const newToken = await authStore.refreshToken();
         // updateToken(newToken);
