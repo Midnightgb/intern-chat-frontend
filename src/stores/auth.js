@@ -60,7 +60,6 @@ export const useAuthStore = defineStore('auth', {
       document.cookie = `session=${token}; path=/; secure; samesite=strict`
       apiClient.defaults.headers.common['Authorization'] = `Bearer ${token}`
       this.token = token
-      console.log("token en apiClient ", apiClient.defaults.headers.common['Authorization']);
       this.checkAuth()
       this.checkTokenExpiration(token)
     },

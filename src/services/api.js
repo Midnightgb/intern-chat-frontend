@@ -18,13 +18,13 @@ export const apiClient = axios.create({
   },
 });
 
-// Función para obtener el token actual
+// obtener el token actual
 const getToken = () => {
-  const cookie = document.cookie.split(';').find((cookie) => cookie.trim().startsWith('session='));
-  return cookie ? cookie.split('=')[1] : null;
+  const authStore = useAuthStore();
+  return authStore.getSessionCookie();
 };
 
-// Función para actualizar el token
+// actualizar el token
 const updateToken = (newToken) => {
   const authStore = useAuthStore();
   authStore.setSessionCookie(newToken);
@@ -50,11 +50,9 @@ apiClient.interceptors.request.use(
 // Interceptor para manejar la respuesta y renovar el token si es necesario
 apiClient.interceptors.response.use(
   (response) => {
-    // Comprueba si hay un nuevo token en los headers
-    console.log('Headers de la respuesta:', response.headers);
-    
     const newToken = response.headers['new-token'];
     if (newToken) {
+      console.log('Nuevo token en la respuesta:', newToken);
       updateToken(newToken);
     }
     return response;
@@ -68,6 +66,7 @@ apiClient.interceptors.response.use(
       
       // Actualiza el token en la solicitud original y la reintenta
       originalRequest.headers['Authorization'] = `Bearer ${newToken}`;
+      console.log('Reintentando solicitud:', originalRequest);
       return apiClient(originalRequest);
     }
     
@@ -75,8 +74,9 @@ apiClient.interceptors.response.use(
     if (error.response && error.response.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
       const authStore = useAuthStore();
-      
+      console.log('Token expirado, cerrando sesión...');
       try {
+        await authStore.logout();
         // Aquí podría implementar una lógica para obtener un nuevo token si es necesario
         // Por ejemplo, hacer una llamada a un endpoint de refresh token
         // const newToken = await authStore.refreshToken();
@@ -85,7 +85,6 @@ apiClient.interceptors.response.use(
         // return apiClient(originalRequest);
       } catch (refreshError) {
         authStore.logout();
-        // Redirigir al login o mostrar un mensaje, según tu lógica de aplicación
         return Promise.reject(refreshError);
       }
     }
