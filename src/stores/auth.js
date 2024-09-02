@@ -37,6 +37,7 @@ export const useAuthStore = defineStore('auth', {
         await apiLogout(this.token)
       } catch (error) {
         console.error('Error durante el logout del servidor:', error)
+        cleanupSession()
         throw error // Propagar el error para manejarlo en el componente
       } finally {
         cleanupSession()

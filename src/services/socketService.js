@@ -97,7 +97,12 @@ class SocketService {
   }
 
   getConversations() {
-    const token = this.authStore.token
+    let token = null
+    try {
+      token = this.authStore.token
+    } catch (error) {
+      console.warn('Error al obtener el token')
+    }
     this.messageStore.setLoadingConversations(true)
     this.socket.emit('get_conversations', { token })
   }
