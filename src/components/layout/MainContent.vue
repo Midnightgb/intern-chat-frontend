@@ -5,7 +5,7 @@
     <div class="flex-1 px-6 pt-6 overflow-hidden flex flex-col">
       <!-- Mostrar mensaje cuando no se ha seleccionado nada -->
       <div v-if="!currentChannelId && !currentConversationId" class="flex items-center justify-center h-full">
-        <h2 class="text-2xl font-bold text-gray-500">Por favor, selecciona un canal o una conversación.</h2>
+        <h2 class="text-2xl font-bold text-gray-500">selecciona un canal o una conversación.</h2>
       </div>
       
       <!-- Mostrar loader cuando se están cargando mensajes -->
