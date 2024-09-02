@@ -59,6 +59,7 @@ apiClient.interceptors.response.use(
   },
   async (error) => {
     const originalRequest = error.config;
+    console.log('Error en la respuesta:', error);
     // Comprueba si la respuesta contiene un nuevo token
     if (error.response && error.response.data && error.response.data.token_new) {
       const newToken = error.response.data.token_new;

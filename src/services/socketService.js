@@ -18,6 +18,11 @@ class SocketService {
     this.messageStore = useMessageStore()
     this.authStore = useAuthStore()
 
+    if (!this.authStore.isAuthenticated || !this.authStore.token) {
+      console.warn('No se pudo inicializar el socket: usuario no autenticado o token no disponible');
+      return;
+    }
+    
     this.socket = io(SOCKET_URL, {
       auth: {
         token: this.authStore.token
@@ -97,11 +102,15 @@ class SocketService {
   }
 
   getConversations() {
-    let token = null
-    try {
-      token = this.authStore.token
-    } catch (error) {
-      console.warn('Error al obtener el token')
+    if (!this.socket || !this.authStore.isAuthenticated) {
+      console.warn('No se pueden obtener conversaciones: socket no inicializado o usuario no autenticado');
+      return;
+    }
+
+    const token = this.authStore.token;
+    if (!token) {
+      console.warn('Token no disponible');
+      return;
     }
     this.messageStore.setLoadingConversations(true)
     this.socket.emit('get_conversations', { token })

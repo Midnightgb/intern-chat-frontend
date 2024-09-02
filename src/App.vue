@@ -23,10 +23,14 @@ import { useAuthStore } from '@/stores/auth'
 import { initFlowbite } from 'flowbite'
 import SidebarLeft from '@/components/layout/SideBarLeft.vue'
 import SideBarRight from '@/components/layout/SideBarRight.vue'
+import { socketService } from '@/services/socketService';
 
 onMounted(() => {
   initFlowbite()
-  authStore.checkAuth()
+  authStore.checkAuth();
+  if (authStore.isAuthenticated) {
+    socketService.connect();
+  }
 })
 
 const route = useRoute()
