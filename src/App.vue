@@ -5,9 +5,7 @@
       <div class="flex flex-grow bg-gray-100">
         <SidebarLeft />
         <SideBarRight />
-        <MainContent>
-          <RouterView />
-        </MainContent>
+        <RouterView />
       </div>
     </template>
     <template v-else>
@@ -25,7 +23,6 @@ import { useAuthStore } from '@/stores/auth'
 import { initFlowbite } from 'flowbite'
 import SidebarLeft from '@/components/layout/SideBarLeft.vue'
 import SideBarRight from '@/components/layout/SideBarRight.vue'
-import MainContent from '@/components/layout/MainContent.vue'
 
 onMounted(() => {
   initFlowbite()
