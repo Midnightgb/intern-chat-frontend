@@ -76,7 +76,7 @@ apiClient.interceptors.response.use(
       const authStore = useAuthStore();
       console.log('Token expirado, cerrando sesión...');
       try {
-        await authStore.logout();
+        authStore.logout();
         // Aquí podría implementar una lógica para obtener un nuevo token si es necesario
         // Por ejemplo, hacer una llamada a un endpoint de refresh token
         // const newToken = await authStore.refreshToken();
