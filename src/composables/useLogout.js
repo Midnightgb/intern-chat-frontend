@@ -1,10 +1,10 @@
 //src/composables/useLogout.js
-import { useAuthHandlers } from "@/handlers/auth";
+import { useAuthHandlers } from '@/handlers/auth'
 
 export default function useLogout() {
-  const { handleLogout } = useAuthHandlers();
+  const { handleLogout } = useAuthHandlers()
 
   return {
-    handleLogout,
-  };
+    handleLogout
+  }
 }

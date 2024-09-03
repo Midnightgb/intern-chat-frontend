@@ -5,20 +5,20 @@ import { messages } from './validationMessages'
 
 const i18n = {
   t: (key, params) => {
-    const keys = key.split('.');
-    let message = messages.es;
+    const keys = key.split('.')
+    let message = messages.es
     for (const k of keys) {
       if (message && message[k]) {
-        message = message[k];
+        message = message[k]
       } else {
-        console.warn(`Missing translation for key: ${key}`);
-        return key; // Return the key if translation is missing
+        console.warn(`Missing translation for key: ${key}`)
+        return key // Return the key if translation is missing
       }
     }
     if (typeof message === 'string') {
-      return message.replace(/{(\w+)}/g, (match, p1) => params[p1] || match);
+      return message.replace(/{(\w+)}/g, (match, p1) => params[p1] || match)
     }
-    return key;
+    return key
   }
 }
 

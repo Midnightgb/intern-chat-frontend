@@ -1,3 +1,4 @@
+//src/views/auth/LoginView.vue
 <template>
   <div>
     <LoginForm @login-success="onLoginSuccess" />

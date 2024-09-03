@@ -1,27 +1,37 @@
 //src/components/common/ToolTip.vue
 <template>
-  <fwb-tooltip>
+  <fwb-tooltip :placement="placement">
     <template #trigger>
-      <fwb-button color="dark">
+      <fwb-button :color="color" :outline="outline" :pill="pill" :square="square">
         {{ triggerText }}
-        <component :is="iconComponent" v-if="iconComponent" />
+        <div v-if="!imgChannel" class="w-6 h-6">
+          <component :is="iconComponent" v-if="iconComponent" />
+        </div>
+
+        <div v-if="imgChannel" class="w-6 h-6">
+          <img :src="imgChannel" v-if="imgChannel" class="aspect-square h-full w-full object-cover rounded-full" />
+        </div>
+        
       </fwb-button>
     </template>
     <template #content>
-      {{ tooltipContent }}
+      <TruncatedContent :content="tooltipContent" :maxLength="32" />
     </template>
   </fwb-tooltip>
 </template>
 
 <script setup>
-import { FwbButton, FwbTooltip } from 'flowbite-vue'
 import { computed, defineAsyncComponent } from 'vue'
 
-import { Settings, User} from 'lucide-vue-next'
+import { FwbButton, FwbTooltip } from 'flowbite-vue'
+
+import { Settings, User, Server } from 'lucide-vue-next'
+import TruncatedContent from './TruncatedContent.vue';
 
 const iconMap = {
   Settings,
   User,
+  Server,
   // Agregar más iconos aquí
 }
 
@@ -37,6 +47,30 @@ const props = defineProps({
   tooltipContent: {
     type: String,
     required: true
+  },
+  color: {
+    type: String,
+    default: ''
+  },
+  placement: {
+    type: String,
+    default: 'top'
+  },
+  outline: {
+    type: Boolean,
+    default: false
+  },
+  pill: {
+    type: Boolean,
+    default: false
+  },
+  square: {
+    type: Boolean,
+    default: false
+  },
+  imgChannel: {
+    type: String,
+    default: ''
   }
 })
 
@@ -46,7 +80,12 @@ const iconComponent = computed(() => {
   }
   // Si el icono no está en el mapa, intenta cargarlo dinámicamente
   if (props.triggerIcon) {
-    return defineAsyncComponent(() => import(`../../../node_modules/lucide-vue-next/dist/esm/icons/${props.triggerIcon.toLowerCase()}.js`))
+    return defineAsyncComponent(
+      () =>
+        import(
+          `../../../node_modules/lucide-vue-next/dist/esm/icons/${props.triggerIcon.toLowerCase()}.js`
+        )
+    )
   }
   return null
 })

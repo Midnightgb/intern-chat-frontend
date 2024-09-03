@@ -3,6 +3,8 @@ import { defineStore } from 'pinia'
 import { jwtDecode } from 'jwt-decode'
 import { logout as apiLogout } from '@/services/api'
 import { cleanupSession } from '@/utils/sessionCleanup'
+import { apiClient } from '@/services/api'
+import { socketService } from '@/services/socketService'
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
@@ -14,32 +16,31 @@ export const useAuthStore = defineStore('auth', {
     login(userData, token) {
       this.isAuthenticated = true
       this.user = {
+        id: userData.id_user,
         name: userData.full_name,
         networkUser: userData.network_user,
-        profilePic: userData.photo_url,
+        photo_url: userData.photo_url,
         role: userData.role
       }
       this.token = token
       this.setSessionCookie(token)
-      
-      try {
-        const decodedToken = jwtDecode(token)
-        // usar decodedToken para verificar la expiración, por ejemplo
-        console.log('Token decoded:', decodedToken);
-      } catch (error) {
-        console.error('Error decoding token:', error)
-        // Manejar el error según sea necesario
-      }
+
+      // Reconectar el socket con el nuevo token
+      socketService.disconnect()
+      socketService.connect()
+
+      this.checkTokenExpiration(token)
     },
     async logout() {
       try {
         // Realizar el logout en el servidor
-        await apiLogout(this.token);
+        await apiLogout(this.token)
       } catch (error) {
-        console.error('Error durante el logout del servidor:', error);
-        throw error; // Propagar el error para manejarlo en el componente
+        console.error('Error durante el logout del servidor:', error)
+        cleanupSession()
+        throw error // Propagar el error para manejarlo en el componente
       } finally {
-        cleanupSession();
+        cleanupSession()
       }
     },
     checkAuth() {
@@ -56,15 +57,37 @@ export const useAuthStore = defineStore('auth', {
       }
     },
     setSessionCookie(token) {
+      console.log("Seteando token auth.js ", token);
       document.cookie = `session=${token}; path=/; secure; samesite=strict`
+      apiClient.defaults.headers.common['Authorization'] = `Bearer ${token}`
+      this.token = token
+      this.checkAuth()
+      this.checkTokenExpiration(token)
     },
     getSessionCookie() {
       const cookies = document.cookie.split(';')
-      const sessionCookie = cookies.find(cookie => cookie.trim().startsWith('session='))
+      const sessionCookie = cookies.find((cookie) => cookie.trim().startsWith('session='))
       return sessionCookie ? sessionCookie.split('=')[1] : null
     },
     clearSessionCookie() {
-      document.cookie = 'session=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; secure; samesite=strict'
+      document.cookie =
+        'session=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; secure; samesite=strict'
+    },
+    checkTokenExpiration(token) {
+      try {
+        const decodedToken = jwtDecode(token)
+        const expiration = new Date(decodedToken.exp * 1000)
+        if (expiration < new Date()) {
+          console.warn('Token expirado:', expiration)
+          this.logout()
+        } else if (expiration < new Date(Date.now() + 1000 * 60 * 5)) {
+          console.warn('Token expirará en menos de 5 minutos:', expiration)
+        }else{
+          console.log('Token válido hasta:', expiration)
+        }
+      } catch (error) {
+        console.error('Error decoding token:', error)
+      }
     }
   },
   persist: {
