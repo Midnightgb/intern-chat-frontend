@@ -50,6 +50,7 @@
                 :outline="true"
                 :pill="true"
                 :square="true"
+                :imgChannel="channel.image_channel"
               />
               <span class="ml-2 text-sm font-medium hidden">{{ channel.name }}</span>
             </div>

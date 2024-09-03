@@ -4,8 +4,14 @@
     <template #trigger>
       <fwb-button :color="color" :outline="outline" :pill="pill" :square="square">
         {{ triggerText }}
-        <component :is="iconComponent" v-if="iconComponent" />
-        <!-- <img :src="triggerIcon" v-if="triggerIcon" class="w-4 h-4" /> -->
+        <div v-if="!imgChannel" class="w-6 h-6">
+          <component :is="iconComponent" v-if="iconComponent" />
+        </div>
+
+        <div v-if="imgChannel" class="w-6 h-6">
+          <img :src="imgChannel" v-if="imgChannel" class="aspect-square h-full w-full object-cover rounded-full" />
+        </div>
+        
       </fwb-button>
     </template>
     <template #content>
@@ -61,6 +67,10 @@ const props = defineProps({
   square: {
     type: Boolean,
     default: false
+  },
+  imgChannel: {
+    type: String,
+    default: ''
   }
 })
 
