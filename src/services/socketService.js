@@ -78,11 +78,15 @@ class SocketService {
     })
 
     this.socket.on('error', (error) => {
-      console.warn('WebSocket error:', error)
-      this.messageStore.setError(error)
-      this.messageStore.setLoadingMessages(false)
-      this.messageStore.setLoadingConversations(false)
-    })
+      console.warn('WebSocket error:', error);
+      this.messageStore.setError(error);
+      this.messageStore.setLoadingMessages(false);
+      this.messageStore.setLoadingConversations(false);
+
+      // Asegúrate de que si hay un error, los mensajes se establezcan en una lista vacía.
+      this.messageStore.setMessages([]);  // Aquí se establece que no hay mensajes disponibles.
+    });
+
 
     this.socket.on('disconnect', () => {
       console.log('Disconnected from WebSocket server')

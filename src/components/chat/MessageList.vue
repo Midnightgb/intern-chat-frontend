@@ -1,4 +1,4 @@
-//src/components/chat/MessageList.vue
+<!-- src/components/chat/MessageList.vue -->
 <template>
   <div class="relative flex flex-col h-full">
     <div
@@ -6,6 +6,12 @@
       class="flex flex-col gap-3 flex-grow overflow-y-auto pr-4"
       @scroll="handleScroll"
     >
+      <!-- Mostrar un mensaje si no hay mensajes -->
+      <div v-if="messages.length === 0" class="text-center text-gray-500 mt-10">
+        No hay mensajes por mostrar.
+      </div>
+
+      <!-- Mostrar la lista de mensajes si existen -->
       <div
         v-for="message in messages"
         :key="message.id_message"
@@ -60,6 +66,7 @@
 
 
 
+
 <script setup>
 import { ref, onMounted, nextTick, watch } from 'vue'
 // Stores
@@ -80,9 +87,6 @@ const { messages } = storeToRefs(messageStore)
 
 const currentUserStore = useCurrentUserStore();
 const { currentUserId } = storeToRefs(currentUserStore);
-
-console.log("ESTE ES EL ID DEL USUARIO ACTUAL", currentUserId.value);
-
 
 const messageContainer = ref(null)
 const isScrolledToBottom = ref(true)
