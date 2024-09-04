@@ -18,15 +18,31 @@ class SocketService {
     this.messageStore = useMessageStore()
     this.authStore = useAuthStore()
 
-    this.socket = io(SOCKET_URL)
+    if (!this.authStore.isAuthenticated || !this.authStore.token) {
+      console.warn('No se pudo inicializar el socket: usuario no autenticado o token no disponible');
+      return;
+    }
+    
+    this.socket = io(SOCKET_URL, {
+      auth: {
+        token: this.authStore.token
+      }
+    })
 
     this.socket.on('connect', () => {
       console.log('Connected to WebSocket server')
     })
 
+    this.socket.on('token_renewed', (data) => {
+      console.log('Data emitida: ', data);
+      console.log('Nuevo Token recibido emitido: ', data.token_new)
+      this.authStore.setSessionCookie(data.token_new)
+      this.socket.auth.token = data.token_new
+    })
+
     this.socket.on('messages_channel', (data) => {
       this.messageStore.setMessages(data)
-      this.messageStore.setLoadingMessages(false) 
+      this.messageStore.setLoadingMessages(false)
     })
 
     this.socket.on('new_message_channel', (message) => {
@@ -64,8 +80,8 @@ class SocketService {
     this.socket.on('error', (error) => {
       console.warn('WebSocket error:', error)
       this.messageStore.setError(error)
-      this.messageStore.setLoadingMessages(false) 
-      this.messageStore.setLoadingConversations(false) 
+      this.messageStore.setLoadingMessages(false)
+      this.messageStore.setLoadingConversations(false)
     })
 
     this.socket.on('disconnect', () => {
@@ -74,11 +90,10 @@ class SocketService {
   }
 
   joinChannel(channelId) {
-    this.messageStore.clearMessages()  
+    this.messageStore.clearMessages()
     const token = this.authStore.token
-    this.messageStore.setLoadingMessages(true) 
+    this.messageStore.setLoadingMessages(true)
     this.socket.emit('join_channel', { channelId, token })
-    
   }
 
   sendMessage(channel_id, message) {
@@ -87,13 +102,22 @@ class SocketService {
   }
 
   getConversations() {
-    const token = this.authStore.token
-    this.messageStore.setLoadingConversations(true) 
+    if (!this.socket || !this.authStore.isAuthenticated) {
+      console.warn('No se pueden obtener conversaciones: socket no inicializado o usuario no autenticado');
+      return;
+    }
+
+    const token = this.authStore.token;
+    if (!token) {
+      console.warn('Token no disponible');
+      return;
+    }
+    this.messageStore.setLoadingConversations(true)
     this.socket.emit('get_conversations', { token })
   }
 
   getDirectMessages(send_id, recipient_id) {
-    this.messageStore.clearMessages()  
+    this.messageStore.clearMessages()
     const token = this.authStore.token
     this.messageStore.setLoadingMessages(true)
     this.socket.emit('direct_message', { send_id, recipient_id, token })

@@ -21,15 +21,7 @@ const router = createRouter({
     {
       path: ROUTES.DASHBOARD,
       name: 'Panel',
-      component: () => import('@/views/dashboard/DashboardView.vue'),
-      meta: {
-        requiresAuth: true
-      }
-    },
-    {
-      path: ROUTES.CONVERSATIONS,
-      name: 'Conversations',
-      component: () => import('@/views/conversations/ConversationsView.vue'),
+      component: () => import('@/views/home/HomeView.vue'),
       meta: {
         requiresAuth: true
       }
