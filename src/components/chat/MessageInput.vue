@@ -1,15 +1,20 @@
 <template>
   <div class="flex items-center gap-2">
     <span class="relative flex shrink-0 w-8 h-8">
-      <UploadFileTest class="absolute bottom-0 right-0" />
+      <UploadFileDropdown @fileSelected="handleFileSelected" />
     </span>
-    <input
-      v-model="message"
-      class="flex h-10 w-full border border-input ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 flex-1 rounded-lg bg-muted px-4 py-2 text-sm"
-      placeholder="Type your message..."
-      type="text"
-      @keyup.enter="sendMessage"
-    />
+    <div class="flex-1 relative">
+      <input
+        v-model="message"
+        class="flex h-10 w-full border border-input ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 flex-1 rounded-lg bg-muted px-4 py-2 text-sm"
+        :placeholder="selectedFile ? selectedFile.name : 'Type your message...'"
+        type="text"
+        @keyup.enter="sendMessage"
+      />
+      <span v-if="selectedFile" class="absolute right-2 top-1/2 transform -translate-y-1/2 text-sm text-gray-500">
+        {{ selectedFile.name }}
+      </span>
+    </div>
     <button
       @click="sendMessage"
       class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-10 w-10"
@@ -26,7 +31,7 @@ import { socketService } from '@/services/socketService'
 import { useCurrentChannelStore } from '@/stores/channels/currentChannelStore'
 import { useCurrentConversationStore } from '@/stores/conversations/currentConversationStore'
 import { Send } from 'lucide-vue-next'
-import UploadFileTest from '@/components/common/UploadFileDropdown.vue'
+import UploadFileDropdown from '@/components/common/UploadFileDropdown.vue'
 
 const currentChannelStore = useCurrentChannelStore()
 const currentConversationStore = useCurrentConversationStore()
@@ -34,18 +39,49 @@ const { currentChannelId } = storeToRefs(currentChannelStore)
 const { currentConversationId } = storeToRefs(currentConversationStore)
 
 const message = ref('')
+const selectedFile = ref(null)
 
-const sendMessage = () => {
-  if (message.value.trim() === '') {
+const sendMessage = async () => {
+  if (message.value.trim() === '' && !selectedFile.value) {
+    return;
+  }
+
+
+  try {
+/*     const response = await apiClient.post(API_ENDPOINTS.SEND_MESSAGE, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    }); */
+    socketService.sendMessage(currentChannelId.value, message.value, selectedFile.value);
+    message.value = '';
+    selectedFile.value = null;
+  } catch (error) {
+    console.error('Error al enviar el mensaje:', error);
+  }
+};
+
+/* const sendMessage = () => {
+  if (message.value.trim() === '' && !selectedFile.value) {
     return
   }
 
   if (currentChannelId.value) {
     console.log("SE ESTA ENVIANDO UN MENSAJE A UN CANAL")
-    socketService.sendMessage(currentChannelId.value, message.value)
+    socketService.sendMessage(currentChannelId.value, message.value, selectedFile.value)
+    console.log("selectedFile.value", selectedFile.value);
+    
   } else if (currentConversationId.value) {
     console.log('%cSE ESTA MANDANDO UN MENSAJE A UNA CONVERSACION', 'color: darkblue;')
+    // Implementa la lógica para enviar a una conversación
+    // socketService.sendMessageToConversation(currentConversationId.value, message.value, selectedFile.value)
   }
-  message.value = '' // Limpiar el input después de enviar
+  
+  message.value = ''
+  selectedFile.value = null
+} */
+
+const handleFileSelected = (file) => {
+  selectedFile.value = file
 }
 </script>

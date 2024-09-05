@@ -100,11 +100,28 @@ class SocketService {
     this.socket.emit('join_channel', { channelId, token })
   }
 
-  sendMessage(channel_id, message) {
+/*   sendMessage(channel_id, message) {
     postMessage({ channel_id, content: message })
     this.socket.emit('new_message_channel', { channel_id, message, token: this.authStore.token })
-  }
-
+  } */
+    sendMessage(channel_id, message, file = null) {
+      const content = { channel_id, content: message };
+      if (file) {
+        content.file = file;
+      }
+      postMessage(content)
+        .then(() => {
+          this.socket.emit('new_message_channel', { 
+            channel_id, 
+            message, 
+            file: file ? file.name : null, 
+            token: this.authStore.token 
+          });
+        })
+        .catch(error => {
+          console.error('Error al enviar el mensaje:', error);
+        });
+    }
   getConversations() {
     if (!this.socket || !this.authStore.isAuthenticated) {
       console.warn('No se pueden obtener conversaciones: socket no inicializado o usuario no autenticado');
