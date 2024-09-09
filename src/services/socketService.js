@@ -19,7 +19,6 @@ class SocketService {
     this.authStore = useAuthStore()
 
     if (!this.authStore.isAuthenticated || !this.authStore.token) {
-      console.warn('No se pudo inicializar el socket: usuario no autenticado o token no disponible');
       return;
     }
     

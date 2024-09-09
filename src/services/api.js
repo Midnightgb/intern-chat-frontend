@@ -2,6 +2,7 @@
 import axios from 'axios';
 import { API_ENDPOINTS } from '@/constants/apiEndpoints';
 import { useAuthStore } from '@/stores/auth';
+import useLogout from '@/composables/useLogout'
 
 const publicApi = axios.create({
   baseURL: API_ENDPOINTS.BASE_URL,
@@ -36,7 +37,6 @@ apiClient.interceptors.request.use(
   (config) => {
     const token = getToken();
     if (token) {
-      console.log('Token en la solicitud:', token);
       config.headers['Authorization'] = `Bearer ${token}`;
     }
     return config;
@@ -74,10 +74,11 @@ apiClient.interceptors.response.use(
     // Manejo de token expirado
     if (error.response && error.response.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
-      const authStore = useAuthStore();
       console.log('Token expirado, cerrando sesión...');
+      const { handleLogout } = useLogout()
       try {
-        authStore.logout();
+        console.log('Cerrando sesión...');
+        handleLogout()
         // Aquí podría implementar una lógica para obtener un nuevo token si es necesario
         // Por ejemplo, hacer una llamada a un endpoint de refresh token
         // const newToken = await authStore.refreshToken();
@@ -85,7 +86,7 @@ apiClient.interceptors.response.use(
         // originalRequest.headers['Authorization'] = `Bearer ${newToken}`;
         // return apiClient(originalRequest);
       } catch (refreshError) {
-        authStore.logout();
+        handleLogout()
         return Promise.reject(refreshError);
       }
     }

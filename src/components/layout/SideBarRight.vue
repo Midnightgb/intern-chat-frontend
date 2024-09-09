@@ -1,16 +1,12 @@
 //src/components/partials/SideBarRight.vue
 <template>
-  <aside
-  class="bg-background border-r border-gray-300 flex flex-col h-screen w-48 sm:w-56"
-  >
-    <div class="flex-grow overflow-hidden ">
+  <aside class="bg-background border-r border-gray-300 flex flex-col h-screen w-48 sm:w-56">
+    <div class="flex-grow overflow-hidden">
       <DirectMessages />
     </div>
 
     <!-- Bloque de configuraciones de usuario -->
-    <div
-      class="flex-shrink-0 w-full p-4 bg-gradient-to-t from-gray-100 to-gray-200 rounded-lg"
-    >
+    <div class="flex-shrink-0 w-full p-4 bg-gradient-to-t from-gray-100 to-gray-200 rounded-lg">
       <div class="flex-grow">
         <div class="flex items-center justify-between">
           <span class="relative flex shrink-0 overflow-hidden rounded-full w-8 h-8">
@@ -37,9 +33,16 @@
         </div>
       </div>
       <div>
-        <fwb-button color="red" class="w-full transition-all" outline @click="handleLogout">
+        <FwbButton
+          color="red"
+          :disabled="loading"
+          :loading="loading"
+          class="w-full transition-all"
+          outline
+          @click="clickLogout"
+        >
           Cerrar Sesión
-        </fwb-button>
+        </FwbButton>
       </div>
     </div>
   </aside>
@@ -49,7 +52,7 @@
 import { storeToRefs } from 'pinia'
 // Stores
 import { useAuthStore } from '@/stores/auth'
-import {useCurrentUserStore} from '@/stores/user/currentUserStore'
+import { useCurrentUserStore } from '@/stores/user/currentUserStore'
 // Components
 import { FwbButton } from 'flowbite-vue'
 import { CircleUserRound } from 'lucide-vue-next'
@@ -60,15 +63,22 @@ import DirectMessages from '@/components/common/DirectMessages.vue'
 import { getUserAvatar } from '@/utils/helpers'
 import { onMounted, ref } from 'vue'
 
+const loading = ref(false)
+
 const authStore = useAuthStore()
 const currentUserStore = useCurrentUserStore()
 
 const { user } = storeToRefs(authStore)
-const { handleLogout } = useLogout()
 
-currentUserStore.updateCurrentUser(user.value.id);
+currentUserStore.updateCurrentUser(user.value.id)
 
 const userPhotoUrl = ref(null)
+
+const { handleLogout } = useLogout()
+const clickLogout = async () => {
+  loading.value = true
+  await handleLogout()
+}
 
 const handleImageError = () => {
   console.error('Error loading user avatar')

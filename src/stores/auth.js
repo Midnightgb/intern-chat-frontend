@@ -34,6 +34,8 @@ export const useAuthStore = defineStore('auth', {
     async logout() {
       try {
         // Realizar el logout en el servidor
+        console.log('Logout en el servidor...');
+        console.log('Token:', this.token);
         await apiLogout(this.token)
       } catch (error) {
         console.error('Error durante el logout del servidor:', error)
