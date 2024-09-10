@@ -105,10 +105,19 @@ class SocketService {
     this.socket.emit('join_channel', { channelId, token })
   }
   
-  sendDirectMessage(recipient_id, message) {
+  sendDirectMessage(recipient_id, message, file = null) {
     this.socket.emit('direct_message', { send_id: this.authStore.user.id, recipient_id, token: this.authStore.token })
-    const content = { recipient_id, content: message }
-    postDirectMessage(content)
+    //if there is a file, send it in a form data
+    if (file) {
+      const formData = new FormData()
+      formData.append('file', file)
+      formData.append('recipient_id', recipient_id)
+      formData.append('content', message)
+      postDirectMessage(formData)
+    }else{
+      const content = { recipient_id, content: message }
+      postDirectMessage(content)
+    }
   }
 
     sendMessage(channel_id, message, file = null) {

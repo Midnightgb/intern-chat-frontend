@@ -38,7 +38,12 @@ apiClient.interceptors.request.use(
     const token = getToken();
     if (token) {
       console.log('token en la solicitud:', token);
-      
+      //if the request is a post request and it has a file in it, then we change the content type to multipart/form-data
+      if (config.method === 'post' && config.data instanceof FormData) {
+        config.headers['Content-Type'] = 'multipart/form-data';
+      }else{
+        config.headers['Content-Type'] = 'application/json';
+      }
       config.headers['Authorization'] = `Bearer ${token}`;
     }
     return config;

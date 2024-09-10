@@ -53,7 +53,16 @@
               <button @click="cancelEdit" class="ml-2 text-sm text-red-500">Cancelar</button>
             </div>
           </div>
-          <div v-else class="text-muted-foreground">{{ message.content }}</div>
+          <div v-if="message.content? message.content : message.url_file" class="mt-1">
+            <span v-if="message.content != null" class="text-sm">{{ message.content }}</span>
+            <!--  @click="downloadFile(message.url_file)" -->
+            <span v-if="isImage(message.url_file)" class="text-sm text-blue-500 cursor-pointer">
+              <img :src="message.url_file" alt="Image" class="max-w-full h-auto" />
+            </span>
+            <span v-else class="text-sm text-blue-500 cursor-pointer">
+              {{ message.url_file }}
+            </span>
+          </div>
         </div>
       </div>
     </div>
@@ -94,6 +103,10 @@ const showNewMessageNotification = ref(false)
 
 const editingMessage = ref(null)
 const editedContent = ref('')
+
+function isImage(url) {
+    return /\.(jpg|jpeg|png|gif|bmp|webp)$/i.test(url);
+  }
 
 const scrollToBottom = (smooth) => {
   if (messageContainer.value) {

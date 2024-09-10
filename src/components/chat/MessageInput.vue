@@ -56,7 +56,11 @@ const sendMessage = async () => {
   if (currentChannelId.value) {
     socketService.sendMessage(currentChannelId.value, message.value, selectedFile.value);
   } else if (currentConversationId.value) {
-    socketService.sendDirectMessage(currentConversationId.value, message.value);
+    if (selectedFile.value) {
+      socketService.sendDirectMessage(currentConversationId.value, null, selectedFile.value);
+    }else{
+      socketService.sendDirectMessage(currentConversationId.value, message.value, null);
+    }
   }
     message.value = '';
     selectedFile.value = null;
