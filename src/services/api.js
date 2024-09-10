@@ -37,6 +37,8 @@ apiClient.interceptors.request.use(
   (config) => {
     const token = getToken();
     if (token) {
+      console.log('token en la solicitud:', token);
+      
       config.headers['Authorization'] = `Bearer ${token}`;
     }
     return config;
@@ -121,6 +123,12 @@ export const updateMessage = (message) => {
 
 export const getUserByName = (network_user) => {
   return apiClient.get(API_ENDPOINTS.GET_USER_BY_NAME.replace(':network_user', network_user));
+};
+
+export const postDirectMessage = (content) => {
+  console.log('Enviando mensaje:', content);
+  
+  return apiClient.post(API_ENDPOINTS.CREATE_CONVERSATION, content);
 };
 
 export default apiClient;

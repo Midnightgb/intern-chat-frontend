@@ -3,7 +3,8 @@ import { io } from 'socket.io-client'
 import { useMessageStore } from '@/stores/messages/messageStore'
 import { useAuthStore } from '@/stores/auth'
 import { API_ENDPOINTS } from '@/constants/apiEndpoints'
-import { postMessage } from '@/services/api'
+import { postMessage, postDirectMessage } from '@/services/api'
+import useLogout from '@/composables/useLogout'
 
 const SOCKET_URL = API_ENDPOINTS.SOCKET_URL
 
@@ -19,6 +20,7 @@ class SocketService {
     this.authStore = useAuthStore()
 
     if (!this.authStore.isAuthenticated || !this.authStore.token) {
+      useLogout().handleLogout()
       return;
     }
     
@@ -45,6 +47,7 @@ class SocketService {
     })
 
     this.socket.on('new_message_channel', (message) => {
+      console.log('Nuevo mensaje canal:', message);
       this.messageStore.addMessage(message)
     })
 
@@ -67,12 +70,17 @@ class SocketService {
     })
 
     this.socket.on('direct_message', (data) => {
-      this.messageStore.setMessages(data) // Actualiza los mensajes directos en el mismo estado
+      this.messageStore.setMessages(data)
       this.messageStore.setLoadingMessages(false)
     })
-
+//new_conversations
+    this.socket.on('new_conversation_direct', (data) => {
+      console.log('nuevo mensaje directo:', data);
+      this.messageStore.addMessage(data)
+    })
     this.socket.on('get_direct_messages', (data) => {
-      this.messageStore.setMessages(data) // Actualiza los mensajes directos en el mismo estado
+      console.log('nuevo mensaje directo:', data);
+      this.messageStore.setMessages(data)
       this.messageStore.setLoadingMessages(false)
     })
 
@@ -82,27 +90,27 @@ class SocketService {
       this.messageStore.setLoadingMessages(false);
       this.messageStore.setLoadingConversations(false);
 
-      // Asegúrate de que si hay un error, los mensajes se establezcan en una lista vacía.
-      this.messageStore.setMessages([]);  // Aquí se establece que no hay mensajes disponibles.
+      this.messageStore.setMessages([]);
     });
-
 
     this.socket.on('disconnect', () => {
       console.log('Disconnected from WebSocket server')
     })
   }
-
+  
   joinChannel(channelId) {
     this.messageStore.clearMessages()
     const token = this.authStore.token
     this.messageStore.setLoadingMessages(true)
     this.socket.emit('join_channel', { channelId, token })
   }
+  
+  sendDirectMessage(recipient_id, message) {
+    this.socket.emit('direct_message', { send_id: this.authStore.user.id, recipient_id, token: this.authStore.token })
+    const content = { recipient_id, content: message }
+    postDirectMessage(content)
+  }
 
-/*   sendMessage(channel_id, message) {
-    postMessage({ channel_id, content: message })
-    this.socket.emit('new_message_channel', { channel_id, message, token: this.authStore.token })
-  } */
     sendMessage(channel_id, message, file = null) {
       const content = { channel_id, content: message };
       if (file) {
@@ -121,15 +129,16 @@ class SocketService {
           console.error('Error al enviar el mensaje:', error);
         });
     }
+
   getConversations() {
     if (!this.socket || !this.authStore.isAuthenticated) {
-      console.warn('No se pueden obtener conversaciones: socket no inicializado o usuario no autenticado');
+      useLogout().handleLogout()
       return;
     }
 
     const token = this.authStore.token;
     if (!token) {
-      console.warn('Token no disponible');
+      useLogout().handleLogout()
       return;
     }
     this.messageStore.setLoadingConversations(true)

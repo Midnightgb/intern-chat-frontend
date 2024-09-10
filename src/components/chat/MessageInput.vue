@@ -53,33 +53,17 @@ const sendMessage = async () => {
         'Content-Type': 'multipart/form-data'
       }
     }); */
+  if (currentChannelId.value) {
     socketService.sendMessage(currentChannelId.value, message.value, selectedFile.value);
+  } else if (currentConversationId.value) {
+    socketService.sendDirectMessage(currentConversationId.value, message.value);
+  }
     message.value = '';
     selectedFile.value = null;
   } catch (error) {
     console.error('Error al enviar el mensaje:', error);
   }
 };
-
-/* const sendMessage = () => {
-  if (message.value.trim() === '' && !selectedFile.value) {
-    return
-  }
-
-  if (currentChannelId.value) {
-    console.log("SE ESTA ENVIANDO UN MENSAJE A UN CANAL")
-    socketService.sendMessage(currentChannelId.value, message.value, selectedFile.value)
-    console.log("selectedFile.value", selectedFile.value);
-    
-  } else if (currentConversationId.value) {
-    console.log('%cSE ESTA MANDANDO UN MENSAJE A UNA CONVERSACION', 'color: darkblue;')
-    // Implementa la lógica para enviar a una conversación
-    // socketService.sendMessageToConversation(currentConversationId.value, message.value, selectedFile.value)
-  }
-  
-  message.value = ''
-  selectedFile.value = null
-} */
 
 const handleFileSelected = (file) => {
   selectedFile.value = file
