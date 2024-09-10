@@ -124,11 +124,22 @@ const handleScroll = () => {
 }
 
 const editMessage = (message) => {
-  editingMessage.value = message.id_message
-  editedContent.value = message.content
+  const messageId = message.id_message || message.id_direct_message;
+  console.log('Message object:', message);
+  console.log(`Editing message with ID: ${messageId}`);
+  
+  if (!messageId) {
+    console.error('No valid message ID found!');
+    return;
+  }
+
+  editingMessage.value = messageId;
+  editedContent.value = message.content;
 }
 
+
 const confirmEditMessage = (messageId) => {
+  console.log(`Confirming edit for message with ID: ${messageId}`);
   messageStore.updateMessage({
     id_message: messageId,
     content: editedContent.value

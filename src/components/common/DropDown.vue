@@ -1,3 +1,4 @@
+<!-- src/components/common/DropDown.vue -->
 <template>
   <fwb-dropdown placement="left" text="Left">
     <template #trigger>
