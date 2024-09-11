@@ -1,9 +1,10 @@
+//src/components/common/UploadFileDropdown.vue
 <template>
   <fwb-dropdown placement="top" text="top">
     <template #trigger>
-      <Paperclip class="w-5 h-5 cursor-pointer hover:text-blue-600 transition-colors" />
+      <Paperclip class="w-5 h-5 transition-colors cursor-pointer hover:text-blue-600" />
     </template>
-    <fwb-list-group class="shadow-lg shadow-gray-500 transition-opacity max-w-xs w-64">
+    <fwb-list-group class="w-64 max-w-xs transition-opacity shadow-lg shadow-gray-500">
       <div class="relative p-2">
         <fwb-file-input
           v-if="!file"
@@ -17,16 +18,16 @@
             v-if="filePreview" 
             :src="filePreview" 
             alt="File preview" 
-            class="w-full h-32 object-cover rounded-lg"
+            class="object-cover w-full h-32 rounded-lg"
           />
-          <div v-else class="w-full h-32 bg-gray-200 flex items-center justify-center rounded-lg">
+          <div v-else class="flex items-center justify-center w-full h-32 bg-gray-200 rounded-lg">
             <span class="text-sm text-gray-600">{{ file.name }}</span>
           </div>
           <button
             @click="clearFile"
-            class="absolute top-2 right-2 bg-white rounded-full p-1 shadow-md hover:bg-gray-200"
+            class="absolute p-1 bg-white rounded-full shadow-md top-2 right-2 hover:bg-gray-200"
           >
-            <span class="text-red-600 text-xl">✕</span>
+            <span class="text-xl text-red-600">✕</span>
           </button>
         </div>
       </div>

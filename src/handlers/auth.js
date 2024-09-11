@@ -11,9 +11,22 @@ export const useAuthHandlers = () => {
   }
 
   const handleLogout = async () => {
-    await authStore.logout()
-    router.push({ name: 'login' })
+    if (!authStore.isAuthenticated) {
+      // Si ya no está autenticado, solo redirigir
+      router.push({ name: 'login' })
+      return
+    }
+
+    try {
+      await authStore.logout()
+    } catch (error) {
+      console.error('Error durante el logout:', error)
+    } finally {
+      // Asegurarse de que el usuario sea redirigido y la sesión se limpie
+      router.push({ name: 'login' })
+    }
   }
+
 
   return {
     handleLoginSuccess,

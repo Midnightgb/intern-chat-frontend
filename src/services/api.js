@@ -38,6 +38,13 @@ apiClient.interceptors.request.use(
     const token = getToken();
     console.log('Token actual:', token);
     if (token) {
+      console.log('token en la solicitud:', token);
+      //if the request is a post request and it has a file in it, then we change the content type to multipart/form-data
+      if (config.method === 'post' && config.data instanceof FormData) {
+        config.headers['Content-Type'] = 'multipart/form-data';
+      }else{
+        config.headers['Content-Type'] = 'application/json';
+      }
       config.headers['Authorization'] = `Bearer ${token}`;
     }
     return config;
@@ -59,40 +66,15 @@ apiClient.interceptors.response.use(
     return response;
   },
   async (error) => {
-    const originalRequest = error.config;
-    console.log('Error en la respuesta:', error);
-    // Comprueba si la respuesta contiene un nuevo token
-    if (error.response && error.response.data && error.response.data.token_new) {
-      const newToken = error.response.data.token_new;
-      updateToken(newToken);
-      
-      // Actualiza el token en la solicitud original y la reintenta
-      originalRequest.headers['Authorization'] = `Bearer ${newToken}`;
-      console.log('Reintentando solicitud:', originalRequest);
-      return apiClient(originalRequest);
-    }
-    
-    // Manejo de token expirado
-    if (error.response && error.response.status === 401 && !originalRequest._retry) {
-      originalRequest._retry = true;
-      console.log('Token expirado, cerrando sesión...');
-      const { handleLogout } = useLogout()
-      try {
-        console.log('Cerrando sesión...');
-        handleLogout()
-        // Aquí podría implementar una lógica para obtener un nuevo token si es necesario
-        // Por ejemplo, hacer una llamada a un endpoint de refresh token
-        // const newToken = await authStore.refreshToken();
-        // updateToken(newToken);
-        // originalRequest.headers['Authorization'] = `Bearer ${newToken}`;
-        // return apiClient(originalRequest);
-      } catch (refreshError) {
-        handleLogout()
-        return Promise.reject(refreshError);
+    if (error.response && error.response.status === 401) {
+      const authStore = useAuthStore()
+      if (authStore.isAuthenticated) {
+        console.log('Token expirado, cerrando sesión...')
+        const { handleLogout } = useLogout()
+        await handleLogout()
       }
     }
-    
-    return Promise.reject(error);
+    return Promise.reject(error)
   }
 );
 
@@ -141,5 +123,10 @@ export const getUserByName = (network_user) => {
   return apiClient.get(API_ENDPOINTS.GET_USER_BY_NAME.replace(':network_user', network_user));
 };
 
+export const postDirectMessage = (content) => {
+  console.log('Enviando mensaje:', content);
+  
+  return apiClient.post(API_ENDPOINTS.CREATE_CONVERSATION, content);
+};
 
 export default apiClient;
