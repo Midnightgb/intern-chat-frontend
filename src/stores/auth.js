@@ -32,17 +32,21 @@ export const useAuthStore = defineStore('auth', {
       this.checkTokenExpiration(token)
     },
     async logout() {
+      if (!this.isAuthenticated) {
+        console.log('Usuario ya desconectado')
+        return
+      }
+    
       try {
-        // Realizar el logout en el servidor
-        console.log('Logout en el servidor...');
-        console.log('Token:', this.token);
-        await apiLogout(this.token)
+        console.log('Logout en el servidor...')
+        await apiLogout()
       } catch (error) {
         console.error('Error durante el logout del servidor:', error)
-        cleanupSession()
-        throw error // Propagar el error para manejarlo en el componente
       } finally {
+        // Limpiar la sesión independientemente del resultado de la API
+        this.isAuthenticated = false
         cleanupSession()
+        socketService.disconnect()
       }
     },
     checkAuth() {
