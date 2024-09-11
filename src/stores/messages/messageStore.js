@@ -18,7 +18,7 @@ export const useMessageStore = defineStore('message', {
     addMessage(message) {
       this.messages.push(message);
     },
-    async updateMessage(updatedMessage) {
+    async updateMessageChannel(updatedMessage) {
       try {
         // Actualizar el mensaje en el estado
         const index = this.messages.findIndex(m => m.id_message === updatedMessage.id_message);
@@ -29,11 +29,28 @@ export const useMessageStore = defineStore('message', {
           };
         }
 
+        console.log('Updating message in store:', updatedMessage);
+        
         // Enviar solicitud de actualización al backend
         await updateMessageApi(updatedMessage);
       } catch (error) {
         this.error = 'No se pudo actualizar el mensaje';
         console.error('Error updating message in store:', error);
+      }
+    },
+    async updateMessageCoversation(updateConversation) {
+      try {
+        // Actualizar la conversación en el estado
+        const index = this.conversations.findIndex(c => c.id_conversation === updateConversation.id_conversation);
+        if (index !== -1) {
+          this.conversations[index] = { 
+            ...this.conversations[index], 
+            ...updateConversation 
+          };
+        }
+      } catch (error) {
+        this.error = 'No se pudo actualizar la conversación';
+        console.error('Error updating conversation in store:', error);
       }
     },
     deleteMessage(messageId) {

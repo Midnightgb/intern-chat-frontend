@@ -36,6 +36,7 @@ const updateToken = (newToken) => {
 apiClient.interceptors.request.use(
   (config) => {
     const token = getToken();
+    console.log('Token actual:', token);
     if (token) {
       config.headers['Authorization'] = `Bearer ${token}`;
     }
@@ -112,6 +113,7 @@ export const postMessage = (content) => {
   return apiClient.post(API_ENDPOINTS.SEND_MESSAGE, content);
 };
 
+// CHANNELS
 export const updateMessage = (message) => {
   return apiClient.post(API_ENDPOINTS.UPDATE_MESSAGE, {
     id_message: message.id_message,
@@ -119,8 +121,25 @@ export const updateMessage = (message) => {
   });
 };
 
+export const deleteMessage = (messageId) => {
+  return apiClient.delete(API_ENDPOINTS.DELETE_MESSAGE.replace(':id_message', messageId));
+}
+
+// MESSAGES DIRECT
+export const updateConversation = (conversation) => {
+  return apiClient.get(API_ENDPOINTS.UPDATE_CONVERSATION,{
+    id_direct_message: conversation.id_direct_message,
+    content: conversation.content
+  });
+};
+
+export const getConversations = () => {
+  return apiClient.get(API_ENDPOINTS.GET_CONVERSATIONS);
+};
+
 export const getUserByName = (network_user) => {
   return apiClient.get(API_ENDPOINTS.GET_USER_BY_NAME.replace(':network_user', network_user));
 };
+
 
 export default apiClient;

@@ -125,22 +125,23 @@ const handleScroll = () => {
 
 const editMessage = (message) => {
   const messageId = message.id_message || message.id_direct_message;
-  console.log('Message object:', message);
-  console.log(`Editing message with ID: ${messageId}`);
-  
+  const idType = message.id_message ? 'Id obtenido de un canal' : 'Id obtenido de un mensaje directo';
+
   if (!messageId) {
     console.error('No valid message ID found!');
     return;
   }
 
+  console.log(`${idType}: ${messageId}`);
+  console.log(`Editando mensaje: ${messageId}`);
+  
   editingMessage.value = messageId;
   editedContent.value = message.content;
 }
 
-
 const confirmEditMessage = (messageId) => {
   console.log(`Confirming edit for message with ID: ${messageId}`);
-  messageStore.updateMessage({
+  messageStore.updateMessageChannel({
     id_message: messageId,
     content: editedContent.value
   })
