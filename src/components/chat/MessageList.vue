@@ -35,11 +35,15 @@
                 {{ formatDate(message.created_at) }}
               </span>
             </div>
-            <button v-if="message.user_id ? message.user_id === currentUserId : message.send_id === currentUserId" class="pt-1 pr-1 rounded-full">
+            <button 
+              v-if="(message.user_id ? message.user_id === currentUserId : message.send_id === currentUserId) && message.recent == true" 
+              class="pt-1 pr-1 rounded-full"
+            >
               <DropDown
                 :canEdit="true"
                 @edit="editMessage(message)" 
-                @delete="deleteMessage(message.id_message)" />
+                @delete="deleteMessage(message)" 
+              />
             </button>
           </div>
           <div v-if="editingMessage === message.id_message">
@@ -104,6 +108,10 @@ const showNewMessageNotification = ref(false)
 const editingMessage = ref(null)
 const editedContent = ref('')
 
+console.log("estos son los ",messages.value)
+
+
+
 function isImage(url) {
     return /\.(jpg|jpeg|png|gif|bmp|webp)$/i.test(url);
   }
@@ -163,6 +171,19 @@ const confirmEditMessage = (messageId) => {
 
 const cancelEdit = () => {
   editingMessage.value = null
+}
+
+const deleteMessage = (messageId) => {
+  const idMessage = messageId.id_message || messageId.id_direct_message;
+  const idType = messageId.id_message ? 'Id obtenido de un canal' : 'Id obtenido de un mensaje directo';
+
+  if (!idMessage) {
+    console.error('No valid message ID found!');
+    return;
+  }
+
+  console.log(`${idType}: ${idMessage}`);
+  console.log(`Eliminando mensaje: ${idMessage}`);
 }
 
 onMounted(() => {
