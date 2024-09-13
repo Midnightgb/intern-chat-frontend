@@ -61,7 +61,7 @@
             <span v-if="message.content != null" class="text-sm">{{ message.content }}</span>
             <!--  @click="downloadFile(message.url_file)" -->
             <span v-if="isImage(message.url_file)" class="text-sm text-blue-500 cursor-pointer">
-              <img :src="message.url_file" alt="Image" class="max-w-full h-auto" />
+              <img :src="message.url_file" alt="Image" class="w-1/3 h-auto" />
             </span>
             <span v-else class="text-sm text-blue-500 cursor-pointer">
               {{ message.url_file }}
@@ -93,7 +93,10 @@ import { formatDate } from '@/utils/date/convertTime'
 import { CircleUserRound } from 'lucide-vue-next'
 import DropDown from '@/components/common/DropDown.vue'
 import NewMessageNotification from '@/components/common/NewMessageNotification.vue'
-import ImageLoader from '@/components/common/ImageLoader.vue'
+import ImageLoader from '@/components/common/AvatarLoader.vue'
+import { imageCache } from '@/utils/imageCache';
+
+const cachedImgSrc = ref(null)
 
 const messageStore = useMessageStore()
 const { messages } = storeToRefs(messageStore)
@@ -215,4 +218,6 @@ watch(
   },
   { deep: true }
 )
+
+
 </script>
