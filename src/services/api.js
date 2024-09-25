@@ -104,7 +104,9 @@ export const updateMessage = (message) => {
 };
 
 export const deleteMessage = (messageId) => {
-  return apiClient.delete(API_ENDPOINTS.DELETE_MESSAGE.replace(':id_message', messageId));
+  return apiClient.post(API_ENDPOINTS.DELETE_MESSAGE, {
+    id_message: messageId
+  });
 }
 
 // MESSAGES DIRECT

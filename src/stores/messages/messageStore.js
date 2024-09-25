@@ -1,6 +1,6 @@
 // src/stores/messages/messageStore.js
 import { defineStore } from 'pinia';
-import { updateMessage as updateMessageApi } from '@/services/api';
+import { updateMessage as updateMessageApi, deleteMessage as deleteMessageApi } from '@/services/api';
 
 export const useMessageStore = defineStore('message', {
   state: () => ({
@@ -53,8 +53,19 @@ export const useMessageStore = defineStore('message', {
         console.error('Error updating conversation in store:', error);
       }
     },
-    deleteMessage(messageId) {
-      this.messages = this.messages.filter(m => m.id_message !== messageId);
+    async deleteMessage(message) {
+      try {
+        const messageId = message.id_message;
+        // Enviar solicitud de eliminación al backend
+        await deleteMessageApi(messageId);
+
+        // Actualizar el estado eliminando el mensaje
+        this.messages = this.messages.filter(m => m.id_message !== messageId);
+        console.log(`Mensaje con ID ${messageId} eliminado del estado y backend.`);
+      } catch (error) {
+        this.error = 'No se pudo eliminar el mensaje';
+        console.error('Error al eliminar el mensaje en el store:', error);
+      }
     },
     setConversations(conversations) {
       this.conversations = conversations;

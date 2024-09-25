@@ -1,4 +1,3 @@
-<!-- src/components/chat/MessageList.vue -->
 <template>
   <div class="relative flex flex-col h-full">
     <div
@@ -35,8 +34,10 @@
                 {{ formatDate(message.created_at) }}
               </span>
             </div>
+
+            <!-- Mostrar el menú de acciones solo si no estamos confirmando eliminación -->
             <button 
-              v-if="(message.user_id ? message.user_id === currentUserId : message.send_id === currentUserId) && message.recent == true" 
+              v-if="(message.user_id ? message.user_id === currentUserId : message.send_id === currentUserId) && message.recent == true && deletingMessage !== message.id_message" 
               class="pt-1 pr-1 rounded-full"
             >
               <DropDown
@@ -45,7 +46,14 @@
                 @delete="deleteMessage(message)" 
               />
             </button>
+
+            <!-- Mostrar la confirmación de eliminación -->
+            <div v-if="deletingMessage === message.id_message" class="flex gap-2">
+              <button @click="confirmDeleteMessage(message.id_message)" class="text-sm text-red-500">Confirmar</button>
+              <button @click="cancelDelete" class="text-sm text-blue-500">Cancelar</button>
+            </div>
           </div>
+
           <div v-if="editingMessage === message.id_message">
             <input 
               v-model="editedContent" 
@@ -57,9 +65,9 @@
               <button @click="cancelEdit" class="ml-2 text-sm text-red-500">Cancelar</button>
             </div>
           </div>
+
           <div v-if="message.content? message.content : message.url_file" class="mt-1">
             <span v-if="message.content != null" class="text-sm">{{ message.content }}</span>
-            <!--  @click="downloadFile(message.url_file)" -->
             <span v-if="isImage(message.url_file)" class="text-sm text-blue-500 cursor-pointer">
               <img :src="message.url_file" alt="Image" class="w-1/3 h-auto" />
             </span>
@@ -77,9 +85,6 @@
   </div>
 </template>
 
-
-
-
 <script setup>
 import { ref, onMounted, nextTick, watch } from 'vue'
 // Stores
@@ -94,9 +99,6 @@ import { CircleUserRound } from 'lucide-vue-next'
 import DropDown from '@/components/common/DropDown.vue'
 import NewMessageNotification from '@/components/common/NewMessageNotification.vue'
 import ImageLoader from '@/components/common/AvatarLoader.vue'
-import { imageCache } from '@/utils/imageCache';
-
-const cachedImgSrc = ref(null)
 
 const messageStore = useMessageStore()
 const { messages } = storeToRefs(messageStore)
@@ -110,14 +112,11 @@ const showNewMessageNotification = ref(false)
 
 const editingMessage = ref(null)
 const editedContent = ref('')
-
-console.log("estos son los ",messages.value)
-
-
+const deletingMessage = ref(null) // Estado para manejar la eliminación de mensajes
 
 function isImage(url) {
-    return /\.(jpg|jpeg|png|gif|bmp|webp)$/i.test(url);
-  }
+  return /\.(jpg|jpeg|png|gif|bmp|webp)$/i.test(url);
+}
 
 const scrollToBottom = (smooth) => {
   if (messageContainer.value) {
@@ -176,17 +175,36 @@ const cancelEdit = () => {
   editingMessage.value = null
 }
 
-const deleteMessage = (messageId) => {
-  const idMessage = messageId.id_message || messageId.id_direct_message;
-  const idType = messageId.id_message ? 'Id obtenido de un canal' : 'Id obtenido de un mensaje directo';
+// Actualiza la función deleteMessage para mostrar la confirmación en lugar de eliminar directamente
+const deleteMessage = (message) => {
+  const messageId = message.id_message || message.id_direct_message;
+  const idType = message.id_message ? 'Id obtenido de un canal' : 'Id obtenido de un mensaje directo';
 
-  if (!idMessage) {
+  if (!messageId) {
     console.error('No valid message ID found!');
     return;
   }
 
-  console.log(`${idType}: ${idMessage}`);
-  console.log(`Eliminando mensaje: ${idMessage}`);
+  console.log(`${idType}: ${messageId}`);
+  
+  // Establecer el mensaje a eliminar
+  deletingMessage.value = messageId;
+}
+
+// Función para confirmar la eliminación
+const confirmDeleteMessage = (messageId) => {
+  console.log(`Confirmando eliminación del mensaje con ID: ${messageId}`);
+  // Aquí llamas a la función del store para eliminar el mensaje
+  const message = messages.value.find(m => m.id_message === messageId);
+  if (message) {
+    messageStore.deleteMessage(message);
+  }
+  deletingMessage.value = null;
+}
+
+// Función para cancelar la eliminación
+const cancelDelete = () => {
+  deletingMessage.value = null;
 }
 
 onMounted(() => {
@@ -218,6 +236,4 @@ watch(
   },
   { deep: true }
 )
-
-
 </script>
