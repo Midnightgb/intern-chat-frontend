@@ -59,7 +59,9 @@ class SocketService {
     })
 
     this.socket.on('delete_message_channel', (message) => {
-      this.messageStore.deleteMessage(message.id_message)
+      //this.messageStore.deleteMessage(message.id_message)
+      console.log('Mensaje eliminado:', message);
+      
     })
 
     this.socket.on('conversations', (data) => {
