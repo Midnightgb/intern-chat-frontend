@@ -20,19 +20,20 @@ export const useMessageStore = defineStore('message', {
     },
     async updateMessageChannel(updatedMessage) {
       try {
-        // Actualizar el mensaje en el estado
+        // Verificar si el mensaje realmente cambió antes de actualizar
         const index = this.messages.findIndex(m => m.id_message === updatedMessage.id_message);
-        if (index !== -1) {
+        if (index !== -1 && this.messages[index].content !== updatedMessage.content) {
+          // Actualizar el mensaje solo si su contenido ha cambiado
           this.messages[index] = { 
             ...this.messages[index], 
             ...updatedMessage 
           };
+    
+          console.log('Updating message in store:', updatedMessage);
+          
+          // Enviar solicitud de actualización al backend
+          await updateMessageApi(updatedMessage);
         }
-
-        console.log('Updating message in store:', updatedMessage);
-        
-        // Enviar solicitud de actualización al backend
-        await updateMessageApi(updatedMessage);
       } catch (error) {
         this.error = 'No se pudo actualizar el mensaje';
         console.error('Error updating message in store:', error);

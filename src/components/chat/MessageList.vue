@@ -6,14 +6,14 @@
       @scroll="handleScroll"
     >
       <!-- Mostrar un mensaje si no hay mensajes -->
-      <div v-if="messages.length === 0" class="text-center text-gray-500 mt-10">
+      <div v-if="computedMessages.length === 0" class="text-center text-gray-500 mt-10">
         No hay mensajes por mostrar.
       </div>
 
       <!-- Mostrar la lista de mensajes si existen -->
       <div
-        v-for="message in messages"
-        :key="message.id_message"
+        v-for="message in computedMessages"
+        :key="message.id_message || message.id_direct_message"
         class="flex items-start gap-2 relative bg-gray-300 rounded-lg p-3 break-words"
       >
         <span class="relative flex shrink-0 overflow-hidden rounded-full w-8 h-8 z-10">
@@ -37,7 +37,7 @@
 
             <!-- Mostrar el menú de acciones solo si no estamos confirmando eliminación -->
             <button 
-              v-if="(message.user_id ? message.user_id === currentUserId : message.send_id === currentUserId) && message.recent == true && deletingMessage !== message.id_message" 
+              v-if="(message.user_id ? message.user_id === currentUserId : message.send_id === currentUserId) && message.isRecent && deletingMessage !== message.id_message" 
               class="pt-1 pr-1 rounded-full"
             >
               <DropDown
@@ -66,12 +66,12 @@
             </div>
           </div>
 
-          <div v-if="message.content? message.content : message.url_file" class="mt-1">
+          <div v-if="message.content || message.url_file" class="mt-1">
             <span v-if="message.content != null" class="text-sm">{{ message.content }}</span>
             <span v-if="isImage(message.url_file)" class="text-sm text-blue-500 cursor-pointer">
               <img :src="message.url_file" alt="Image" class="w-1/3 h-auto" />
             </span>
-            <span v-else class="text-sm text-blue-500 cursor-pointer">
+            <span v-else-if="message.url_file" class="text-sm text-blue-500 cursor-pointer">
               {{ message.url_file }}
             </span>
           </div>
@@ -86,7 +86,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, nextTick, watch } from 'vue'
+import { ref, onMounted, nextTick, watch, computed } from 'vue'
 // Stores
 import { storeToRefs } from 'pinia'
 import { useMessageStore } from '@/stores/messages/messageStore'
@@ -112,23 +112,32 @@ const showNewMessageNotification = ref(false)
 
 const editingMessage = ref(null)
 const editedContent = ref('')
-const deletingMessage = ref(null) // Estado para manejar la eliminación de mensajes
+const deletingMessage = ref(null)
+
+// Computed property para los mensajes
+const computedMessages = computed(() => 
+  messages.value.map(message => ({
+    ...message,
+    isRecent: true, // Asumimos que todos los mensajes son recientes por ahora
+    id: message.id_message || message.id_direct_message // Aseguramos una key única
+  }))
+)
 
 function isImage(url) {
-  return /\.(jpg|jpeg|png|gif|bmp|webp)$/i.test(url);
+  return url && /\.(jpg|jpeg|png|gif|bmp|webp)$/i.test(url);
 }
 
 const scrollToBottom = (smooth) => {
-  if (messageContainer.value) {
-    messageContainer.value.scrollTo({
-      top: messageContainer.value.scrollHeight,
-      behavior: smooth ? 'smooth' : 'auto'
-    })
-    isScrolledToBottom.value = true
-    showNewMessageNotification.value = false
-  } else {
-    console.warn('[scrollToBottom] messageContainer.value is null')
-  }
+  nextTick(() => {
+    if (messageContainer.value) {
+      messageContainer.value.scrollTo({
+        top: messageContainer.value.scrollHeight,
+        behavior: smooth ? 'smooth' : 'auto'
+      })
+      isScrolledToBottom.value = true
+      showNewMessageNotification.value = false
+    }
+  })
 }
 
 const handleScroll = () => {
@@ -141,96 +150,77 @@ const handleScroll = () => {
     if (scrolledToBottom) {
       showNewMessageNotification.value = false
     }
-  } else {
-    console.warn('[handleScroll] messageContainer.value is null')
   }
 }
 
 const editMessage = (message) => {
   const messageId = message.id_message || message.id_direct_message;
-  const idType = message.id_message ? 'Id obtenido de un canal' : 'Id obtenido de un mensaje directo';
-
   if (!messageId) {
     console.error('No valid message ID found!');
     return;
   }
-
-  console.log(`${idType}: ${messageId}`);
-  console.log(`Editando mensaje: ${messageId}`);
   
   editingMessage.value = messageId;
   editedContent.value = message.content;
 }
 
 const confirmEditMessage = (messageId) => {
-  console.log(`Confirming edit for message with ID: ${messageId}`);
   messageStore.updateMessageChannel({
     id_message: messageId,
     content: editedContent.value
   })
   editingMessage.value = null
+  nextTick(() => {
+    scrollToBottom(true)
+  })
 }
 
 const cancelEdit = () => {
   editingMessage.value = null
 }
 
-// Actualiza la función deleteMessage para mostrar la confirmación en lugar de eliminar directamente
 const deleteMessage = (message) => {
   const messageId = message.id_message || message.id_direct_message;
-  const idType = message.id_message ? 'Id obtenido de un canal' : 'Id obtenido de un mensaje directo';
-
   if (!messageId) {
     console.error('No valid message ID found!');
     return;
   }
-
-  console.log(`${idType}: ${messageId}`);
   
-  // Establecer el mensaje a eliminar
   deletingMessage.value = messageId;
 }
 
-// Función para confirmar la eliminación
 const confirmDeleteMessage = (messageId) => {
-  console.log(`Confirmando eliminación del mensaje con ID: ${messageId}`);
-  // Aquí llamas a la función del store para eliminar el mensaje
-  const message = messages.value.find(m => m.id_message === messageId);
+  const message = computedMessages.value.find(m => m.id === messageId);
   if (message) {
     messageStore.deleteMessage(message);
   }
   deletingMessage.value = null;
+  nextTick(() => {
+    scrollToBottom(true)
+  })
 }
 
-// Función para cancelar la eliminación
 const cancelDelete = () => {
   deletingMessage.value = null;
 }
 
 onMounted(() => {
-  scrollToBottom()
-  nextTick(() => {
-    if (messageContainer.value) {
-      messageContainer.value.addEventListener('scroll', handleScroll)
-    } else {
-      console.warn('[onMounted] messageContainer.value is null, scroll listener not added')
-    }
-  })
+  scrollToBottom(false)
+  if (messageContainer.value) {
+    messageContainer.value.addEventListener('scroll', handleScroll)
+  }
 })
 
 watch(
-  () => [...messages.value],
+  computedMessages,
   (newMessages, oldMessages) => {
     nextTick(() => {
-      const smooth = isScrolledToBottom.value
       if (newMessages.length > oldMessages.length) {
         if (isScrolledToBottom.value) {
-          scrollToBottom(smooth)
+          scrollToBottom(true)
         } else {
           showNewMessageNotification.value = true
         }
-      } else {
-        console.log('No new messages')
       }
     })
   },

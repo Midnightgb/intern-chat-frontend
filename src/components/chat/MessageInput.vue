@@ -1,4 +1,3 @@
-//src/components/chat/MessageInput.vue
 <template>
   <div class="flex items-center gap-2">
     <span class="relative flex w-8 h-8 shrink-0">
@@ -31,11 +30,13 @@ import { storeToRefs } from 'pinia'
 import { socketService } from '@/services/socketService'
 import { useCurrentChannelStore } from '@/stores/channels/currentChannelStore'
 import { useCurrentConversationStore } from '@/stores/conversations/currentConversationStore'
+import { useMessageStore } from '@/stores/messages/messageStore'
 import { Send } from 'lucide-vue-next'
 import UploadFileDropdown from '@/components/common/UploadFileDropdown.vue'
 
 const currentChannelStore = useCurrentChannelStore()
 const currentConversationStore = useCurrentConversationStore()
+const messageStore = useMessageStore()
 const { currentChannelId } = storeToRefs(currentChannelStore)
 const { currentConversationId } = storeToRefs(currentConversationStore)
 
@@ -47,22 +48,23 @@ const sendMessage = async () => {
     return;
   }
 
-
   try {
-/*     const response = await apiClient.post(API_ENDPOINTS.SEND_MESSAGE, formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data'
+    let newMessage;
+    if (currentChannelId.value) {
+      newMessage = await socketService.sendMessage(currentChannelId.value, message.value, selectedFile.value);
+    } else if (currentConversationId.value) {
+      if (selectedFile.value) {
+        newMessage = await socketService.sendDirectMessage(currentConversationId.value, null, selectedFile.value);
+      } else {
+        newMessage = await socketService.sendDirectMessage(currentConversationId.value, message.value, null);
       }
-    }); */
-  if (currentChannelId.value) {
-    socketService.sendMessage(currentChannelId.value, message.value, selectedFile.value);
-  } else if (currentConversationId.value) {
-    if (selectedFile.value) {
-      socketService.sendDirectMessage(currentConversationId.value, null, selectedFile.value);
-    }else{
-      socketService.sendDirectMessage(currentConversationId.value, message.value, null);
     }
-  }
+
+    // Añadir el nuevo mensaje al store
+    if (newMessage) {
+      messageStore.addMessage(newMessage);
+    }
+
     message.value = '';
     selectedFile.value = null;
   } catch (error) {

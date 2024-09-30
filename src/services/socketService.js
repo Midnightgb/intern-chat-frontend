@@ -52,7 +52,10 @@ class SocketService {
     })
 
     this.socket.on('update_message_channel', (message) => {
-      this.messageStore.updateMessage(message)
+      const existingMessage = this.messageStore.messages.find(m => m.id_message === message.id_message);
+      if (!existingMessage || existingMessage.content !== message.content) {
+        this.messageStore.updateMessageChannel(message);
+      }
     })
 
     this.socket.on('delete_message_channel', (message) => {
