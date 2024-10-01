@@ -1,6 +1,6 @@
 // src/constants/apiEndpoints.js
-//const SOCKET_URL = 'https://intern-chat-backend-production-uy3j.onrender.com';
-const SOCKET_URL = 'http://localhost:3000';
+const SOCKET_URL = 'https://intern-chat-backend-production-uy3j.onrender.com';
+//const SOCKET_URL = 'http://localhost:3000';
 const BASE_URL = `${SOCKET_URL}/collaborative_chat`;
 const BASE_USER = `${BASE_URL}/user`;
 const BASE_AUTH = `${BASE_URL}/auth`;
