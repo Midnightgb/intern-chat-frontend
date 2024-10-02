@@ -43,8 +43,8 @@ export const useAuthStore = defineStore('auth', {
       } catch (error) {
         console.error('Error durante el logout del servidor:', error)
       } finally {
+        console.log('AUTH>JS    authStore.isAuthenticated:', this.isAuthenticated);
         // Limpiar la sesión independientemente del resultado de la API
-        this.isAuthenticated = false
         cleanupSession()
         socketService.disconnect()
       }
