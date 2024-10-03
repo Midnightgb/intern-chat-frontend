@@ -1,5 +1,5 @@
 //src/composables/useAuth.js
-import { useAuthStore } from '@/stores/auth'
+import { useAuthStore } from '@stores/auth'
 
 export function useAuth() {
   const authStore = useAuthStore()

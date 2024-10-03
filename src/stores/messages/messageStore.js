@@ -1,6 +1,6 @@
 // src/stores/messages/messageStore.js
 import { defineStore } from 'pinia';
-import { updateMessage as updateMessageApi, deleteMessage as deleteMessageApi, updateConversation as updateConversationApi } from '@/services/api';
+import { updateMessage as updateMessageApi, deleteMessage as deleteMessageApi, updateConversation as updateConversationApi } from '@services/api';
 
 export const useMessageStore = defineStore('message', {
   state: () => ({

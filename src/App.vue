@@ -19,11 +19,11 @@
 <script setup>
 import { onMounted, computed } from 'vue'
 import { RouterView, useRoute } from 'vue-router'
-import { useAuthStore } from '@/stores/auth'
+import { useAuthStore } from '@stores/auth'
 import { initFlowbite } from 'flowbite'
-import SidebarLeft from '@/components/layout/SideBarLeft.vue'
-import SideBarRight from '@/components/layout/SideBarRight.vue'
-import { socketService } from '@/services/socketService';
+import SidebarLeft from '@components/layout/SideBarLeft.vue'
+import SideBarRight from '@components/layout/SideBarRight.vue'
+import { socketService } from '@services/socketService';
 
 onMounted(() => {
   initFlowbite()

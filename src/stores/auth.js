@@ -1,10 +1,10 @@
 // src/stores/auth.js
 import { defineStore } from 'pinia'
 import { jwtDecode } from 'jwt-decode'
-import { logout as apiLogout } from '@/services/api'
-import { cleanupSession } from '@/utils/sessionCleanup'
-import { apiClient } from '@/services/api'
-import { socketService } from '@/services/socketService'
+import { logout as apiLogout } from '@services/api'
+import { cleanupSession } from '@utils/sessionCleanup'
+import { apiClient } from '@services/api'
+import { socketService } from '@services/socketService'
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({

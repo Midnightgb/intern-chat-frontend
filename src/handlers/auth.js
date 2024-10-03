@@ -1,5 +1,5 @@
 //src/handlers/auth.js
-import { useAuthStore } from '@/stores/auth'
+import { useAuthStore } from '@stores/auth'
 import { useRouter } from 'vue-router'
 
 export const useAuthHandlers = () => {

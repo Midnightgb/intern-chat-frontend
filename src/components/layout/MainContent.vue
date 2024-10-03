@@ -36,16 +36,16 @@ import { storeToRefs } from 'pinia'
 import { onMounted, onUnmounted, computed, watch } from 'vue'
 import {  } from 'vue'
 // Services
-import { socketService } from '@/services/socketService'
+import { socketService } from '@services/socketService'
 // Stores
-import { useCurrentChannelStore } from '@/stores/channels/currentChannelStore'
-import { useCurrentConversationStore } from '@/stores/conversations/currentConversationStore'
-import { useMessageStore } from '@/stores/messages/messageStore'
+import { useCurrentChannelStore } from '@stores/channels/currentChannelStore'
+import { useCurrentConversationStore } from '@stores/conversations/currentConversationStore'
+import { useMessageStore } from '@stores/messages/messageStore'
 // Components
 import { FwbSpinner } from 'flowbite-vue'
-import MessageInput from '@/components/chat/MessageInput.vue'
-import MessageList from '@/components/chat/MessageList.vue'
-import ServerHeader from '@/components/partials/ServerHeader.vue'
+import MessageInput from '@components/chat/MessageInput.vue'
+import MessageList from '@components/chat/MessageList.vue'
+import ServerHeader from '@components/partials/ServerHeader.vue'
 
 const currentChannelStore = useCurrentChannelStore()
 const currentConversationStore = useCurrentConversationStore()

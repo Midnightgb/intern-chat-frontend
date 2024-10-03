@@ -1,8 +1,8 @@
 // src/services/api.js
 import axios from 'axios';
-import { API_ENDPOINTS } from '@/constants/apiEndpoints';
-import { useAuthStore } from '@/stores/auth';
-import useLogout from '@/composables/useLogout'
+import { API_ENDPOINTS } from '@constants/apiEndpoints';
+import { useAuthStore } from '@stores/auth';
+import useLogout from '@composables/useLogout'
 
 const publicApi = axios.create({
   baseURL: API_ENDPOINTS.BASE_URL,

@@ -26,8 +26,8 @@
 
 <script setup>
 import { Server, X, Search, Settings } from 'lucide-vue-next'
-import { useCurrentConversationStore } from '@/stores/conversations/currentConversationStore'
-import { useCurrentChannelStore } from '@/stores/channels/currentChannelStore'
+import { useCurrentConversationStore } from '@stores/conversations/currentConversationStore'
+import { useCurrentChannelStore } from '@stores/channels/currentChannelStore'
 
 const currentConversationStore = useCurrentConversationStore()
 const currentChannelStore = useCurrentChannelStore()

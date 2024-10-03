@@ -19,16 +19,16 @@
 <script setup>
 import { computed, ref, watch } from 'vue'
 // Stores
-import { useMessageStore } from '@/stores/messages/messageStore'
-import { useCurrentConversationStore } from '@/stores/conversations/currentConversationStore'
-import { useCurrentChannelStore } from '@/stores/channels/currentChannelStore'
+import { useMessageStore } from '@stores/messages/messageStore'
+import { useCurrentConversationStore } from '@stores/conversations/currentConversationStore'
+import { useCurrentChannelStore } from '@stores/channels/currentChannelStore'
 // Icons
 import { MessageCircle } from 'lucide-vue-next'
 // Components
-import SearchInput from '@/components/chat/SearchInput.vue'
-import ConversationList from '@/components/chat/ConversationList.vue'
+import SearchInput from '@components/chat/SearchInput.vue'
+import ConversationList from '@components/chat/ConversationList.vue'
 // API
-import { getUserByName } from '@/services/api'
+import { getUserByName } from '@services/api'
 
 const messageStore = useMessageStore()
 const currentConversationStore = useCurrentConversationStore()

@@ -1,6 +1,6 @@
 // src/stores/channelStore.js
 import { defineStore } from 'pinia'
-import { getChannels } from '@/services/api'
+import { getChannels } from '@services/api'
 
 const CACHE_EXPIRATION = 5 * 60 * 1000 // 5 minutos en milisegundos
 

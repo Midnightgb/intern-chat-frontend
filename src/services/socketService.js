@@ -1,10 +1,10 @@
 // src/services/socketService.js
 import { io } from 'socket.io-client'
-import { useMessageStore } from '@/stores/messages/messageStore'
-import { useAuthStore } from '@/stores/auth'
-import { API_ENDPOINTS } from '@/constants/apiEndpoints'
-import { postMessage, postDirectMessage } from '@/services/api'
-import useLogout from '@/composables/useLogout'
+import { useMessageStore } from '@stores/messages/messageStore'
+import { useAuthStore } from '@stores/auth'
+import { API_ENDPOINTS } from '@constants/apiEndpoints'
+import { postMessage, postDirectMessage } from '@services/api'
+import useLogout from '@composables/useLogout'
 
 const SOCKET_URL = API_ENDPOINTS.SOCKET_URL
 

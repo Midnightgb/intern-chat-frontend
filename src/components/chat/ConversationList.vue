@@ -27,7 +27,7 @@
 </template>
 
 <script setup>
-import ConversationItem from '@/components/chat/ConversationItem.vue'
+import ConversationItem from '@components/chat/ConversationItem.vue'
 
 defineProps({
   conversations: Array,

@@ -24,9 +24,9 @@
 </template>
 
 <script setup>
-import TruncatedContent from '@/components/common/TruncatedContent.vue'
-import ImageLoader from '@/components/common/AvatarLoader.vue'
-import { formatDate } from '@/utils/date/convertTime'
+import TruncatedContent from '@components/common/TruncatedContent.vue'
+import ImageLoader from '@components/common/AvatarLoader.vue'
+import { formatDate } from '@utils/date/convertTime'
 
 defineProps({
   conversation: Object

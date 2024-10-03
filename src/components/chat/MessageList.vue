@@ -89,16 +89,16 @@
 import { ref, onMounted, nextTick, watch, computed } from 'vue'
 // Stores
 import { storeToRefs } from 'pinia'
-import { useMessageStore } from '@/stores/messages/messageStore'
-import { useCurrentUserStore } from '@/stores/user/currentUserStore';
+import { useMessageStore } from '@stores/messages/messageStore'
+import { useCurrentUserStore } from '@stores/user/currentUserStore';
 // Utils
-import { getUserName } from '@/utils/helpers'
-import { formatDate } from '@/utils/date/convertTime'
+import { getUserName } from '@utils/helpers'
+import { formatDate } from '@utils/date/convertTime'
 // Components
 import { CircleUserRound } from 'lucide-vue-next'
-import DropDown from '@/components/common/DropDown.vue'
-import NewMessageNotification from '@/components/common/NewMessageNotification.vue'
-import ImageLoader from '@/components/common/AvatarLoader.vue'
+import DropDown from '@components/common/DropDown.vue'
+import NewMessageNotification from '@components/common/NewMessageNotification.vue'
+import ImageLoader from '@components/common/AvatarLoader.vue'
 
 const messageStore = useMessageStore()
 const { messages } = storeToRefs(messageStore)

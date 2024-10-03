@@ -6,8 +6,8 @@
 </template>
 
 <script setup>
-import LoginForm from '@/components/auth/LoginForm.vue'
-import { useAuthHandlers } from '@/handlers/auth'
+import LoginForm from '@components/auth/LoginForm.vue'
+import { useAuthHandlers } from '@handlers/auth'
 
 const { handleLoginSuccess } = useAuthHandlers()
 

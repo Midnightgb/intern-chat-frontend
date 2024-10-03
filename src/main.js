@@ -7,7 +7,7 @@ import vuetify from '@/plugins/vuetify'
 import pinia from '@/plugins/pinia'
 
 // Styles
-import '@/assets/main.css'
+import '@assets/main.css'
 import '../node_modules/flowbite-vue/dist/index.css'
 
 const app = createApp(App)

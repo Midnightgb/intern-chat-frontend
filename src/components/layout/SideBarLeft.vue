@@ -66,11 +66,11 @@ import { storeToRefs } from 'pinia'
 import { onMounted, onUnmounted, computed } from 'vue'
 
 // Stores
-import { useChannelStore } from '@/stores/channels/channelStore'
-import { useCurrentChannelStore } from '@/stores/channels/currentChannelStore'
-import { useCurrentConversationStore } from '@/stores/conversations/currentConversationStore'
+import { useChannelStore } from '@stores/channels/channelStore'
+import { useCurrentChannelStore } from '@stores/channels/currentChannelStore'
+import { useCurrentConversationStore } from '@stores/conversations/currentConversationStore'
 // Components
-import ToolTip from '@/components/common/ToolTip.vue'
+import ToolTip from '@components/common/ToolTip.vue'
 import { CircleDot } from 'lucide-vue-next'
 
 const channelStore = useChannelStore()

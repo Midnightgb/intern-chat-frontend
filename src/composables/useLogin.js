@@ -1,9 +1,9 @@
 //src/composables/useLogin.js
 import { reactive, ref } from 'vue'
 import { useVuelidate } from '@vuelidate/core'
-import { authValidators } from '@/utils/validators'
-import { login as apiLogin } from '@/services/api'
-import { useAuthStore } from '@/stores/auth'
+import { authValidators } from '@utils/validators'
+import { login as apiLogin } from '@services/api'
+import { useAuthStore } from '@stores/auth'
 
 export default function useLogin() {
   const authStore = useAuthStore()

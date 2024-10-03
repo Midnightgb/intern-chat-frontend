@@ -27,12 +27,12 @@
 <script setup>
 import { ref } from 'vue'
 import { storeToRefs } from 'pinia'
-import { socketService } from '@/services/socketService'
-import { useCurrentChannelStore } from '@/stores/channels/currentChannelStore'
-import { useCurrentConversationStore } from '@/stores/conversations/currentConversationStore'
-import { useMessageStore } from '@/stores/messages/messageStore'
+import { socketService } from '@services/socketService'
+import { useCurrentChannelStore } from '@stores/channels/currentChannelStore'
+import { useCurrentConversationStore } from '@stores/conversations/currentConversationStore'
+import { useMessageStore } from '@stores/messages/messageStore'
 import { Send } from 'lucide-vue-next'
-import UploadFileDropdown from '@/components/common/UploadFileDropdown.vue'
+import UploadFileDropdown from '@components/common/UploadFileDropdown.vue'
 
 const currentChannelStore = useCurrentChannelStore()
 const currentConversationStore = useCurrentConversationStore()

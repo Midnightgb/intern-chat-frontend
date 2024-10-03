@@ -1,9 +1,9 @@
 // src/utils/sessionCleanup.js
 
-import { useAuthStore } from '@/stores/auth'
-import { useChannelStore } from '@/stores/channels/channelStore'
-import { useMessageStore } from '@/stores/messages/messageStore'
-import { useCurrentChannelStore } from '@/stores/channels/currentChannelStore'
+import { useAuthStore } from '@stores/auth'
+import { useChannelStore } from '@stores/channels/channelStore'
+import { useMessageStore } from '@stores/messages/messageStore'
+import { useCurrentChannelStore } from '@stores/channels/currentChannelStore'
 
 export function cleanupSession() {
   const authStore = useAuthStore()

@@ -75,8 +75,8 @@
 import { ref } from 'vue'
 // Components
 import { FwbButton } from 'flowbite-vue'
-import useLogin from '@/composables/useLogin'
-import AlertMessage from '@/components/common/StatusAlert.vue'
+import useLogin from '@composables/useLogin'
+import AlertMessage from '@components/common/StatusAlert.vue'
 
 const emit = defineEmits(['login-success'])
 

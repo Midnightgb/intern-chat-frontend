@@ -1,7 +1,7 @@
 // src/router/index.js
 import { createRouter, createWebHistory } from 'vue-router'
-import { ROUTES } from '@/constants/routes'
-import { useAuthStore } from '@/stores/auth'
+import { ROUTES } from '@constants/routes'
+import { useAuthStore } from '@stores/auth'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),

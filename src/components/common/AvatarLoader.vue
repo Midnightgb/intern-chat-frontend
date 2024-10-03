@@ -25,8 +25,8 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { CircleUserRound } from 'lucide-vue-next'
-import { imageCache } from '@/utils/imageCache'
-import { getUserAvatar } from '@/utils/helpers'
+import { imageCache } from '@utils/imageCache'
+import { getUserAvatar } from '@utils/helpers'
 
 const props = defineProps({
   message: {
