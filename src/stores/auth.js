@@ -33,17 +33,14 @@ export const useAuthStore = defineStore('auth', {
     },
     async logout() {
       if (!this.isAuthenticated) {
-        console.log('Usuario ya desconectado')
         return
       }
     
       try {
-        console.log('Logout en el servidor...')
         await apiLogout()
       } catch (error) {
         console.error('Error durante el logout del servidor:', error)
       } finally {
-        console.log('AUTH>JS    authStore.isAuthenticated:', this.isAuthenticated);
         // Limpiar la sesión independientemente del resultado de la API
         cleanupSession()
         socketService.disconnect()
@@ -63,7 +60,6 @@ export const useAuthStore = defineStore('auth', {
       }
     },
     setSessionCookie(token) {
-      console.log("Seteando token auth.js ", token);
       document.cookie = `session=${token}; path=/; secure; samesite=strict`
       apiClient.defaults.headers.common['Authorization'] = `Bearer ${token}`
       this.token = token
@@ -84,7 +80,6 @@ export const useAuthStore = defineStore('auth', {
         const decodedToken = jwtDecode(token)
         const expiration = new Date(decodedToken.exp * 1000)
         if (expiration < new Date()) {
-          console.warn('Token expirado:', expiration)
           this.logout()
         } else if (expiration < new Date(Date.now() + 1000 * 60 * 5)) {
           console.warn('Token expirará en menos de 5 minutos:', expiration)
