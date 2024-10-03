@@ -36,9 +36,7 @@ const updateToken = (newToken) => {
 apiClient.interceptors.request.use(
   (config) => {
     const token = getToken();
-    console.log('Token actual:', token);
     if (token) {
-      console.log('token en la solicitud:', token);
       //if the request is a post request and it has a file in it, then we change the content type to multipart/form-data
       if (config.method === 'post' && config.data instanceof FormData) {
         config.headers['Content-Type'] = 'multipart/form-data';
@@ -60,7 +58,6 @@ apiClient.interceptors.response.use(
   (response) => {
     const newToken = response.headers['new-token'];
     if (newToken) {
-      console.log('Nuevo token en la respuesta:', newToken);
       updateToken(newToken);
     }
     return response;

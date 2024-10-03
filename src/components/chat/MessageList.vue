@@ -57,7 +57,7 @@
           <div v-if="editingMessage === message.id_message || editingMessage === message.id_direct_message">
             <input 
               v-model="editedContent" 
-              @keyup.enter="confirmEditMessage(message.id_message)"
+              @keyup.enter="confirmEditMessage(message.id_message || message.id_direct_message)"
               class="w-full px-2 py-1 border border-gray-300 rounded-md"
             />
             <div class="flex justify-end mt-1">
@@ -175,6 +175,9 @@ const editMessage = (message) => {
 }
 
 const confirmEditMessage = (messageId) => {
+  console.log("EDITANDO UN MENSAJE DIRECTO");
+  console.log("Tipo de mensaje:", typeMessage.value); // Verifica que sea 'direct'
+  
   if (typeMessage.value === 'channel') {
     console.log("EDITANDO UN MENSAJE DE CANAL");
     messageStore.updateMessageChannel({
@@ -183,22 +186,17 @@ const confirmEditMessage = (messageId) => {
     });
   } else if (typeMessage.value === 'direct') {
     console.log("EDITANDO UN MENSAJE DIRECTO");
-    
     messageStore.updateMessageConversation({
       id_direct_message: messageId,
       content: editedContent.value
     });
-  }else {
-    console.error('No valid message type found!');
+  } else {
+    console.error('No se encontró un tipo de mensaje válido!');
     return;
-  } 
+  }
 
   editingMessage.value = null;
   typeMessage.value = null;
-
-  nextTick(() => {
-    scrollToBottom(true);
-  });
 }
 
 const cancelEdit = () => {

@@ -36,7 +36,6 @@ class SocketService {
 
     this.socket.on('token_renewed', (data) => {
       console.log('Data emitida: ', data);
-      console.log('Nuevo Token recibido emitido: ', data.token_new)
       this.authStore.setSessionCookie(data.token_new)
       this.socket.auth.token = data.token_new
     })
