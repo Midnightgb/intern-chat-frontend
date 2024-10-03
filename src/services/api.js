@@ -66,8 +66,17 @@ apiClient.interceptors.response.use(
     return response;
   },
   async (error) => {
+
+    const originalRequest = error.config;
+    
+    // Check if it's a logout request
+    if (originalRequest.url === API_ENDPOINTS.LOGOUT) {
+      return Promise.reject(error);
+    }
+    
     if (error.response && error.response.status === 401) {
       const authStore = useAuthStore()
+      console.log('authStore.isAuthenticated:', authStore.isAuthenticated);
       if (authStore.isAuthenticated) {
         console.log('Token expirado, cerrando sesión...')
         const { handleLogout } = useLogout()
