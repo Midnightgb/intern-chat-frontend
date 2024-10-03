@@ -54,7 +54,7 @@
             </div>
           </div>
 
-          <div v-if="editingMessage === message.id_message">
+          <div v-if="editingMessage === message.id_message || editingMessage === message.id_direct_message">
             <input 
               v-model="editedContent" 
               @keyup.enter="confirmEditMessage(message.id_message)"
@@ -111,6 +111,7 @@ const isScrolledToBottom = ref(true)
 const showNewMessageNotification = ref(false)
 
 const editingMessage = ref(null)
+const typeMessage = ref(null) 
 const editedContent = ref('')
 const deletingMessage = ref(null)
 
@@ -155,9 +156,18 @@ const handleScroll = () => {
 
 const editMessage = (message) => {
   const messageId = message.id_message || message.id_direct_message;
+  
   if (!messageId) {
     console.error('No valid message ID found!');
     return;
+  }
+  
+  if (message.id_message) {
+    console.log('Selected message ID from channel:', message.id_message);
+    typeMessage.value = 'channel';
+  } else {
+    console.log('Selected direct message ID:', message.id_direct_message);
+    typeMessage.value = 'direct';
   }
   
   editingMessage.value = messageId;
@@ -165,14 +175,30 @@ const editMessage = (message) => {
 }
 
 const confirmEditMessage = (messageId) => {
-  messageStore.updateMessageChannel({
-    id_message: messageId,
-    content: editedContent.value
-  })
-  editingMessage.value = null
+  if (typeMessage.value === 'channel') {
+    console.log("EDITANDO UN MENSAJE DE CANAL");
+    messageStore.updateMessageChannel({
+      id_message: messageId,
+      content: editedContent.value
+    });
+  } else if (typeMessage.value === 'direct') {
+    console.log("EDITANDO UN MENSAJE DIRECTO");
+    
+    messageStore.updateMessageConversation({
+      id_direct_message: messageId,
+      content: editedContent.value
+    });
+  }else {
+    console.error('No valid message type found!');
+    return;
+  } 
+
+  editingMessage.value = null;
+  typeMessage.value = null;
+
   nextTick(() => {
-    scrollToBottom(true)
-  })
+    scrollToBottom(true);
+  });
 }
 
 const cancelEdit = () => {

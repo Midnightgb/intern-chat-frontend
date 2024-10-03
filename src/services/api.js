@@ -103,20 +103,19 @@ export const updateMessage = (message) => {
   });
 };
 
-export const deleteMessage = (messageId) => {
-  return apiClient.post(API_ENDPOINTS.DELETE_MESSAGE, {
-    id_message: messageId
-  });
-}
-
 // MESSAGES DIRECT
 export const updateConversation = (conversation) => {
-  return apiClient.get(API_ENDPOINTS.UPDATE_CONVERSATION,{
+  return apiClient.post(API_ENDPOINTS.UPDATE_CONVERSATION,{
     id_direct_message: conversation.id_direct_message,
     content: conversation.content
   });
 };
 
+export const deleteMessage = (messageId) => {
+  return apiClient.post(API_ENDPOINTS.DELETE_MESSAGE, {
+    id_message: messageId
+  });
+}
 export const getConversations = () => {
   return apiClient.get(API_ENDPOINTS.GET_CONVERSATIONS);
 };
