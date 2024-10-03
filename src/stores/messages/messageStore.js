@@ -26,15 +26,10 @@ export const useMessageStore = defineStore('message', {
             ...this.messages[index], 
             ...updatedMessage 
           };
-
-          console.log('ACTUALIZANDO MENSAJE EN STORE:', updatedMessage);
-
           const response = await updateMessageApi(updatedMessage);
           if (response) {
             console.log('XXX RESPONSE:', response);
           }
-          
-          await updateMessageApi(updatedMessage);
         }
       } catch (error) {
         this.error = 'No se pudo actualizar el mensaje';
@@ -43,17 +38,15 @@ export const useMessageStore = defineStore('message', {
     },
     async updateMessageConversation(updateConversation) {
       console.log('Entrando a updateMessageConversation', updateConversation);
-      
       try {
         const index = this.conversations.findIndex(c => c.id_direct_message === updateConversation.id_direct_message);
+        console.log('Index:', index);
+        
         if (index !== -1 && this.conversations[index].content !== updateConversation.content) {
           this.conversations[index] = { 
             ...this.conversations[index], 
             ...updateConversation 
           };
-    
-          console.log('ACTUALIZANDO CONVERSACIÓN EN STORE:', updateConversation);
-    
           const response = await updateConversationApi(updateConversation);
           if (response) {
             console.log('Response from API:', response);

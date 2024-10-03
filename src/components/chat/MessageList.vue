@@ -61,7 +61,7 @@
               class="w-full px-2 py-1 border border-gray-300 rounded-md"
             />
             <div class="flex justify-end mt-1">
-              <button @click="confirmEditMessage(message.id_message)" class="text-sm text-blue-500">Guardar</button>
+              <button @click="confirmEditMessage(message.id_message || message.id_direct_message )" class="text-sm text-blue-500">Guardar</button>
               <button @click="cancelEdit" class="ml-2 text-sm text-red-500">Cancelar</button>
             </div>
           </div>
@@ -119,8 +119,8 @@ const deletingMessage = ref(null)
 const computedMessages = computed(() => 
   messages.value.map(message => ({
     ...message,
-    isRecent: true, // Asumimos que todos los mensajes son recientes por ahora
-    id: message.id_message || message.id_direct_message // Aseguramos una key única
+    isRecent: true,
+    id: message.id_message || message.id_direct_message
   }))
 )
 
@@ -176,7 +176,7 @@ const editMessage = (message) => {
 
 const confirmEditMessage = (messageId) => {
   console.log("EDITANDO UN MENSAJE DIRECTO");
-  console.log("Tipo de mensaje:", typeMessage.value); // Verifica que sea 'direct'
+  console.log("Tipo de mensaje:", typeMessage.value, "messageId:", messageId);
   
   if (typeMessage.value === 'channel') {
     console.log("EDITANDO UN MENSAJE DE CANAL");
