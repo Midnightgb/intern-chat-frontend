@@ -79,11 +79,9 @@ class SocketService {
     })
 //new_conversations
     this.socket.on('new_conversation_direct', (data) => {
-      console.log('nuevo mensaje directo:', data);
       this.messageStore.addMessage(data)
     })
     this.socket.on('get_direct_messages', (data) => {
-      console.log('nuevo mensaje directo:', data);
       this.messageStore.setMessages(data)
       this.messageStore.setLoadingMessages(false)
     })
