@@ -42,27 +42,27 @@
             >
               <DropDown
                 :canEdit="true"
-                @edit="editMessage(message)" 
-                @delete="deleteMessage(message)" 
+                @edit="handleMessageAction('edit', message)" 
+                @delete="handleMessageAction('delete', message)" 
               />
             </button>
 
             <!-- Mostrar la confirmación de eliminación -->
             <div v-if="deletingMessage === message.id_message" class="flex gap-2">
-              <button @click="confirmDeleteMessage(message.id_message)" class="text-sm text-red-500">Confirmar</button>
-              <button @click="cancelDelete" class="text-sm text-blue-500">Cancelar</button>
+              <button @click="confirmMessageAction('delete', message.id_message)" class="text-sm text-red-500">Confirmar</button>
+              <button @click="cancelAction('delete')" class="text-sm text-blue-500">Cancelar</button>
             </div>
           </div>
 
           <div v-if="editingMessage === message.id_message || editingMessage === message.id_direct_message">
             <input 
               v-model="editedContent" 
-              @keyup.enter="confirmEditMessage(message.id_message || message.id_direct_message)"
+              @keyup.enter="confirmMessageAction('edit', message.id_message || message.id_direct_message, message.id_message? 'dc_' : 'dm_')"
               class="w-full px-2 py-1 border border-gray-300 rounded-md"
             />
             <div class="flex justify-end mt-1">
-              <button @click="confirmEditMessage(message.id_message || message.id_direct_message )" class="text-sm text-blue-500">Guardar</button>
-              <button @click="cancelEdit" class="ml-2 text-sm text-red-500">Cancelar</button>
+              <button @click="confirmMessageAction('edit', message.id_message || message.id_direct_message, message.id_message? 'dc_' : 'dm_')" class="text-sm text-blue-500">Guardar</button>
+              <button @click="cancelAction('edit')" class="ml-2 text-sm text-red-500">Cancelar</button>
             </div>
           </div>
 
@@ -87,35 +87,30 @@
 
 <script setup>
 import { ref, onMounted, nextTick, watch, computed } from 'vue'
-// Stores
 import { storeToRefs } from 'pinia'
 import { useMessageStore } from '@stores/messages/messageStore'
-import { useCurrentUserStore } from '@stores/user/currentUserStore';
-// Utils
+import { useCurrentUserStore } from '@stores/user/currentUserStore'
 import { getUserName } from '@utils/helpers'
 import { formatDate } from '@utils/date/convertTime'
-// Components
 import { CircleUserRound } from 'lucide-vue-next'
 import DropDown from '@components/common/DropDown.vue'
 import NewMessageNotification from '@components/common/NewMessageNotification.vue'
 import ImageLoader from '@components/common/AvatarLoader.vue'
 
+// Stores
 const messageStore = useMessageStore()
 const { messages } = storeToRefs(messageStore)
+const { currentUserId } = storeToRefs(useCurrentUserStore())
 
-const currentUserStore = useCurrentUserStore();
-const { currentUserId } = storeToRefs(currentUserStore);
-
+// Refs
 const messageContainer = ref(null)
 const isScrolledToBottom = ref(true)
 const showNewMessageNotification = ref(false)
-
 const editingMessage = ref(null)
-const typeMessage = ref(null) 
 const editedContent = ref('')
 const deletingMessage = ref(null)
 
-// Computed property para los mensajes
+// Computed
 const computedMessages = computed(() => 
   messages.value.map(message => ({
     ...message,
@@ -124,11 +119,10 @@ const computedMessages = computed(() =>
   }))
 )
 
-function isImage(url) {
-  return url && /\.(jpg|jpeg|png|gif|bmp|webp)$/i.test(url);
-}
+// Functions
+const isImage = (url) => url && /\.(jpg|jpeg|png|gif|bmp|webp)$/i.test(url)
 
-const scrollToBottom = (smooth) => {
+const scrollToBottom = (smooth = false) => {
   nextTick(() => {
     if (messageContainer.value) {
       messageContainer.value.scrollTo({
@@ -144,110 +138,59 @@ const scrollToBottom = (smooth) => {
 const handleScroll = () => {
   if (messageContainer.value) {
     const { scrollTop, scrollHeight, clientHeight } = messageContainer.value
-    const scrolledToBottom = Math.abs(scrollHeight - clientHeight - scrollTop) < 1
-
-    isScrolledToBottom.value = scrolledToBottom
-
-    if (scrolledToBottom) {
-      showNewMessageNotification.value = false
-    }
+    isScrolledToBottom.value = Math.abs(scrollHeight - clientHeight - scrollTop) < 1
+    if (isScrolledToBottom.value) showNewMessageNotification.value = false
   }
 }
 
-const editMessage = (message) => {
-  const messageId = message.id_message || message.id_direct_message;
-  
+const handleMessageAction = (action, message) => {
+  const messageId = message.id_message || message.id_direct_message
   if (!messageId) {
-    console.error('No valid message ID found!');
-    return;
+    console.error('No valid message ID found!')
+    return
   }
-  
-  if (message.id_message) {
-    console.log('Selected message ID from channel:', message.id_message);
-    typeMessage.value = 'channel';
-  } else {
-    console.log('Selected direct message ID:', message.id_direct_message);
-    typeMessage.value = 'direct';
+
+  if (action === 'edit') {
+    editingMessage.value = messageId
+    editedContent.value = message.content
+  } else if (action === 'delete') {
+    deletingMessage.value = messageId
   }
-  
-  editingMessage.value = messageId;
-  editedContent.value = message.content;
 }
 
-const confirmEditMessage = (messageId) => {
-  console.log("EDITANDO UN MENSAJE DIRECTO");
-  console.log("Tipo de mensaje:", typeMessage.value, "messageId:", messageId);
-  
-  if (typeMessage.value === 'channel') {
-    console.log("EDITANDO UN MENSAJE DE CANAL");
-    messageStore.updateMessageChannel({
-      id_message: messageId,
+const confirmMessageAction = (action, messageId, idType) => {
+  if (action === 'edit') {
+    const messageType = idType.startsWith('dm_') ? 'id_direct_message' : 'id_message';
+    messageStore.updateMessage({
+      [messageType]: messageId,
       content: editedContent.value
     });
-  } else if (typeMessage.value === 'direct') {
-    console.log("EDITANDO UN MENSAJE DIRECTO");
-    messageStore.updateMessageConversation({
-      id_direct_message: messageId,
-      content: editedContent.value
-    });
-  } else {
-    console.error('No se encontró un tipo de mensaje válido!');
-    return;
+    editingMessage.value = null;
+  } else if (action === 'delete') {
+    const message = computedMessages.value.find(m => m.id === messageId);
+    if (message) messageStore.deleteMessage(message);
+    deletingMessage.value = null;
+    nextTick(() => scrollToBottom(true));
   }
+};
 
-  editingMessage.value = null;
-  typeMessage.value = null;
+const cancelAction = (action) => {
+  if (action === 'edit') editingMessage.value = null
+  else if (action === 'delete') deletingMessage.value = null
 }
 
-const cancelEdit = () => {
-  editingMessage.value = null
-}
-
-const deleteMessage = (message) => {
-  const messageId = message.id_message || message.id_direct_message;
-  if (!messageId) {
-    console.error('No valid message ID found!');
-    return;
-  }
-  
-  deletingMessage.value = messageId;
-}
-
-const confirmDeleteMessage = (messageId) => {
-  const message = computedMessages.value.find(m => m.id === messageId);
-  if (message) {
-    messageStore.deleteMessage(message);
-  }
-  deletingMessage.value = null;
-  nextTick(() => {
-    scrollToBottom(true)
-  })
-}
-
-const cancelDelete = () => {
-  deletingMessage.value = null;
-}
-
+// Lifecycle hooks
 onMounted(() => {
-  scrollToBottom(false)
-  if (messageContainer.value) {
-    messageContainer.value.addEventListener('scroll', handleScroll)
-  }
+  scrollToBottom()
+  messageContainer.value?.addEventListener('scroll', handleScroll)
 })
 
-watch(
-  computedMessages,
-  (newMessages, oldMessages) => {
-    nextTick(() => {
-      if (newMessages.length > oldMessages.length) {
-        if (isScrolledToBottom.value) {
-          scrollToBottom(true)
-        } else {
-          showNewMessageNotification.value = true
-        }
-      }
-    })
-  },
-  { deep: true }
-)
+// Watchers
+watch(computedMessages, (newMessages, oldMessages) => {
+  nextTick(() => {
+    if (newMessages.length > oldMessages.length) {
+      isScrolledToBottom.value ? scrollToBottom(true) : showNewMessageNotification.value = true
+    }
+  })
+}, { deep: true })
 </script>
