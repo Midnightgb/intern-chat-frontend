@@ -23,13 +23,7 @@
             </span>
           </span>
           <div class="text-sm font-medium inline capitalize">{{ user.networkUser }}</div>
-          <ToolTip
-            triggerIcon="Settings"
-            tooltipContent="Ajustes de usuario"
-            :outline="true"
-            :pill="true"
-            :square="true"
-          />
+          <ProfileModal />
         </div>
       </div>
       <div>
@@ -56,9 +50,9 @@ import { useCurrentUserStore } from '@stores/user/currentUserStore'
 // Components
 import { FwbButton } from 'flowbite-vue'
 import { CircleUserRound } from 'lucide-vue-next'
-import ToolTip from '@components/common/ToolTip.vue'
 import useLogout from '@composables/useLogout'
 import DirectMessages from '@components/common/DirectMessages.vue'
+import ProfileModal from '@components/common/ProfileModal.vue'
 // Utils
 import { getUserAvatar } from '@/utils/helpers'
 import { onMounted, ref } from 'vue'
@@ -67,7 +61,6 @@ const loading = ref(false)
 
 const authStore = useAuthStore()
 const currentUserStore = useCurrentUserStore()
-
 const { user } = storeToRefs(authStore)
 
 currentUserStore.updateCurrentUser(user.value.id)

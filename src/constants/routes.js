@@ -7,8 +7,8 @@ export const ROUTES = {
   LOGOUT: '/cerrar-sesion',
 
   // Rutas privadas
-  DASHBOARD: '/panel',
-
+  DASHBOARD: '/home',
+  
   // Rutas usuario
   USERS: '/usuarios',
   USER: '/usuarios/:id',

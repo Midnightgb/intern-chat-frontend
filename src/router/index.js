@@ -3,6 +3,9 @@ import { createRouter, createWebHistory } from 'vue-router'
 import { ROUTES } from '@constants/routes'
 import { useAuthStore } from '@stores/auth'
 
+const login = () => import('@/views/auth/LoginView.vue')
+const home = () => import('@/views/home/HomeView.vue')
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -13,7 +16,7 @@ const router = createRouter({
     {
       path: ROUTES.LOGIN,
       name: 'login',
-      component: () => import('@/views/auth/LoginView.vue'),
+      component: login,
       meta: {
         requiresAuth: false
       }
@@ -21,7 +24,7 @@ const router = createRouter({
     {
       path: ROUTES.DASHBOARD,
       name: 'Panel',
-      component: () => import('@/views/home/HomeView.vue'),
+      component: home,
       meta: {
         requiresAuth: true
       }
