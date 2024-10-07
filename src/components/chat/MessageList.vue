@@ -37,19 +37,20 @@
 
             <!-- Mostrar el menú de acciones solo si no estamos confirmando eliminación -->
             <button 
-              v-if="(message.user_id ? message.user_id === currentUserId : message.send_id === currentUserId) && message.isRecent && deletingMessage !== message.id_message" 
+              v-if="(message.user_id ? message.user_id === currentUserId : message.send_id === currentUserId) && message.isRecent" 
               class="pt-1 pr-1 rounded-full"
             >
               <DropDown
                 :canEdit="true"
+                v-if="editingMessage !== message.id_message && deletingMessage !== message.id_message && editingMessage !== message.id_direct_message && deletingMessage !== message.id_direct_message"
                 @edit="editMessage(message)" 
                 @delete="deleteMessage(message)" 
               />
             </button>
 
             <!-- Mostrar la confirmación de eliminación -->
-            <div v-if="deletingMessage === message.id_message" class="flex gap-2">
-              <button @click="confirmDeleteMessage(message.id_message)" class="text-sm text-red-500">Confirmar</button>
+            <div v-if="deletingMessage === (message.id_message || message.id_direct_message)" class="flex gap-2">
+              <button @click="confirmDeleteMessage(message.id_message || message.id_direct_message)" class="text-sm text-red-500">Confirmar</button>
               <button @click="cancelDelete" class="text-sm text-blue-500">Cancelar</button>
             </div>
           </div>
@@ -119,7 +120,7 @@ const deletingMessage = ref(null)
 const computedMessages = computed(() => 
   messages.value.map(message => ({
     ...message,
-    isRecent: true,
+    isRecent: message.recent || false, 
     id: message.id_message || message.id_direct_message
   }))
 )
@@ -205,24 +206,47 @@ const cancelEdit = () => {
 
 const deleteMessage = (message) => {
   const messageId = message.id_message || message.id_direct_message;
+
   if (!messageId) {
     console.error('No valid message ID found!');
     return;
   }
-  
-  deletingMessage.value = messageId;
-}
+
+  deletingMessage.value = messageId; 
+
+  if (message.id_message) {
+    console.log('Selected message ID from channel:', message.id_message);
+    typeMessage.value = 'channel';
+  } else {
+    console.log('Selected direct message ID:', message.id_direct_message);
+    typeMessage.value = 'direct';
+  }
+};
 
 const confirmDeleteMessage = (messageId) => {
-  const message = computedMessages.value.find(m => m.id === messageId);
-  if (message) {
-    messageStore.deleteMessage(message);
+  console.log("ELIMINANDO UN MENSAJE DIRECTO");
+  console.log("Tipo de mensaje:", typeMessage.value, "messageId:", messageId);
+
+  if (typeMessage.value === 'channel') {
+    console.log("ELIMINANDO UN MENSAJE DE CANAL");
+    messageStore.deleteMessage(messageId);
+  } else if (typeMessage.value === 'direct') {
+    console.log("ELIMINANDO UN MENSAJE DIRECTO");
+    messageStore.deleteConversation(messageId);
+  } else {
+    console.error('No se encontró un tipo de mensaje válido!');
+    return;
   }
+
   deletingMessage.value = null;
-  nextTick(() => {
-    scrollToBottom(true)
-  })
-}
+  typeMessage.value = null;
+
+
+  scrollToBottom(true);
+
+  console.log("Mensaje eliminado con éxito!");
+};
+
 
 const cancelDelete = () => {
   deletingMessage.value = null;

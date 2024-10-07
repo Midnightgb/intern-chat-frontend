@@ -1,6 +1,6 @@
 // src/stores/messages/messageStore.js
 import { defineStore } from 'pinia';
-import { updateMessage as updateMessageApi, deleteMessage as deleteMessageApi, updateConversation as updateConversationApi } from '@/services/api';
+import { updateMessage as updateMessageApi, deleteMessage as deleteMessageApi, updateConversation as updateConversationApi, deleteConversation as deleteConversationApi } from '@/services/api';
 
 export const useMessageStore = defineStore('message', {
   state: () => ({
@@ -61,16 +61,30 @@ export const useMessageStore = defineStore('message', {
     },
     async deleteMessage(message) {
       try {
-        const messageId = message.id_message;
+        console.log('Deleting message:', message);
         // Enviar solicitud de eliminación al backend
-        await deleteMessageApi(messageId);
+        await deleteMessageApi(message);
 
         // Actualizar el estado eliminando el mensaje
-        this.messages = this.messages.filter(m => m.id_message !== messageId);
-        console.log(`Mensaje con ID ${messageId} eliminado del estado y backend.`);
+        this.messages = this.messages.filter(m => m.id_message !== message);
+        console.log(`Mensaje con ID ${message} eliminado del estado y backend.`);
       } catch (error) {
         this.error = 'No se pudo eliminar el mensaje';
         console.error('Error al eliminar el mensaje en el store:', error);
+      }
+    },
+    async deleteConversation(conversation) {
+      try {
+        console.log("esto me llego xxxx", conversation);
+        // Enviar solicitud de eliminación al backend
+        await deleteConversationApi(conversation);
+
+        // Actualizar el estado eliminando el mensaje
+        this.conversations = this.conversations.filter(c => c.id_direct_message !== conversation);
+        console.log(`Conversación con ID ${conversation} eliminada del estado y backend.`);
+      } catch (error) {
+        this.error = 'No se pudo eliminar la conversación';
+        console.error('Error al eliminar la conversación en el store:', error);
       }
     },
     setConversations(conversations) {
