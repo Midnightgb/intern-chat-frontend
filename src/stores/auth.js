@@ -16,10 +16,10 @@ export const useAuthStore = defineStore('auth', {
     login(userData, token) {
       this.isAuthenticated = true
       this.user = {
-        id: userData.id_user,
-        name: userData.full_name,
-        networkUser: userData.network_user,
-        photo_url: userData.photo_url,
+        id: userData.data.id_user,
+        name: userData.data.full_name,
+        networkUser: userData.data.network_user,
+        photo_url: userData.data.photo_url,
         role: userData.role
       }
       this.token = token

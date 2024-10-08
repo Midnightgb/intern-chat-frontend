@@ -28,7 +28,11 @@ export default function useLogin() {
         })
         console.log('Login successful', response.data)
         // Actualiza el store de autenticación con los datos del usuario y el token
-        authStore.login(response.data.user, response.data.token)
+        const data = {
+          role: response.data.role,
+          data: response.data.user
+        }
+        authStore.login(data, response.data.token)
 
         return true
       } catch (err) {

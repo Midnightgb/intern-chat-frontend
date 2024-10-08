@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <section>
     <ToolTip
       triggerIcon="Settings"
       tooltipContent="Ajustes de usuario"
@@ -15,7 +15,7 @@
       <div
         class="bg-white dark:bg-gray-800 rounded-lg shadow-xl w-full max-w-6xl h-[90vh] overflow-y-auto"
       >
-        <div class="container mx-auto py-10 px-4">
+        <div class="container mx-auto py-5 px-9">
           <div class="flex justify-between items-center mb-6">
             <h2 class="text-3xl font-bold text-gray-900 dark:text-white">Información del Perfil</h2>
             <button
@@ -43,11 +43,14 @@
             <div class="space-y-6">
               <div class="flex items-center space-x-4">
                 <!-- Avatar -->
-                <div
-                  class="h-24 w-24 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center text-gray-500 dark:text-gray-300 text-2xl font-bold"
-                >
-                  CN
-                </div>
+                <span class="relative flex shrink-0 overflow-hidden rounded-full w-8 h-8 z-10">
+                  <ImageLoader
+                    v-if="user.photo_url"
+                    :message="user"
+                    class="aspect-square h-full w-full"
+                  />
+                  <CircleUserRound v-else size="32" class="aspect-square h-full w-full" />
+                </span>
                 <!-- Nombre -->
                 <div class="space-y-2 flex-1">
                   <label
@@ -59,7 +62,9 @@
                     id="name"
                     v-model="name"
                     type="text"
-                    placeholder="Tu nombre"
+                    :placeholder="user.name"
+                    :value="user.name"
+                    disabled
                     class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 dark:bg-gray-700 dark:text-white"
                   />
                 </div>
@@ -73,22 +78,9 @@
                   id="type"
                   v-model="type"
                   type="text"
-                  placeholder="Tipo de usuario"
-                  class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 dark:bg-gray-700 dark:text-white"
-                />
-              </div>
-              <!-- Correo Electrónico -->
-              <div class="space-y-2">
-                <label
-                  for="email"
-                  class="block text-sm font-medium text-gray-700 dark:text-gray-300"
-                  >Correo Electrónico</label
-                >
-                <input
-                  id="email"
-                  v-model="email"
-                  type="email"
-                  placeholder="tu@ejemplo.com"
+                  :placeholder="user.role"
+                  :value="user.role"
+                  disabled
                   class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 dark:bg-gray-700 dark:text-white"
                 />
               </div>
@@ -103,7 +95,9 @@
                   id="network_user"
                   v-model="network_user"
                   type="text"
-                  placeholder="@usuario"
+                  :placeholder="user.networkUser"
+                  :value="user.networkUser"
+                  disabled
                   class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 dark:bg-gray-700 dark:text-white"
                 />
               </div>
@@ -127,21 +121,6 @@
               </div>
             </div>
             <div class="space-y-6">
-              <!-- Dominio -->
-              <div class="space-y-2">
-                <label
-                  for="domain"
-                  class="block text-sm font-medium text-gray-700 dark:text-gray-300"
-                  >Dominio</label
-                >
-                <input
-                  id="domain"
-                  v-model="domain"
-                  type="text"
-                  placeholder="ejemplo.com"
-                  class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 dark:bg-gray-700 dark:text-white"
-                />
-              </div>
               <!-- Permisos -->
               <div class="space-y-2">
                 <h3 class="text-lg font-semibold mb-2 text-gray-900 dark:text-white">
@@ -167,7 +146,7 @@
                   <tbody
                     class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700"
                   >
-                    <tr v-for="permission in permissions" :key="permission.name">
+                    <tr v-for="permission in permissions_list" :key="permission.id_permission">
                       <td
                         class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white"
                       >
@@ -176,7 +155,7 @@
                       <td
                         class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400"
                       >
-                        {{ permission.granted ? 'Concedido' : 'Denegado' }}
+                        Concedido
                       </td>
                     </tr>
                   </tbody>
@@ -187,26 +166,28 @@
         </div>
       </div>
     </div>
-  </div>
+  </section>
 </template>
 
 <script setup>
-import { ref, watchEffect } from 'vue'
+import { ref, watchEffect, onMounted } from 'vue'
 import ToolTip from '@components/common/ToolTip.vue'
-import { theme, toggleTheme } from '@utils/themeUtils';
+import { theme, toggleTheme } from '@utils/themeUtils'
+import { getPermissions } from '@services/api'
+import { useAuthStore } from '@stores/auth'
+import { storeToRefs } from 'pinia'
+import ImageLoader from '@components/common/AvatarLoader.vue'
+import { CircleUserRound } from 'lucide-vue-next'
 
-const isOpen = ref(false)
+const authStore = useAuthStore()
+const { user } = storeToRefs(authStore)
+console.log(user.value)
+
+const isOpen = ref(true)
 const name = ref('')
 const type = ref('')
 const network_user = ref('')
-const email = ref('')
-const domain = ref('')
-const permissions = ref([
-  { name: 'Leer archivos', granted: true },
-  { name: 'Escribir archivos', granted: true },
-  { name: 'Eliminar archivos', granted: false },
-  { name: 'Administrar usuarios', granted: true }
-])
+const permissions_list = ref([])
 
 watchEffect(() => {
   const handleEsc = (event) => {
@@ -226,5 +207,9 @@ watchEffect(() => {
   }
 })
 
-
+onMounted(async () => {
+  const permissions = await getPermissions(user.value.id)
+  permissions.value = permissions.data.role_permission
+  permissions_list.value = permissions.value.map((permission) => permission.Permissions)
+})
 </script>

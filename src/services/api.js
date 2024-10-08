@@ -141,4 +141,8 @@ export const postDirectMessage = (content) => {
   return apiClient.post(API_ENDPOINTS.CREATE_CONVERSATION, content);
 };
 
+export const getPermissions = (id_user) => {
+  return apiClient.post(API_ENDPOINTS.GET_PRIVILEGES, {id_user});
+};
+
 export default apiClient;
