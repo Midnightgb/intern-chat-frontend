@@ -158,7 +158,6 @@ const handleMessageAction = (action, message) => {
     deletingMessage.value = messageId
   }
 }
-
 const confirmMessageAction = (action, messageId, idType) => {
   if (action === 'edit') {
     const messageType = idType.startsWith('dm_') ? 'id_direct_message' : 'id_message';
@@ -175,6 +174,7 @@ const confirmMessageAction = (action, messageId, idType) => {
     nextTick(() => scrollToBottom(true));
   }
 };
+
 
 const cancelAction = (action) => {
   if (action === 'edit') editingMessage.value = null
