@@ -37,19 +37,20 @@
 
             <!-- Mostrar el menú de acciones solo si no estamos confirmando eliminación -->
             <button 
-              v-if="(message.user_id ? message.user_id === currentUserId : message.send_id === currentUserId) && message.isRecent && deletingMessage !== message.id_message" 
+              v-if="(message.user_id ? message.user_id === currentUserId : message.send_id === currentUserId) && message.isRecent" 
               class="pt-1 pr-1 rounded-full"
             >
               <DropDown
                 :canEdit="true"
+                v-if="editingMessage !== message.id_message && deletingMessage !== message.id_message && editingMessage !== message.id_direct_message && deletingMessage !== message.id_direct_message"
                 @edit="handleMessageAction('edit', message)" 
                 @delete="handleMessageAction('delete', message)" 
               />
             </button>
 
             <!-- Mostrar la confirmación de eliminación -->
-            <div v-if="deletingMessage === message.id_message" class="flex gap-2">
-              <button @click="confirmMessageAction('delete', message.id_message)" class="text-sm text-red-500">Confirmar</button>
+            <div v-if="deletingMessage === (message.id_message || message.id_direct_message)" class="flex gap-2">
+              <button @click="confirmMessageAction('delete', message.id_message || message.id_direct_message)" class="text-sm text-red-500">Confirmar</button>
               <button @click="cancelAction('delete')" class="text-sm text-blue-500">Cancelar</button>
             </div>
           </div>
@@ -114,7 +115,7 @@ const deletingMessage = ref(null)
 const computedMessages = computed(() => 
   messages.value.map(message => ({
     ...message,
-    isRecent: true,
+    isRecent: message.recent || false, 
     id: message.id_message || message.id_direct_message
   }))
 )

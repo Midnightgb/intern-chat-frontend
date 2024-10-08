@@ -122,6 +122,11 @@ export const deleteMessage = (messageId) => {
     id_message: messageId
   });
 }
+
+export const deleteConversation = (conversationId) => {
+  return apiClient.delete(API_ENDPOINTS.DELETE_CONVERSATION.replace(':id', conversationId));
+}
+
 export const getConversations = () => {
   return apiClient.get(API_ENDPOINTS.GET_CONVERSATIONS);
 };

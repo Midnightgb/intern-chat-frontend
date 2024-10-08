@@ -17,12 +17,6 @@
         </template>
         Eliminar
       </fwb-list-group-item>
-      <fwb-list-group-item hover>
-        <template #prefix>
-          <Copy size="16"/>
-        </template>
-        Copiar
-      </fwb-list-group-item>
     </fwb-list-group>
   </fwb-dropdown>
 </template>
