@@ -47,11 +47,15 @@ export const useMessageStore = defineStore('message', {
         console.error(`Error updating ${errorMessage} in store:`, error);
       }
     },
-    async deleteMessage(message) {
+    async deleteMessage(message, type) {
       try {
         console.log('Deleting message:', message);
-        // Enviar solicitud de eliminación al backend
-        await deleteMessageApi(message);
+        // Enviar solicitud de eliminación al backendx
+        if (type === 'id_direct_message') {
+          await deleteConversationApi(message);
+        } else {
+          await deleteMessageApi(message);
+        }
 
         // Actualizar el estado eliminando el mensaje
         this.messages = this.messages.filter(m => m.id_message !== message);

@@ -195,7 +195,7 @@ import { ref, watchEffect } from 'vue'
 import ToolTip from '@components/common/ToolTip.vue'
 import { theme, toggleTheme } from '@utils/themeUtils';
 
-const isOpen = ref(true)
+const isOpen = ref(false)
 const name = ref('')
 const type = ref('')
 const network_user = ref('')

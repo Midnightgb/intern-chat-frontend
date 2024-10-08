@@ -50,7 +50,7 @@
 
             <!-- Mostrar la confirmación de eliminación -->
             <div v-if="deletingMessage === (message.id_message || message.id_direct_message)" class="flex gap-2">
-              <button @click="confirmMessageAction('delete', message.id_message || message.id_direct_message)" class="text-sm text-red-500">Confirmar</button>
+              <button @click="confirmMessageAction('delete', message.id_message || message.id_direct_message, message.id_message? 'dc_' : 'dm_')" class="text-sm text-red-500">Confirmar</button>
               <button @click="cancelAction('delete')" class="text-sm text-blue-500">Cancelar</button>
             </div>
           </div>
@@ -169,7 +169,8 @@ const confirmMessageAction = (action, messageId, idType) => {
     editingMessage.value = null;
   } else if (action === 'delete') {
     const message = computedMessages.value.find(m => m.id === messageId);
-    if (message) messageStore.deleteMessage(message);
+    const messageType = idType.startsWith('dm_') ? 'id_direct_message' : 'id_message';
+    if (message) messageStore.deleteMessage(message.id_message || message.id_direct_message, messageType);
     deletingMessage.value = null;
     nextTick(() => scrollToBottom(true));
   }
