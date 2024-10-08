@@ -1,15 +1,15 @@
 //src/App.vue
 <template>
-  <div class="min-h-screen flex flex-col">
+  <div class="min-h-screen flex flex-col dark:bg-gray-900">
     <template v-if="showAuthContent">
-      <div class="flex flex-grow bg-gray-100">
+      <div class="flex flex-grow bg-gray-100 dark:bg-gray-800">
         <SidebarLeft />
         <SideBarRight />
         <RouterView />
       </div>
     </template>
     <template v-else>
-      <div>
+      <div class="dark:bg-gray-900">
         <RouterView />
       </div>
     </template>
@@ -24,6 +24,7 @@ import { initFlowbite } from 'flowbite'
 import SidebarLeft from '@components/layout/SideBarLeft.vue'
 import SideBarRight from '@components/layout/SideBarRight.vue'
 import { socketService } from '@services/socketService';
+import { theme, toggleTheme } from '@utils/themeUtils';
 
 onMounted(() => {
   initFlowbite()
@@ -31,6 +32,7 @@ onMounted(() => {
   if (authStore.isAuthenticated) {
     socketService.connect();
   }
+  toggleTheme(theme.value)
 })
 
 const route = useRoute()
