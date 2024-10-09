@@ -43,7 +43,9 @@
             <div class="space-y-6">
               <div class="flex items-center space-x-4">
                 <!-- Avatar -->
-                <span class="relative flex shrink-0 overflow-hidden rounded-full w-8 h-8 z-10">
+                <span
+                  class="h-24 w-24 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center text-gray-500 dark:text-gray-300 text-2xl font-bold"
+                >
                   <ImageLoader
                     v-if="user.photo_url"
                     :message="user"
@@ -62,8 +64,6 @@
                     id="name"
                     v-model="name"
                     type="text"
-                    :placeholder="user.name"
-                    :value="user.name"
                     disabled
                     class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 dark:bg-gray-700 dark:text-white"
                   />
@@ -78,8 +78,6 @@
                   id="type"
                   v-model="type"
                   type="text"
-                  :placeholder="user.role"
-                  :value="user.role"
                   disabled
                   class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 dark:bg-gray-700 dark:text-white"
                 />
@@ -95,8 +93,6 @@
                   id="network_user"
                   v-model="network_user"
                   type="text"
-                  :placeholder="user.networkUser"
-                  :value="user.networkUser"
                   disabled
                   class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 dark:bg-gray-700 dark:text-white"
                 />
@@ -120,48 +116,66 @@
                 </select>
               </div>
             </div>
-            <div class="space-y-6">
+            <article class="space-y-6">
               <!-- Permisos -->
-              <div class="space-y-2">
+              <section class="space-y-2">
                 <h3 class="text-lg font-semibold mb-2 text-gray-900 dark:text-white">
                   Lista de Permisos
                 </h3>
-                <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                  <thead class="bg-gray-50 dark:bg-gray-700">
-                    <tr>
-                      <th
-                        scope="col"
-                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
-                      >
-                        Permiso
-                      </th>
-                      <th
-                        scope="col"
-                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
-                      >
-                        Estado
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody
-                    class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700"
+                <section class="relative overflow-hidden">
+                  <table
+                    class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 bg-white dark:bg-gray-800"
                   >
-                    <tr v-for="permission in permissions_list" :key="permission.id_permission">
-                      <td
-                        class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white"
-                      >
-                        {{ permission.name }}
-                      </td>
-                      <td
-                        class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400"
-                      >
-                        Concedido
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
+                    <thead class="bg-gray-50 dark:bg-gray-700">
+                      <tr>
+                        <th
+                          scope="col"
+                          class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
+                        >
+                          Permiso
+                        </th>
+                        <th
+                          scope="col"
+                          class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
+                        >
+                          Estado
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody
+                      class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700"
+                    >
+                      <template v-if="!loading">
+                        <tr v-for="permission in permissions_list" :key="permission.id_permission">
+                          <td
+                            class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white"
+                          >
+                            {{ permission.name }}
+                          </td>
+                          <td
+                            class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400"
+                          >
+                            Concedido
+                          </td>
+                        </tr>
+                      </template>
+                      <tr v-else>
+                        <td colspan="2" class="px-6 py-4">
+                          <div class="flex justify-center items-center">
+                            <v-progress-circular
+                              color="primary"
+                              indeterminate
+                              :size="70"
+                              :width="8"
+                            ></v-progress-circular>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </section>
+              </section>
+            </article>
           </div>
         </div>
       </div>
@@ -184,9 +198,10 @@ const { user } = storeToRefs(authStore)
 console.log(user.value)
 
 const isOpen = ref(true)
-const name = ref('')
-const type = ref('')
-const network_user = ref('')
+const loading = ref(true)
+const name = ref(user.value.name)
+const type = ref(user.value.role)
+const network_user = ref(user.value.networkUser)
 const permissions_list = ref([])
 
 watchEffect(() => {
@@ -211,5 +226,6 @@ onMounted(async () => {
   const permissions = await getPermissions(user.value.id)
   permissions.value = permissions.data.role_permission
   permissions_list.value = permissions.value.map((permission) => permission.Permissions)
+  loading.value = false
 })
 </script>
