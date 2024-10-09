@@ -146,6 +146,13 @@
                       class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700"
                     >
                       <template v-if="!loading">
+                        <tr v-if="error_message">
+                          <td colspan="2" class="px-6 py-4">
+                            <p class="text-red-500 dark:text-red-600 text-center font-bold text-xl">
+                              {{ error_message }}!!
+                            </p>
+                          </td>
+                        </tr>
                         <tr v-for="permission in permissions_list" :key="permission.id_permission">
                           <td
                             class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white"
@@ -159,7 +166,7 @@
                           </td>
                         </tr>
                       </template>
-                      <tr v-else>
+                      <tr v-else-if="loading">
                         <td colspan="2" class="px-6 py-4">
                           <div class="flex justify-center items-center">
                             <v-progress-circular
@@ -203,6 +210,7 @@ const name = ref(user.value.name)
 const type = ref(user.value.role)
 const network_user = ref(user.value.networkUser)
 const permissions_list = ref([])
+const error_message = ref('')
 
 watchEffect(() => {
   const handleEsc = (event) => {
@@ -223,9 +231,15 @@ watchEffect(() => {
 })
 
 onMounted(async () => {
-  const permissions = await getPermissions(user.value.id)
-  permissions.value = permissions.data.role_permission
-  permissions_list.value = permissions.value.map((permission) => permission.Permissions)
-  loading.value = false
+  try {
+    const permissions = await getPermissions(user.value.id)
+    permissions.value = permissions.data.role_permission
+    permissions_list.value = permissions.value.map((permission) => permission.Permissions)
+    loading.value = false
+  } catch (error) {
+    error_message.value = 'Error al cargar los permisos'
+    console.info(error_message)
+    loading.value = false
+  }
 })
 </script>
