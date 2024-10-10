@@ -1,6 +1,6 @@
 import { ref, watch } from 'vue'
 
-const theme = ref('system')
+const theme = ref(null)
 
 const applyTheme = (newTheme) => {
   if (newTheme === 'dark' || (newTheme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
@@ -12,6 +12,24 @@ const applyTheme = (newTheme) => {
 
 const toggleTheme = (value) => {
   theme.value = value
+  localStorage.setItem('userTheme', value)
+  applyTheme(theme.value)
+}
+
+const getSystemTheme = () => {
+  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+}
+
+const initializeTheme = () => {
+  // Intentamos obtener el tema guardado del localStorage
+  const savedTheme = localStorage.getItem('userTheme')
+  if (savedTheme) {
+    // Si hay un tema guardado, lo usamos
+    theme.value = savedTheme
+  } else {
+    // Si no hay tema guardado, usamos el tema del sistema
+    theme.value = getSystemTheme()
+  }
   applyTheme(theme.value)
 }
 
@@ -25,10 +43,8 @@ const handleMediaQueryChange = (e) => {
 
 mediaQuery.addEventListener('change', handleMediaQueryChange)
 
-// Aplicar el tema inicial
-applyTheme(theme.value)
+initializeTheme()
 
-// Observar cambios en el tema
 watch(theme, (newTheme) => {
   applyTheme(newTheme)
 })
