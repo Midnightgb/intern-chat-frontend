@@ -1,3 +1,4 @@
+//src/components/chat/MessageList.vue
 <template>
   <div class="relative flex flex-col h-full">
     <div
@@ -154,6 +155,9 @@ const handleMessageAction = (action, message) => {
   if (action === 'edit') {
     editingMessage.value = messageId
     editedContent.value = message.content
+    if (messageId === computedMessages.value[computedMessages.value.length - 1].id) {
+      nextTick(() => scrollToBottom(true));
+    }
   } else if (action === 'delete') {
     deletingMessage.value = messageId
   }
@@ -175,6 +179,7 @@ const confirmMessageAction = (action, messageId, idType) => {
     nextTick(() => scrollToBottom(true));
   }
 };
+
 
 const cancelAction = (action) => {
   if (action === 'edit') editingMessage.value = null

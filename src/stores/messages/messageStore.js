@@ -47,19 +47,22 @@ export const useMessageStore = defineStore('message', {
         console.error(`Error updating ${errorMessage} in store:`, error);
       }
     },
-    async deleteMessage(message, type) {
+    async deleteMessage(messageId, type) {
       try {
-        console.log('Deleting message:', message);
-        // Enviar solicitud de eliminación al backendx
+        console.log('Deleting message:', messageId);
+        
+        // Enviar solicitud de eliminación al backend
         if (type === 'id_direct_message') {
-          await deleteConversationApi(message);
+          await deleteConversationApi(messageId);
         } else {
-          await deleteMessageApi(message);
+          await deleteMessageApi(messageId);
         }
 
         // Actualizar el estado eliminando el mensaje
-        this.messages = this.messages.filter(m => m.id_message !== message);
-        console.log(`Mensaje con ID ${message} eliminado del estado y backend.`);
+        this.messages = this.messages.filter(m => 
+          m.id_message !== messageId && m.id_direct_message !== messageId
+        );
+        console.log(`Mensaje con ID ${messageId} eliminado del estado y backend.`);
       } catch (error) {
         this.error = 'No se pudo eliminar el mensaje';
         console.error('Error al eliminar el mensaje en el store:', error);
