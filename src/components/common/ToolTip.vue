@@ -2,7 +2,7 @@
 <template>
   <fwb-tooltip :placement="placement">
     <template #trigger>
-      <fwb-button :color="color" :outline="outline" :pill="pill" :square="square" class="dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600">
+      <fwb-button :color="color" :outline="outline" :pill="pill" :square="square">
         {{ triggerText }}
         <div v-if="!imgChannel" class="w-6 h-6">
           <component :is="iconComponent" v-if="iconComponent" class="dark:text-gray-200" />

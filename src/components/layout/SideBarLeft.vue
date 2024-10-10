@@ -37,7 +37,7 @@
           <span
             v-for="(channel, index) in filteredChannels"
             :key="index"
-            class="bg-muted dark:bg-gray-700 rounded-lg text-muted-foreground dark:text-gray-300 hover:bg-accent dark:hover:bg-gray-600 hover:text-accent-foreground dark:hover:text-white w-full select-none"
+            class="rounded-lg text-muted-foreground dark:text-gray-300 hover:bg-accent hover:text-accent-foreground dark:hover:text-white w-full select-none"
             @click="onChannelClick(channel)"
           >
             <div class="flex items-center justify-center">
