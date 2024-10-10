@@ -1,26 +1,28 @@
 //src/components/partials/ServerHeader.vue
 <template>
-  <div class="flex items-center gap-2">
-    <button
-      class="ml-auto p-2 rounded-full hover:bg-slate-200 hover:text-red-500"
-      @click="handleCloseChat"
-    >
-    <X/>
-    </button>
-    <Server/>
-    <h2 class="text-xl font-bold">{{ serverName }}</h2>
-  </div>
-  <div class="flex items-center gap-2">
-    <button
-      class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-10 w-10"
-    >
-    <Search />
-    </button>
-    <button
-      class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-10 w-10"
-    >
-    <Settings />
-    </button>
+  <div class="flex items-center justify-between w-full p-2 bg-gray-100 dark:bg-gray-800">
+    <div class="flex items-center gap-2">
+      <Server class="text-gray-600 dark:text-gray-300"/>
+      <h2 class="text-xl font-bold text-gray-800 dark:text-gray-200">{{ serverName }}</h2>
+    </div>
+    <div class="flex items-center gap-2">
+      <button
+        class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-10 w-10 dark:text-gray-300 dark:hover:bg-gray-700"
+      >
+        <Search />
+      </button>
+      <button
+        class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-10 w-10 dark:text-gray-300 dark:hover:bg-gray-700"
+      >
+        <Settings />
+      </button>
+      <button
+        class="ml-auto p-2 rounded-full hover:bg-slate-200 hover:text-red-500 dark:hover:bg-gray-700 dark:hover:text-red-400"
+        @click="handleCloseChat"
+      >
+        <X class="text-gray-600 dark:text-gray-300"/>
+      </button>
+    </div>
   </div>
 </template>
 

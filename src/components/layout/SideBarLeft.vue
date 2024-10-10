@@ -1,16 +1,16 @@
 <!-- src/components/layout/SideBarLeft.vue -->
 <template>
   <aside
-    class="bg-background border-r border-gray-300 flex flex-col items-center gap-2 w-16 h-screen"
+    class="bg-background dark:bg-gray-800 border-r border-gray-300 dark:border-gray-700 flex flex-col items-center gap-2 w-16 h-screen"
   >
-    <div class="flex flex-col items-center gap-2 w-full h-full">
-      <button class="rounded-lg p-2 w-full" @click="onPrimaryButtonClick">
+    <div class="flex flex-col items-center gap-2 w-full h-full bg-gray-100 dark:bg-gray-800">
+      <button class="rounded-lg p-2 w-full hover:bg-gray-200 dark:hover:bg-gray-700" @click="onPrimaryButtonClick">
         <div class="flex items-center justify-center">
-          <CircleDot />
+          <CircleDot class="text-gray-600 dark:text-gray-300" />
         </div>
       </button>
       <div
-        class="flex flex-col items-center p-2 gap-2 w-full flex-grow overflow-y-auto hide-scrollbar snap-y snap-mandatory"
+        class="flex flex-col items-center p-2 gap-2 w-full flex-grow overflow-y-auto hide-scrollbar snap-y snap-mandatory bg-gray-100 dark:bg-gray-800"
       >
         <!-- Mostrar loader mientras se cargan los canales -->
         <template v-if="loadingChannels">
@@ -22,14 +22,14 @@
               type="avatar"
               height="64"
               width="100%"
-              class="select-none flex items-center justify-center scroll-m-2 custom-avatar-loader"
+              class="select-none flex items-center justify-center scroll-m-2 custom-avatar-loader bg-gray-100 dark:bg-gray-800"
             ></v-skeleton-loader>
           </div>
         </template>
         <!-- Mostrar mensaje de error si hay uno -->
         <template v-else-if="error">
-          <div class="flex items-center justify-center w-full snap-always snap-start">
-            <span class="text-red-500">Error: {{ error }}</span>
+          <div class="flex items-center justify-center w-full snap-always snap-start bg-gray-100 dark:bg-gray-800">
+            <span class="text-red-500 dark:text-red-400">Error: {{ error }}</span>
           </div>
         </template>
         <!-- Mostrar lista de canales -->
@@ -37,7 +37,7 @@
           <span
             v-for="(channel, index) in filteredChannels"
             :key="index"
-            class="bg-muted rounded-lg text-muted-foreground hover:bg-accent hover:text-accent-foreground w-full select-none"
+            class="bg-muted dark:bg-gray-700 rounded-lg text-muted-foreground dark:text-gray-300 hover:bg-accent dark:hover:bg-gray-600 hover:text-accent-foreground dark:hover:text-white w-full select-none"
             @click="onChannelClick(channel)"
           >
             <div class="flex items-center justify-center">

@@ -1,11 +1,11 @@
 <!-- src/components/layout/MainContent.vue -->
 <template>
-  <main class="flex-1 border-gray-300 rounded-tr-xl bg-background flex flex-col h-screen">
+  <main class="flex-1 border-gray-300 dark:border-gray-700 rounded-tr-xl bg-gray-100 dark:bg-gray-800 flex flex-col h-screen">
     <!-- Contenido principal -->
     <div class="flex-1 px-6 pt-6 overflow-hidden flex flex-col">
       <!-- Mostrar mensaje cuando no se ha seleccionado nada -->
       <div v-if="!currentChannelId && !currentConversationId" class="flex items-center justify-center h-full">
-        <h2 class="text-2xl font-bold text-gray-500">Selecciona un canal o una conversación.</h2>
+        <h2 class="text-2xl font-bold text-gray-500 dark:text-gray-400">Selecciona un canal o una conversación.</h2>
       </div>
       
       <!-- Mostrar loader cuando se están cargando mensajes -->
@@ -15,17 +15,17 @@
       
       <!-- Mostrar contenido de mensajes -->
       <div v-else class="flex flex-col h-full">
-        <div class="flex items-center justify-between mb-2 border-b">
+        <div class="flex items-center justify-between mb-2 border-b dark:border-gray-700">
           <ServerHeader :serverName="currentChannelName || currentConversationName" />
         </div>
-        <div class="flex-1 bg-muted rounded-lg px-4 overflow-hidden flex flex-col">
+        <div class="flex-1  rounded-lg px-4 overflow-hidden flex flex-col modern-scrollbar">
           <MessageList class="flex-1 overflow-y-auto" />
         </div>
       </div>
     </div>
     
     <!-- Barra inferior con MessageInput -->
-    <div v-if="currentChannelId || currentConversationId" class="border-t border-gray-300 p-4 bg-background">
+    <div v-if="currentChannelId || currentConversationId" class="border-t border-gray-300 dark:border-gray-700 p-4 bg-gray-100 dark:bg-gray-800">
       <MessageInput />
     </div>
   </main>

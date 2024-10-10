@@ -1,23 +1,23 @@
 <template>
-  <div class="flex items-center gap-2">
+  <div class="flex items-center gap-2 bg-gray-100 dark:bg-gray-800">
     <span class="relative flex w-8 h-8 shrink-0">
       <UploadFileDropdown @fileSelected="handleFileSelected" />
     </span>
     <div class="relative flex-1">
       <input
         v-model="message"
-        class="flex flex-1 w-full h-10 px-4 py-2 text-sm border rounded-lg border-input ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 bg-muted"
+        class="flex flex-1 w-full h-10 px-4 py-2 text-sm border rounded-lg border-input ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 bg-gray-100 dark:bg-gray-700 dark:text-white dark:border-gray-600 dark:placeholder-gray-400"
         :placeholder="selectedFile ? selectedFile.name : 'Type your message...'"
         type="text"
         @keyup.enter="sendMessage"
       />
-      <span v-if="selectedFile" class="absolute text-sm text-gray-500 transform -translate-y-1/2 right-2 top-1/2">
+      <span v-if="selectedFile" class="absolute text-sm text-gray-500 dark:text-gray-400 transform -translate-y-1/2 right-2 top-1/2">
         {{ selectedFile.name }}
       </span>
     </div>
     <button
       @click="sendMessage"
-      class="inline-flex items-center justify-center w-10 h-10 text-sm font-medium transition-colors rounded-md whitespace-nowrap ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground"
+      class="inline-flex items-center justify-center w-10 h-10 text-sm font-medium transition-colors rounded-md whitespace-nowrap ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground dark:hover:bg-gray-700 dark:text-gray-200"
     >
       <Send class="w-5 h-5" />
     </button>

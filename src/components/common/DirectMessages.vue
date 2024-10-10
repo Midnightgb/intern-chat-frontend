@@ -1,10 +1,10 @@
 //src/components/common/DirectMessages.vue
 <template>
-  <div class="flex flex-col h-full w-full">
-    <div class="bg-muted rounded-lg p-2 text-muted-foreground my-2">
+  <div class="flex flex-col h-full w-full dark:bg-gray-800">
+    <div class="bg-muted rounded-lg p-2 text-muted-foreground my-2 dark:bg-gray-700 dark:text-gray-300">
       <div class="flex items-center justify-center">
-        <MessageCircle />
-        <span class="ml-2 text-sm font-medium inline">Mensajes Directos</span>
+        <MessageCircle class="dark:text-gray-400" />
+        <span class="ml-2 text-sm font-medium inline dark:text-gray-200">Mensajes Directos</span>
       </div>
       <SearchInput v-model="search" @clear="clearSearch" />
     </div>

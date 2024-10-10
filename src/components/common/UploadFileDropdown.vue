@@ -2,15 +2,16 @@
 <template>
   <fwb-dropdown placement="top" text="top">
     <template #trigger>
-      <Paperclip class="w-5 h-5 transition-colors cursor-pointer hover:text-blue-600" />
+      <Paperclip class="w-5 h-5 transition-colors cursor-pointer hover:text-blue-600 dark:hover:text-blue-400" />
     </template>
-    <fwb-list-group class="w-64 max-w-xs transition-opacity shadow-lg shadow-gray-500">
+    <fwb-list-group class="w-64 max-w-xs transition-opacity shadow-lg shadow-gray-500 dark:shadow-gray-800">
       <div class="relative p-2">
         <fwb-file-input
           v-if="!file"
           v-model="file"
           dropzone
           @change="handleFileChange"
+          class="dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300"
         >
         </fwb-file-input>
         <div v-else class="relative">
@@ -20,14 +21,14 @@
             alt="File preview" 
             class="object-cover w-full h-32 rounded-lg"
           />
-          <div v-else class="flex items-center justify-center w-full h-32 bg-gray-200 rounded-lg">
-            <span class="text-sm text-gray-600">{{ file.name }}</span>
+          <div v-else class="flex items-center justify-center w-full h-32 bg-gray-200 dark:bg-gray-700 rounded-lg">
+            <span class="text-sm text-gray-600 dark:text-gray-300">{{ file.name }}</span>
           </div>
           <button
             @click="clearFile"
-            class="absolute p-1 bg-white rounded-full shadow-md top-2 right-2 hover:bg-gray-200"
+            class="absolute p-1 bg-white dark:bg-gray-800 rounded-full shadow-md top-2 right-2 hover:bg-gray-200 dark:hover:bg-gray-700"
           >
-            <span class="text-xl text-red-600">✕</span>
+            <span class="text-xl text-red-600 dark:text-red-400">✕</span>
           </button>
         </div>
       </div>

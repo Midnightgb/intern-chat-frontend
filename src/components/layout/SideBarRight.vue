@@ -1,12 +1,12 @@
 //src/components/partials/SideBarRight.vue
 <template>
-  <aside class="bg-background border-r border-gray-300 flex flex-col h-screen w-48 sm:w-56">
+  <aside class="bg-gray-100 dark:bg-gray-800 border-r border-gray-300 dark:border-gray-700 flex flex-col h-screen w-48 sm:w-56">
     <div class="flex-grow overflow-hidden">
       <DirectMessages />
     </div>
 
     <!-- Bloque de configuraciones de usuario -->
-    <div class="flex-shrink-0 w-full p-4 bg-gradient-to-t from-gray-100 to-gray-200 rounded-lg">
+    <div class="flex-shrink-0 w-full p-4 bg-gradient-to-t from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-800 rounded-lg">
       <div class="flex-grow">
         <div class="flex items-center justify-between">
           <span class="relative flex shrink-0 overflow-hidden rounded-full w-8 h-8">
@@ -17,12 +17,11 @@
               :src="userPhotoUrl"
               @error="handleImageError"
             />
-            <!-- parametros que recibe la función getUserAvatar: user y path -->
             <span v-else class="aspect-square h-full w-full">
-              <CircleUserRound size="32" />
+              <CircleUserRound size="32" class="text-gray-600 dark:text-gray-300" />
             </span>
           </span>
-          <div class="text-sm font-medium inline capitalize">{{ user.networkUser }}</div>
+          <div class="text-sm font-medium inline capitalize text-gray-800 dark:text-gray-200">{{ user.networkUser }}</div>
           <ProfileModal />
         </div>
       </div>
@@ -31,7 +30,7 @@
           color="red"
           :disabled="loading"
           :loading="loading"
-          class="w-full transition-all"
+          class="w-full transition-all dark:bg-red-600 dark:hover:bg-red-700 dark:text-white"
           outline
           @click="clickLogout"
         >

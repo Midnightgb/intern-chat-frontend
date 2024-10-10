@@ -1,4 +1,5 @@
 //src/assets/sidebar-scrollbar.css
+/* Ocultar scrollbar por defecto */
 .hide-scrollbar {
   scrollbar-width: none;
   -ms-overflow-style: none;
@@ -8,6 +9,45 @@
   display: none;
 }
 
+/* Estilo moderno para scrollbar */
+.modern-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(155, 155, 155, 0.5) transparent;
+}
+
+.modern-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.modern-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.modern-scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgba(155, 155, 155, 0.5);
+  border-radius: 20px;
+  border: transparent;
+}
+
+/* Hover effect */
+.modern-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(155, 155, 155, 0.7);
+}
+
+/* Estilos para modo oscuro */
+.dark .modern-scrollbar {
+  scrollbar-color: rgba(200, 200, 200, 0.5) transparent;
+}
+
+.dark .modern-scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgba(200, 200, 200, 0.5);
+}
+
+.dark .modern-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(200, 200, 200, 0.7);
+}
+
+/* Mantener los estilos de snap */
 .snap-y {
   scroll-snap-type: y mandatory;
 }

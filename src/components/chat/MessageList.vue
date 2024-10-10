@@ -1,21 +1,21 @@
 //src/components/chat/MessageList.vue
 <template>
-  <div class="relative flex flex-col h-full">
+  <div class="relative flex flex-col h-full dark:bg-gray-800">
     <div
       ref="messageContainer"
       class="flex flex-col gap-3 flex-grow overflow-y-auto pr-4"
       @scroll="handleScroll"
     >
       <!-- Mostrar un mensaje si no hay mensajes -->
-      <div v-if="computedMessages.length === 0" class="text-center text-gray-500 mt-10">
+      <div v-if="computedMessages.length === 0" class="text-center text-gray-500 dark:text-gray-400 mt-10">
         No hay mensajes por mostrar.
       </div>
 
       <!-- Mostrar la lista de mensajes si existen -->
-      <div
+      <article
         v-for="message in computedMessages"
         :key="message.id_message || message.id_direct_message"
-        class="flex items-start gap-2 relative bg-gray-300 rounded-lg p-3 break-words"
+        class="flex items-start gap-2 relative bg-gray-300 dark:bg-gray-700 rounded-lg p-3 break-words"
       >
         <span class="relative flex shrink-0 overflow-hidden rounded-full w-8 h-8 z-10">
           <ImageLoader
@@ -28,10 +28,10 @@
         <div class="flex-grow">
           <div class="flex justify-between">
             <div>
-              <span class="font-semibold">
+              <span class="font-semibold dark:text-white">
                 {{ getUserName(message, message.users_send ? 'users_send' : 'users') }}
               </span>
-              <span class="text-xs text-muted-foreground ml-2 truncate">
+              <span class="text-xs text-muted-foreground dark:text-gray-400 ml-2 truncate">
                 {{ formatDate(message.created_at) }}
               </span>
             </div>
@@ -60,7 +60,7 @@
             <input 
               v-model="editedContent" 
               @keyup.enter="confirmMessageAction('edit', message.id_message || message.id_direct_message, message.id_message? 'dc_' : 'dm_')"
-              class="w-full px-2 py-1 border border-gray-300 rounded-md"
+              class="w-full px-2 py-1 border border-gray-300 dark:border-gray-600 rounded-md dark:bg-gray-700 dark:text-white"
             />
             <div class="flex justify-end mt-1">
               <button @click="confirmMessageAction('edit', message.id_message || message.id_direct_message, message.id_message? 'dc_' : 'dm_')" class="text-sm text-blue-500">Guardar</button>
@@ -69,7 +69,7 @@
           </div>
 
           <div v-if="message.content || message.url_file" class="mt-1">
-            <span v-if="message.content != null" class="text-sm">{{ message.content }}</span>
+            <span v-if="message.content != null" class="text-sm dark:text-gray-200">{{ message.content }}</span>
             <span v-if="isImage(message.url_file)" class="text-sm text-blue-500 cursor-pointer">
               <img :src="message.url_file" alt="Image" class="w-1/3 h-auto" />
             </span>
@@ -78,7 +78,7 @@
             </span>
           </div>
         </div>
-      </div>
+      </article>
     </div>
     <NewMessageNotification
       v-if="showNewMessageNotification"

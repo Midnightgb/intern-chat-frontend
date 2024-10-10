@@ -6,11 +6,11 @@
         v-model="search"
         type="text"
         placeholder="Buscar..."
-        class="w-full p-1 rounded-lg bg-slate-200 text-muted-foreground placeholder:text-xs"
+        class="w-full p-1 rounded-lg bg-slate-200 text-muted-foreground placeholder:text-xs dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
       />
       <button
         v-if="search"
-        class="absolute right-2 top-1/2 transform -translate-y-1/2 rounded-full transition-all hover:text-slate-600 text-slate-400"
+        class="absolute right-2 top-1/2 transform -translate-y-1/2 rounded-full transition-all hover:text-slate-600 text-slate-400 dark:text-gray-400 dark:hover:text-gray-200"
         @click="clearSearch"
       >
         <CircleX class="w-6 h-6" />
