@@ -19,15 +19,10 @@ import { onMounted, computed } from 'vue'
 import { RouterView, useRoute } from 'vue-router'
 import { useAuthStore } from '@stores/auth'
 import { initFlowbite } from 'flowbite'
-import { socketService } from '@services/socketService';
 import { theme, toggleTheme } from '@utils/themeUtils';
 
 onMounted(() => {
   initFlowbite()
-  authStore.checkAuth();
-  if (authStore.isAuthenticated) {
-    socketService.connect();
-  }
   toggleTheme(theme.value)
 })
 

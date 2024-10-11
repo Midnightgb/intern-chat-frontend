@@ -7,7 +7,7 @@
       <div v-if="user && user.role">
         <div class="flex items-center justify-center">
           <ToolTip
-            v-if="user.role === 'ADMIN'"
+            v-if="user.role === 'ADMIN' || user.role === 'SUPERADMIN'"
             triggerIcon="ShieldEllipsis"
             tooltipContent="Panel de administración"
             placement="right"
@@ -102,6 +102,8 @@ const filteredChannels = computed(() => {
   return channels.value.filter((channel) => channel.status_channel)
 })
 
+const { handleAdminPanel } = useAuthHandlers()
+
 onMounted(() => {
   channelStore.initializeStore()
   const intervalId = setInterval(() => {
@@ -115,7 +117,8 @@ onMounted(() => {
 })
 
 const adminPanel = () => {
-  useAuthHandlers().handleAdminPanel()
+  console.log('adminPanel')
+  handleAdminPanel(true)
 }
 
 const onChannelClick = (channel) => {
