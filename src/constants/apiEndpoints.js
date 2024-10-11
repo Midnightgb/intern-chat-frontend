@@ -56,4 +56,8 @@ export const API_ENDPOINTS = {
   SEND_MESSAGE: `${BASE_CHANNEL}/send_message`, // ready
   UPDATE_MESSAGE: `${BASE_CHANNEL}/update_message`, // ready
   DELETE_MESSAGE: `${BASE_CHANNEL}/delete_message`, // ready
+
+  // total endpoints: 28; 
+  //total ready: 12; 
+  //total not ready: 16
 };
