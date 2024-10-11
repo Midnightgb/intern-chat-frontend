@@ -64,11 +64,14 @@ onUnmounted(() => {
   socketService.disconnect()
 })
 
-watch([currentChannelId, currentConversationId], ([newChannelId, newConversationId]) => {
-  if (newChannelId) {
-    socketService.joinChannel(newChannelId)
-  } else if (newConversationId) {
-    socketService.getDirectMessages(newConversationId, newConversationId)
+watch([currentChannelId, currentConversationId], ([newChannelId, newConversationId], [oldChannelId, oldConversationId]) => {
+  if (newChannelId !== oldChannelId || newConversationId !== oldConversationId) {
+    socketService.cancelCurrentRequest();
+    if (newChannelId) {
+      socketService.joinChannel(newChannelId);
+    } else if (newConversationId) {
+      socketService.getDirectMessages(newConversationId, newConversationId);
+    }
   }
 })
 </script>

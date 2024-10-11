@@ -2,16 +2,15 @@
 <template>
   <fwb-tooltip :placement="placement">
     <template #trigger>
-      <fwb-button :color="color" :outline="outline" :pill="pill" :square="square">
-        {{ triggerText }}
-        <div v-if="!imgChannel" class="w-6 h-6">
-          <component :is="iconComponent" v-if="iconComponent" class="dark:text-gray-200" />
+      <fwb-button :color="color" :outline="outline" :pill="pill" :square="square" class="p-0 overflow-hidden">
+        <div v-if="!imgChannel" class="w-full h-full flex items-center justify-center">
+          {{ triggerText }}
+          <component :is="iconComponent" v-if="iconComponent" class="dark:text-gray-200 w-6 h-6" />
         </div>
 
-        <div v-if="imgChannel" class="w-6 h-6">
-          <img :src="imgChannel" v-if="imgChannel" class="aspect-square h-full w-full object-cover rounded-full" />
+        <div v-if="imgChannel" class="w-full h-full">
+          <img :src="imgChannel" class="w-full h-full object-cover" alt="Channel image" />
         </div>
-        
       </fwb-button>
     </template>
     <template #content>

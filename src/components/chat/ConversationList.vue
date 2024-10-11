@@ -9,7 +9,7 @@
         type="list-item-avatar-two-line"
         height="58"
         width="100%"
-        class="select-none flex items-center justify-center scroll-m-2 dark:bg-gray-700"
+        class="select-none flex items-center justify-center scroll-m-2 bg-gray-100 dark:bg-gray-700"
       ></v-skeleton-loader>
     </div>
     <div v-else-if="conversations.length > 0" class="space-y-1">

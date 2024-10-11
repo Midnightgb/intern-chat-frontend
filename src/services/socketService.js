@@ -13,6 +13,7 @@ class SocketService {
     this.socket = null
     this.messageStore = null
     this.authStore = null
+    this.currentRequest = null
   }
 
   connect() {
@@ -100,13 +101,23 @@ class SocketService {
     })
   }
   
+  cancelCurrentRequest() {
+    if (this.currentRequest) {
+      this.currentRequest.abort()
+      this.currentRequest = null
+    }
+  }
+
   joinChannel(channelId) {
+    this.cancelCurrentRequest()
     this.messageStore.clearMessages()
     const token = this.authStore.token
     this.messageStore.setLoadingMessages(true)
-    this.socket.emit('join_channel', { channelId, token })
+    
+    this.currentRequest = new AbortController()
+    this.socket.emit('join_channel', { channelId, token, signal: this.currentRequest.signal })
   }
-  
+
   sendDirectMessage(recipient_id, message, file = null) {
     this.socket.emit('direct_message', { send_id: this.authStore.user.id, recipient_id, token: this.authStore.token })
     //if there is a file, send it in a form data
@@ -157,13 +168,17 @@ class SocketService {
   }
 
   getDirectMessages(send_id, recipient_id) {
+    this.cancelCurrentRequest()
     this.messageStore.clearMessages()
     const token = this.authStore.token
     this.messageStore.setLoadingMessages(true)
-    this.socket.emit('direct_message', { send_id, recipient_id, token })
+    
+    this.currentRequest = new AbortController()
+    this.socket.emit('direct_message', { send_id, recipient_id, token, signal: this.currentRequest.signal })
   }
 
   disconnect() {
+    this.cancelCurrentRequest()
     if (this.socket) {
       this.socket.disconnect()
     }
