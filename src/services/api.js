@@ -2,7 +2,7 @@
 import axios from 'axios';
 import { API_ENDPOINTS } from '@constants/apiEndpoints';
 import { useAuthStore } from '@stores/auth';
-import useLogout from '@composables/useLogout'
+import useLogout from '@composables/useLogout';
 
 const publicApi = axios.create({
   baseURL: API_ENDPOINTS.BASE_URL,
@@ -32,117 +32,62 @@ const updateToken = (newToken) => {
   console.log('Nuevo token actualizado:', newToken);
 };
 
-// Interceptor para agregar el token a cada solicitud
-apiClient.interceptors.request.use(
-  (config) => {
-    const token = getToken();
-    if (token) {
-      //if the request is a post request and it has a file in it, then we change the content type to multipart/form-data
-      if (config.method === 'post' && config.data instanceof FormData) {
-        config.headers['Content-Type'] = 'multipart/form-data';
-      }else{
-        config.headers['Content-Type'] = 'application/json';
-      }
-      config.headers['Authorization'] = `Bearer ${token}`;
-    }
-    return config;
-  },
-  (error) => {
-    console.error('Error en la solicitud:', error);
-    return Promise.reject(error);
-  }
-);
+// Configuración de interceptores
+const setupInterceptors = (api) => {
+  api.interceptors.request.use(addTokenToRequest, handleRequestError);
+  api.interceptors.response.use(handleSuccessResponse, handleErrorResponse);
+};
 
-// Interceptor para manejar la respuesta y renovar el token si es necesario
-apiClient.interceptors.response.use(
-  (response) => {
-    const newToken = response.headers['new-token'];
-    if (newToken) {
-      updateToken(newToken);
-    }
-    return response;
-  },
-  async (error) => {
-
-    const originalRequest = error.config;
-    
-    // Check if it's a logout request
-    if (originalRequest.url === API_ENDPOINTS.LOGOUT) {
-      return Promise.reject(error);
-    }
-    
-    if (error.response && error.response.status === 401) {
-      const authStore = useAuthStore()
-      console.log('authStore.isAuthenticated:', authStore.isAuthenticated);
-      if (authStore.isAuthenticated) {
-        console.log('Token expirado, cerrando sesión...')
-        const { handleLogout } = useLogout()
-        await handleLogout()
-      }
-    }
-    return Promise.reject(error)
+// Funciones para los interceptores
+const addTokenToRequest = (config) => {
+  const token = getToken();
+  if (token) {
+    config.headers['Authorization'] = `Bearer ${token}`;
+    config.headers['Content-Type'] = config.data instanceof FormData ? 'multipart/form-data' : 'application/json';
   }
-);
+  return config;
+};
+
+const handleRequestError = (error) => {
+  console.error('Error en la solicitud:', error);
+  return Promise.reject(error);
+};
+
+const handleSuccessResponse = (response) => {
+  const newToken = response.headers['new-token'];
+  if (newToken) {
+    updateToken(newToken);
+  }
+  return response;
+};
+
+const handleErrorResponse = async (error) => {
+  if (error.response?.status === 401 && error.config.url !== API_ENDPOINTS.LOGOUT) {
+    const authStore = useAuthStore();
+    if (authStore.isAuthenticated) {
+      console.log('Token expirado, cerrando sesión...');
+      const { handleLogout } = useLogout();
+      await handleLogout();
+    }
+  }
+  return Promise.reject(error);
+};
+
+// Aplicar interceptores
+setupInterceptors(apiClient);
 
 // Funciones de API
-export const login = (credentials) => {
-  return publicApi.post(API_ENDPOINTS.LOGIN, credentials);
-};
-
-export const logout = () => {
-  return apiClient.get(API_ENDPOINTS.LOGOUT);
-};
-
-export const getChannels = () => {
-  return apiClient.get(API_ENDPOINTS.GET_CHANNELS);
-};
-
-export const postMessage = (content) => {
-  return apiClient.post(API_ENDPOINTS.SEND_MESSAGE, content);
-};
-
-// CHANNELS
-export const updateMessage = (message) => {
-  return apiClient.post(API_ENDPOINTS.UPDATE_MESSAGE, {
-    id_message: message.id_message,
-    content: message.content
-  });
-};
-
-// MESSAGES DIRECT
-export const updateConversation = (conversation) => {
-  return apiClient.post(API_ENDPOINTS.UPDATE_CONVERSATION,{
-    id_direct_message: conversation.id_direct_message,
-    content: conversation.content
-  });
-};
-
-export const deleteMessage = (messageId) => {
-  return apiClient.post(API_ENDPOINTS.DELETE_MESSAGE, {
-    id_message: messageId
-  });
-}
-
-export const deleteConversation = (conversationId) => {
-  return apiClient.delete(API_ENDPOINTS.DELETE_CONVERSATION.replace(':id', conversationId));
-}
-
-export const getConversations = () => {
-  return apiClient.get(API_ENDPOINTS.GET_CONVERSATIONS);
-};
-
-export const getUserByName = (network_user) => {
-  return apiClient.get(API_ENDPOINTS.GET_USER_BY_NAME.replace(':network_user', network_user));
-};
-
-export const postDirectMessage = (content) => {
-  console.log('Enviando mensaje:', content);
-  
-  return apiClient.post(API_ENDPOINTS.CREATE_CONVERSATION, content);
-};
-
-export const getPermissions = (id_user) => {
-  return apiClient.post(API_ENDPOINTS.GET_PRIVILEGES, {id_user});
-};
+export const login = (credentials) => publicApi.post(API_ENDPOINTS.LOGIN, credentials);
+export const logout = () => apiClient.get(API_ENDPOINTS.LOGOUT);
+export const getChannels = () => apiClient.get(API_ENDPOINTS.GET_CHANNELS);
+export const postMessage = (content) => apiClient.post(API_ENDPOINTS.SEND_MESSAGE, content);
+export const updateMessage = (message) => apiClient.post(API_ENDPOINTS.UPDATE_MESSAGE, message);
+export const updateConversation = (conversation) => apiClient.post(API_ENDPOINTS.UPDATE_CONVERSATION, conversation);
+export const deleteMessage = (messageId) => apiClient.post(API_ENDPOINTS.DELETE_MESSAGE, { id_message: messageId });
+export const deleteConversation = (conversationId) => apiClient.delete(API_ENDPOINTS.DELETE_CONVERSATION.replace(':id', conversationId));
+export const getConversations = () => apiClient.get(API_ENDPOINTS.GET_CONVERSATIONS);
+export const getUserByName = (network_user) => apiClient.get(API_ENDPOINTS.GET_USER_BY_NAME.replace(':network_user', network_user));
+export const postDirectMessage = (content) => apiClient.post(API_ENDPOINTS.CREATE_CONVERSATION, content);
+export const getPermissions = (id_user) => apiClient.post(API_ENDPOINTS.GET_PRIVILEGES, { id_user });
 
 export default apiClient;
