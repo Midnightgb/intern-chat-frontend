@@ -5,6 +5,7 @@ import { logout as apiLogout } from '@services/api'
 import { cleanupSession } from '@utils/sessionCleanup'
 import { apiClient } from '@services/api'
 import { socketService } from '@services/socketService'
+import { useCurrentUserStore } from '@stores/user/currentUserStore'
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
@@ -35,7 +36,7 @@ export const useAuthStore = defineStore('auth', {
       if (!this.isAuthenticated) {
         return
       }
-    
+      const currentUserStore = useCurrentUserStore()
       try {
         await apiLogout()
       } catch (error) {
@@ -44,6 +45,7 @@ export const useAuthStore = defineStore('auth', {
         // Limpiar la sesión independientemente del resultado de la API
         cleanupSession()
         socketService.disconnect()
+        currentUserStore.clearCurrentUser()
       }
     },
     checkAuth() {
