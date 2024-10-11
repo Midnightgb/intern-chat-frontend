@@ -64,4 +64,10 @@ const roleWatcher = (role, conflictingRoles) => {
 roleWatcher('AGENTE', ['ADMIN', 'SUPERADMIN'])
 roleWatcher('ADMIN', ['AGENTE', 'SUPERADMIN'])
 roleWatcher('SUPERADMIN', ['AGENTE', 'ADMIN'])
+
+const emit = defineEmits(['filter-change'])
+
+watch(selectedFilters, (newFilters) => {
+  emit('filter-change', newFilters)
+}, { deep: true })
 </script>

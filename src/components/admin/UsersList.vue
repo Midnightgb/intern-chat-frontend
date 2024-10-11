@@ -1,5 +1,5 @@
 <template>
-  <article class="relative overflow-hidden">
+  <article class="relative">
     <HeaderTab title="Usuarios" description="Gestiona todos los usuarios existentes o añade uno nuevo">
       <fwb-button>
         <template #prefix>
@@ -10,7 +10,6 @@
     </HeaderTab>
     <section class="flex flex-col gap-4 p-4">
       <div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg ">
-        <UserListFilters />
         <UserListTable :users="users" />
         <UserListPagination :pagination="data" />
       </div>
@@ -23,7 +22,6 @@ import { getUsers } from '@services/api'
 import { ref, onMounted } from 'vue'
 import HeaderTab from '@components/common/HeaderTab.vue'
 import { FwbButton } from 'flowbite-vue'
-import UserListFilters from '@admin/users/UserListFilters.vue'
 import UserListTable from '@admin/users/UserListTable.vue'
 import UserListPagination from '@admin/users/UserListPagination.vue'
 import { UserPlus } from 'lucide-vue-next'
