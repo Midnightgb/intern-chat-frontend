@@ -76,18 +76,23 @@ const handleErrorResponse = async (error) => {
 // Aplicar interceptores
 setupInterceptors(apiClient);
 
-// Funciones de API
+// Auth
 export const login = (credentials) => publicApi.post(API_ENDPOINTS.LOGIN, credentials);
 export const logout = () => apiClient.get(API_ENDPOINTS.LOGOUT);
+// Channels
 export const getChannels = () => apiClient.get(API_ENDPOINTS.GET_CHANNELS);
 export const postMessage = (content) => apiClient.post(API_ENDPOINTS.SEND_MESSAGE, content);
 export const updateMessage = (message) => apiClient.post(API_ENDPOINTS.UPDATE_MESSAGE, message);
-export const updateConversation = (conversation) => apiClient.post(API_ENDPOINTS.UPDATE_CONVERSATION, conversation);
 export const deleteMessage = (messageId) => apiClient.post(API_ENDPOINTS.DELETE_MESSAGE, { id_message: messageId });
-export const deleteConversation = (conversationId) => apiClient.delete(API_ENDPOINTS.DELETE_CONVERSATION.replace(':id', conversationId));
-export const getConversations = () => apiClient.get(API_ENDPOINTS.GET_CONVERSATIONS);
+// Users
 export const getUserByName = (network_user) => apiClient.get(API_ENDPOINTS.GET_USER_BY_NAME.replace(':network_user', network_user));
+export const getUsers = () => apiClient.get(API_ENDPOINTS.GET_USERS);
+// Direct Messages
+export const getConversations = () => apiClient.get(API_ENDPOINTS.GET_CONVERSATIONS);
 export const postDirectMessage = (content) => apiClient.post(API_ENDPOINTS.CREATE_CONVERSATION, content);
+export const deleteConversation = (conversationId) => apiClient.delete(API_ENDPOINTS.DELETE_CONVERSATION.replace(':id', conversationId));
+export const updateConversation = (conversation) => apiClient.post(API_ENDPOINTS.UPDATE_CONVERSATION, conversation);
+// Permissions
 export const getPermissions = (id_user) => apiClient.post(API_ENDPOINTS.GET_PRIVILEGES, { id_user });
 
 export default apiClient;
