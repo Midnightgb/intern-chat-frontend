@@ -6,7 +6,7 @@
     </div>
 
     <!-- Bloque de configuraciones de usuario -->
-    <div class="flex-shrink-0 w-full p-4 bg-gradient-to-t from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-800 rounded-lg">
+    <div class="flex-shrink-0 w-full p-4 bg-gradient-to-t from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-700 rounded-lg">
       <div class="flex-grow">
         <div class="flex items-center justify-between">
           <span class="relative flex shrink-0 overflow-hidden rounded-full w-8 h-8">
@@ -30,7 +30,7 @@
           color="red"
           :disabled="loading"
           :loading="loading"
-          class="w-full transition-all dark:bg-red-600 dark:hover:bg-red-700 dark:text-white"
+          class="w-full transition-all dark:bg-red-600 dark:hover:bg-red-700 dark:text-white mt-2"
           outline
           @click="clickLogout"
         >
