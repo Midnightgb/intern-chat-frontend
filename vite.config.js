@@ -26,6 +26,7 @@ export default defineConfig({
       '@assets': fileURLToPath(new URL('./src/assets', import.meta.url)),
       '@services': fileURLToPath(new URL('./src/services', import.meta.url)),
       '@handlers': fileURLToPath(new URL('./src/handlers', import.meta.url)),
+      '@admin': fileURLToPath(new URL('./src/components/admin', import.meta.url))
     }
   }
 })

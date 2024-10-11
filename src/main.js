@@ -9,6 +9,7 @@ import pinia from '@/plugins/pinia'
 // Styles
 import '@assets/main.css'
 import '../node_modules/flowbite-vue/dist/index.css'
+import '../node_modules/flowbite/dist/flowbite.min.js'
 
 const app = createApp(App)
 
