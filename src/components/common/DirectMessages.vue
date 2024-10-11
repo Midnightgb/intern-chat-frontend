@@ -22,6 +22,7 @@ import { computed, ref, watch } from 'vue'
 import { useMessageStore } from '@stores/messages/messageStore'
 import { useCurrentConversationStore } from '@stores/conversations/currentConversationStore'
 import { useCurrentChannelStore } from '@stores/channels/currentChannelStore'
+import { useCurrentContentStore } from '@stores/messages/contentStore'
 // Icons
 import { MessageCircle } from 'lucide-vue-next'
 // Components
@@ -33,6 +34,7 @@ import { getUserByName } from '@services/api'
 const messageStore = useMessageStore()
 const currentConversationStore = useCurrentConversationStore()
 const currentChannelStore = useCurrentChannelStore()
+const currentContentStore = useCurrentContentStore()
 
 const conversations = computed(() => messageStore.conversations)
 const loadingConversations = computed(() => messageStore.loadingConversations)
@@ -113,16 +115,65 @@ async function searchUserInDB(query) {
 }
 
 function handleResultClick(result) {
-  if (isConversation(result)) {
-    currentConversationStore.updateCurrentConversation(
-      result.user_recipient.id_user,
-      result.user_recipient.full_name
-    )
-  } else {
-    currentConversationStore.updateCurrentConversation(result.id_user, result.full_name)
-  }
-  currentChannelStore.clearCurrentChannel()
+    console.log('handleResultClick', result);
+
+    // Verificar si es una conversación
+    if (isConversation(result)) {
+        // Actualizar la conversación actual
+        currentConversationStore.updateCurrentConversation(
+            result.user_recipient.id_user,
+            result.user_recipient.full_name
+        );
+
+        // Limpiar contenido anterior
+        currentContentStore.clearCurrentContent();
+        currentContentStore.clearCurrentContentUsers();
+
+        // Actualizar contenido actual
+        currentContentStore.updateCurrentContent(result.user_recipient.full_name, result.user_recipient.photo_url, 'Conversation');
+
+        // Crear un array de usuarios en la estructura deseada
+        const users = [
+            {
+                users: {
+                    id_user: result.user_send.id_user,
+                    full_name: result.user_send.full_name,
+                }
+            },
+            {
+                users: {
+                    id_user: result.user_recipient.id_user,
+                    full_name: result.user_recipient.full_name,
+                    photo_url: result.user_recipient.photo_url,
+                }
+            }
+        ];
+
+        // Actualizar usuarios en el contenido actual
+        currentContentStore.updateCurrentContentUsers(users);
+    } else {
+        // Manejar otros tipos de resultados
+        currentConversationStore.updateCurrentConversation(result.id_user, result.full_name);
+        currentContentStore.clearCurrentContentUsers();
+        currentContentStore.clearCurrentContent();
+        currentContentStore.updateCurrentContent(result.full_name, null, 'Conversation');
+
+        const users = [
+            {
+                users: {
+                    id_user: result.user_send.id_user,
+                    full_name: result.user_send.full_name,
+                }
+            }
+        ];
+
+        currentContentStore.updateCurrentContentUsers(users);
+    }
+
+    // Limpiar canal actual
+    currentChannelStore.clearCurrentChannel();
 }
+
 
 function isConversation(result) {
   return result && result.user_recipient !== undefined

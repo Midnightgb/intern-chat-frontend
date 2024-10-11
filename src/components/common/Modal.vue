@@ -94,6 +94,7 @@ const currentContentStore = useCurrentContentStore();
 
 const { user } = storeToRefs(authStore);
 const { currentContentName, currentContentPhoto, currentContentMessage, currentContentType, currentContentChannelId, currentContentUsers } = storeToRefs(currentContentStore);
+console.log("esta es la lista de usuarios", currentContentUsers);
 
 const isOpen = ref(false);
 
