@@ -22,7 +22,7 @@
           </button>
         </template>
         <fwb-list-group class="py-1">
-          <fwb-list-group-item class="cursor-pointer hover:bg-gray-600 transition-colors duration-300"
+          <fwb-list-group-item class="cursor-pointer hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors duration-300"
             v-for="option in pageSizeOptions" :key="option" @click="changePageSize(option)">
             {{ option }}
           </fwb-list-group-item>

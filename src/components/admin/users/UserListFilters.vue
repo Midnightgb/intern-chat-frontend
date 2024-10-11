@@ -14,10 +14,10 @@
             </button>
           </template>
           <fwb-list-group class="bg-white rounded-lg shadow dark:bg-gray-700">
-            <fwb-list-group-item @click="selectedFilters[filter.value] = !selectedFilters[filter.value]" class="cursor-pointer hover:bg-gray-600 transition-colors duration-300" v-for="filter in filters" :key="filter.value">
+            <fwb-list-group-item @click="selectedFilters[filter.value] = !selectedFilters[filter.value]" class="cursor-pointer hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors duration-300" v-for="filter in filters" :key="filter.value">
               <fwb-checkbox 
                 v-model="selectedFilters[filter.value]" 
-                class="cursor-pointer hover:bg-gray-600 transition-colors duration-300"
+                class="cursor-pointer hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors duration-300"
                 :value="filter.value" 
                 :label="filter.label" 
               />
