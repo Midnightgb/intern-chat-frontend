@@ -34,6 +34,7 @@
     <UserListPagination 
       :pagination="pagination" 
       @page-change="onPageChange"
+      @limit-change="onLimitChange"
     />
   </div>
 </template>
@@ -56,7 +57,7 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(['page-change'])
+const emit = defineEmits(['page-change', 'limit-change'])
 
 const activeFilters = ref({})
 
@@ -82,4 +83,9 @@ const filteredUsers = computed(() => {
 const onPageChange = (newPage) => {
   emit('page-change', newPage)
 }
+
+const onLimitChange = (newLimit) => {
+  emit('limit-change', newLimit)
+}
 </script>
+

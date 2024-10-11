@@ -1,7 +1,7 @@
 <template>
   <article class="relative">
     <HeaderTab title="Usuarios" description="Gestiona todos los usuarios existentes o añade uno nuevo">
-      <fwb-button>
+      <fwb-button @click="openModal">
         <template #prefix>
           <UserPlus />
         </template>
@@ -17,28 +17,42 @@
           :users="users" 
           :pagination="pagination" 
           @page-change="handlePageChange"
+          @limit-change="handleLimitChange"
         />
       </div>
     </section>
+    
+    <fwb-modal v-if="isShowModal" size="xl" position="center" @close="closeModal">
+      <template #header>
+        <h3 class="text-xl font-medium text-gray-900 dark:text-white">
+          Añadir nuevo usuario
+        </h3>
+      </template>
+      <template #body>
+        <UserForm @submit="handleFormSubmit" />
+      </template>
+    </fwb-modal>
   </article>
 </template>
 
 <script setup>
-import { getUsers } from '@services/api'
+import { getUsers, createUser } from '@services/api'
 import { ref, onMounted } from 'vue'
 import HeaderTab from '@components/common/HeaderTab.vue'
-import { FwbButton, FwbSpinner } from 'flowbite-vue'
+import { FwbButton, FwbSpinner, FwbModal } from 'flowbite-vue'
 import UserListTable from '@admin/users/UserListTable.vue'
+import UserForm from '@admin/users/UserForm.vue'
 import { UserPlus } from 'lucide-vue-next'
 
 const users = ref([])
 const pagination = ref({
   page: 1,
-  limit: 10,
+  limit: 20,
   total_pages: 1,
   total_users: 0
 })
 const isLoading = ref(false)
+const isShowModal = ref(false)
 
 onMounted(async () => {
   await fetchUsers()
@@ -65,4 +79,32 @@ async function fetchUsers(page = 1) {
 async function handlePageChange(newPage) {
   await fetchUsers(newPage)
 }
+
+function openModal() {
+  isShowModal.value = true
+}
+
+function closeModal () {
+  console.log('closeModal')
+  isShowModal.value = false
+}
+
+async function handleFormSubmit(formData) {
+  try {
+    isLoading.value = true
+    await createUser(formData)
+    isShowModal.value = false
+    await fetchUsers()
+  } catch (error) {
+    console.error('Error creating user:', error)
+  } finally {
+    isLoading.value = false
+  }
+}
+
+async function handleLimitChange(newLimit) {
+  pagination.value.limit = newLimit
+  await fetchUsers(1) // Reset to first page when changing limit
+}
 </script>
+
