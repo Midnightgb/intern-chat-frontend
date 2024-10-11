@@ -7,7 +7,7 @@
       <div v-if="user && user.role">
         <div class="flex items-center justify-center">
           <ToolTip
-            v-if="user.role === 'ADMIN'"
+            v-if="user.role === 'ADMIN' || user.role === 'SUPERADMIN'"
             triggerIcon="ShieldEllipsis"
             tooltipContent="Panel de administración"
             placement="right"
