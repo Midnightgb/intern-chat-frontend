@@ -86,7 +86,7 @@ export const updateMessage = (message) => apiClient.post(API_ENDPOINTS.UPDATE_ME
 export const deleteMessage = (messageId) => apiClient.post(API_ENDPOINTS.DELETE_MESSAGE, { id_message: messageId });
 // Users
 export const getUserByName = (network_user) => apiClient.get(API_ENDPOINTS.GET_USER_BY_NAME.replace(':network_user', network_user));
-export const getUsers = () => apiClient.get(API_ENDPOINTS.GET_USERS);
+export const getUsers = (page = 1, limit = 10) => apiClient.get(API_ENDPOINTS.GET_USERS, { params: { page, limit } });
 // Direct Messages
 export const getConversations = () => apiClient.get(API_ENDPOINTS.GET_CONVERSATIONS);
 export const postDirectMessage = (content) => apiClient.post(API_ENDPOINTS.CREATE_CONVERSATION, content);

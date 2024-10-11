@@ -58,7 +58,7 @@ const components = [
         <h2 class="text-3xl font-bold mb-6 text-gray-800 dark:text-white">
           {{ currentComponent }}
         </h2>
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+        <div class="">
           <component :is="components.find((c) => c.name === currentComponent).component" />
         </div>
       </main>
