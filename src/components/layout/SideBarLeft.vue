@@ -100,6 +100,8 @@ const filteredChannels = computed(() => {
   return channels.value.filter((channel) => channel.status_channel)
 })
 
+const { handleAdminPanel } = useAuthHandlers()
+
 onMounted(() => {
   channelStore.initializeStore()
   const intervalId = setInterval(() => {
@@ -113,7 +115,8 @@ onMounted(() => {
 })
 
 const adminPanel = () => {
-  useAuthHandlers().handleAdminPanel()
+  console.log('adminPanel')
+  handleAdminPanel(true)
 }
 
 const onChannelClick = (channel) => {

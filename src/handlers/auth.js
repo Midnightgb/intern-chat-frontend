@@ -27,8 +27,15 @@ export const useAuthHandlers = () => {
     }
   }
 
-  const handleAdminPanel = () => {
-    router.push('/admin')
+  const handleAdminPanel = (isAdminViewOpen) => {
+    console.log('handleAdminPanel', isAdminViewOpen)
+    if (isAdminViewOpen) {
+      console.log('isAdminViewOpen true')
+      router.push({ name: 'AdminPanel' })
+    } else {
+      console.log('isAdminViewOpen false')
+      router.push({ name: 'Panel' })  
+    }
   }
 
   return {

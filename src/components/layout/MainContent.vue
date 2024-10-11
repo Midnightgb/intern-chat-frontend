@@ -34,13 +34,14 @@
 <script setup>
 import { storeToRefs } from 'pinia'
 import { onMounted, onUnmounted, computed, watch } from 'vue'
-import {  } from 'vue'
+
 // Services
 import { socketService } from '@services/socketService'
 // Stores
 import { useCurrentChannelStore } from '@stores/channels/currentChannelStore'
 import { useCurrentConversationStore } from '@stores/conversations/currentConversationStore'
 import { useMessageStore } from '@stores/messages/messageStore'
+import { useAuthStore } from '@stores/auth'
 // Components
 import { FwbSpinner } from 'flowbite-vue'
 import MessageInput from '@components/chat/MessageInput.vue'
@@ -54,9 +55,13 @@ const messageStore = useMessageStore()
 const { currentChannelId, currentChannelName } = storeToRefs(currentChannelStore)
 const { currentConversationId, currentConversationName } = storeToRefs(currentConversationStore)
 const isLoadingMessages = computed(() => messageStore.loadingMessages)
+const authStore = useAuthStore()
 
 onMounted(() => {
-  socketService.getConversations()
+  authStore.checkAuth();
+  if (authStore.isAuthenticated) {
+    socketService.connect();
+  }  socketService.getConversations()
 
 })
 
