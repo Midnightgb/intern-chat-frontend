@@ -28,6 +28,7 @@
 
 <script setup>
 import ConversationItem from '@components/chat/ConversationItem.vue'
+import { useCurrentContentStore } from '@stores/messages/contentStore'
 
 defineProps({
   conversations: Array,
@@ -35,12 +36,15 @@ defineProps({
 })
 
 const emit = defineEmits(['select'])
+const currentContentStore = useCurrentContentStore()
 
 function getKey(conversation) {
   return conversation.user_recipient ? conversation.user_recipient.id_user : conversation.id_user
 }
 
 function handleSelect(conversation) {
+  currentContentStore.clearCurrentContent();
+  currentContentStore.updateCurrentContent(conversation.user_recipient?.full_name, conversation.user_recipient?.photo_url, 'Conversation');
   emit('select', conversation)
 }
 </script>

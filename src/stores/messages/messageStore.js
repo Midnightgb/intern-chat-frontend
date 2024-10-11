@@ -1,6 +1,7 @@
 // src/stores/messages/messageStore.js
 import { defineStore } from 'pinia';
 import { updateMessage as updateMessageApi, deleteMessage as deleteMessageApi, updateConversation as updateConversationApi, deleteConversation as deleteConversationApi } from '@/services/api';
+import { useCurrentContentStore } from '@stores/messages/contentStore'
 
 var errorMessage;
 export const useMessageStore = defineStore('message', {
@@ -14,6 +15,9 @@ export const useMessageStore = defineStore('message', {
   actions: {
     async setMessages(messages) {
       console.log('Setting messages:', messages);
+      const currentContentStore = useCurrentContentStore();
+      currentContentStore.updateCurrentContentMessage(messages.length)
+
       this.messages = messages;
     },
     addMessage(message) {

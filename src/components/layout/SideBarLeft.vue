@@ -83,6 +83,7 @@ import { useChannelStore } from '@stores/channels/channelStore'
 import { useCurrentChannelStore } from '@stores/channels/currentChannelStore'
 import { useCurrentConversationStore } from '@stores/conversations/currentConversationStore'
 import { useAuthStore } from '@stores/auth'
+import { useCurrentContentStore } from '@stores/messages/contentStore'
 
 // Handlers
 import { useAuthHandlers } from '@handlers/auth'
@@ -93,6 +94,7 @@ import ToolTip from '@components/common/ToolTip.vue'
 const channelStore = useChannelStore()
 const currentChannelStore = useCurrentChannelStore()
 const currentConversationStore = useCurrentConversationStore()
+const currentContentStore = useCurrentContentStore()
 const authStore = useAuthStore()
 const { channels, loading: loadingChannels, error } = storeToRefs(channelStore)
 const { user } = storeToRefs(authStore)
@@ -117,6 +119,12 @@ const adminPanel = () => {
 }
 
 const onChannelClick = (channel) => {
+  // Log para registrar el clic en el canal con más información
+  currentContentStore.clearCurrentContent();
+  currentContentStore.clearCurrentContentChannelId();
+  currentContentStore.updateCurrentContentChannelId(channel.id_channel);
+  currentContentStore.updateCurrentContent(channel.name, channel.image_channel,'Channel');
+
   currentChannelStore.updateCurrentChannel(channel.id_channel, channel.name)
   currentConversationStore.clearCurrentConversation()
 }

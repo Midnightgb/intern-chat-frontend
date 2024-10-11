@@ -89,5 +89,6 @@ export const getConversations = () => apiClient.get(API_ENDPOINTS.GET_CONVERSATI
 export const getUserByName = (network_user) => apiClient.get(API_ENDPOINTS.GET_USER_BY_NAME.replace(':network_user', network_user));
 export const postDirectMessage = (content) => apiClient.post(API_ENDPOINTS.CREATE_CONVERSATION, content);
 export const getPermissions = (id_user) => apiClient.post(API_ENDPOINTS.GET_PRIVILEGES, { id_user });
+export const getUsersChannels = (id) => apiClient.get(API_ENDPOINTS.GET_USERS_CHANNEL.replace(':id', id));
 
 export default apiClient;
