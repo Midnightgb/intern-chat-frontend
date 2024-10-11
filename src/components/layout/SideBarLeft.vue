@@ -4,11 +4,22 @@
     class="bg-background dark:bg-gray-800 border-r border-gray-300 dark:border-gray-700 flex flex-col items-center gap-2 w-16 h-screen"
   >
     <div class="flex flex-col items-center gap-2 w-full h-full bg-gray-100 dark:bg-gray-800">
-      <button class="rounded-lg p-2 w-full hover:bg-gray-200 dark:hover:bg-gray-700" @click="onPrimaryButtonClick">
+      <div v-if="user && user.role">
         <div class="flex items-center justify-center">
-          <CircleDot class="text-gray-600 dark:text-gray-300" />
+          <ToolTip
+            v-if="user.role === 'ADMIN'"
+            triggerIcon="ShieldEllipsis"
+            tooltipContent="Panel de administración"
+            placement="right"
+            :pill="true"
+            :square="true"
+            class="p-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer"
+            @click="adminPanel"
+            :showOnParent="true"
+          >
+          </ToolTip>
         </div>
-      </button>
+      </div>
       <div
         class="flex flex-col items-center p-2 gap-2 w-full flex-grow overflow-y-auto hide-scrollbar snap-y snap-mandatory bg-gray-100 dark:bg-gray-800"
       >
@@ -28,7 +39,9 @@
         </template>
         <!-- Mostrar mensaje de error si hay uno -->
         <template v-else-if="error">
-          <div class="flex items-center justify-center w-full snap-always snap-start bg-gray-100 dark:bg-gray-800">
+          <div
+            class="flex items-center justify-center w-full snap-always snap-start bg-gray-100 dark:bg-gray-800"
+          >
             <span class="text-red-500 dark:text-red-400">Error: {{ error }}</span>
           </div>
         </template>
@@ -69,16 +82,20 @@ import { onMounted, onUnmounted, computed } from 'vue'
 import { useChannelStore } from '@stores/channels/channelStore'
 import { useCurrentChannelStore } from '@stores/channels/currentChannelStore'
 import { useCurrentConversationStore } from '@stores/conversations/currentConversationStore'
+import { useAuthStore } from '@stores/auth'
+
+// Handlers
+import { useAuthHandlers } from '@handlers/auth'
+
 // Components
 import ToolTip from '@components/common/ToolTip.vue'
-import { CircleDot } from 'lucide-vue-next'
 
 const channelStore = useChannelStore()
 const currentChannelStore = useCurrentChannelStore()
 const currentConversationStore = useCurrentConversationStore()
-
+const authStore = useAuthStore()
 const { channels, loading: loadingChannels, error } = storeToRefs(channelStore)
-
+const { user } = storeToRefs(authStore)
 const filteredChannels = computed(() => {
   return channels.value.filter((channel) => channel.status_channel)
 })
@@ -95,8 +112,8 @@ onMounted(() => {
   })
 })
 
-const onPrimaryButtonClick = () => {
-  console.log('Primary button clicked')
+const adminPanel = () => {
+  useAuthHandlers().handleAdminPanel()
 }
 
 const onChannelClick = (channel) => {
@@ -107,13 +124,14 @@ const onChannelClick = (channel) => {
 
 <style lang="scss">
 @import '@/assets/sidebar-scrollbar.css';
+
 .custom-avatar-loader .v-skeleton-loader__avatar {
   max-height: 42px !important;
   min-height: 42px !important;
 
   max-width: 42px !important;
   min-width: 42px !important;
-  
+
   width: 42px !important;
   height: 42px !important;
 }

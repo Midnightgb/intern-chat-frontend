@@ -39,7 +39,7 @@
               <span class="sr-only">Cerrar</span>
             </button>
           </div>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div v-if="user" class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div class="space-y-6">
               <div class="flex items-center space-x-4">
                 <!-- Avatar -->
@@ -205,9 +205,9 @@ const { user } = storeToRefs(authStore)
 
 const isOpen = ref(false)
 const loading = ref(true)
-const name = ref(user.value.name)
-const type = ref(user.value.role)
-const network_user = ref(user.value.networkUser)
+const name = ref(user.value?.name)
+const type = ref(user.value?.role)
+const network_user = ref(user.value?.networkUser)
 const permissions_list = ref([])
 const error_message = ref('')
 
@@ -231,9 +231,11 @@ watchEffect(() => {
 
 onMounted(async () => {
   try {
-    const permissions = await getPermissions(user.value.id)
-    permissions.value = permissions.data.role_permission
-    permissions_list.value = permissions.value.map((permission) => permission.Permissions)
+    if (user.value?.id) {
+      const permissions = await getPermissions(user.value.id)
+      permissions.value = permissions.data.role_permission
+      permissions_list.value = permissions.value.map((permission) => permission.Permissions)
+    }
     loading.value = false
   } catch (error) {
     error_message.value = 'Error al cargar los permisos'

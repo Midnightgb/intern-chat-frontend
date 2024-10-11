@@ -27,8 +27,13 @@ export const useAuthHandlers = () => {
     }
   }
 
+  const handleAdminPanel = () => {
+    router.push('/admin')
+  }
+
   return {
     handleLogout,
-    handleLoginSuccess
+    handleLoginSuccess,
+    handleAdminPanel
   }
 }
