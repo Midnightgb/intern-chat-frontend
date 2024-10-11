@@ -18,7 +18,7 @@ export const API_ENDPOINTS = {
   LOGOUT: `${BASE_AUTH}/logout`, // ready
 
   // Usuarios
-  GET_USERS: `${BASE_USER}/users`, // not ready
+  GET_USERS: `${BASE_USER}/users`, // ready
   GET_USER_BY_ID: `${BASE_USER}/find_user/:id`, // not ready
   GET_USER_BY_NAME: `${BASE_USER}/find_user_name/:network_user`, // ready
   CREATE_USER: `${BASE_USER}/create_user`, // not ready
