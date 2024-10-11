@@ -11,7 +11,7 @@
         <div class="flex items-center justify-between">
           <span class="relative flex shrink-0 overflow-hidden rounded-full w-8 h-8">
             <img
-              v-if="userPhotoUrl"
+              v-if="userPhotoUrl && user"
               class="aspect-square h-full w-full"
               alt="User Avatar"
               :src="userPhotoUrl"
@@ -21,7 +21,7 @@
               <CircleUserRound size="32" class="text-gray-600 dark:text-gray-300" />
             </span>
           </span>
-          <div class="text-sm font-medium inline capitalize text-gray-800 dark:text-gray-200">{{ user.networkUser }}</div>
+          <div v-if="user && user.networkUser" class="text-sm font-medium inline capitalize text-gray-800 dark:text-gray-200">{{ user.networkUser }}</div>
           <ProfileModal />
         </div>
       </div>
@@ -62,7 +62,9 @@ const authStore = useAuthStore()
 const currentUserStore = useCurrentUserStore()
 const { user } = storeToRefs(authStore)
 
-currentUserStore.updateCurrentUser(user.value.id)
+if (user.value && user.value.id) {
+  currentUserStore.updateCurrentUser(user.value.id)
+}
 
 const userPhotoUrl = ref(null)
 

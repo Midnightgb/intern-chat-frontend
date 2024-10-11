@@ -40,12 +40,17 @@ export const useAuthStore = defineStore('auth', {
       try {
         await apiLogout()
       } catch (error) {
-        console.error('Error durante el logout del servidor:', error)
+        console.error('Error during server logout:', error)
       } finally {
-        // Limpiar la sesión independientemente del resultado de la API
+        // Clean up session regardless of API result
         cleanupSession()
         socketService.disconnect()
         currentUserStore.clearCurrentUser()
+
+        // Reset auth store state
+        this.isAuthenticated = false
+        this.user = null
+        this.token = null
       }
     },
     checkAuth() {

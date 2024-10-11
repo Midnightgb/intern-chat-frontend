@@ -35,7 +35,6 @@ const route = useRoute()
 const authStore = useAuthStore()
 
 const showAuthContent = computed(() => {
-  console.log(authStore.user)
   return authStore.isAuthenticated && route.name !== 'login'
 })
 </script>

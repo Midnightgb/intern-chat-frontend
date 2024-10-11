@@ -8,6 +8,7 @@ export const ROUTES = {
 
   // Rutas privadas
   DASHBOARD: '/home',
+  ADMIN: '/admin',
   
   // Rutas usuario
   USERS: '/usuarios',

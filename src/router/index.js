@@ -5,7 +5,7 @@ import { useAuthStore } from '@stores/auth'
 
 const login = () => import('@/views/auth/LoginView.vue')
 const home = () => import('@/views/home/HomeView.vue')
-
+const admin = () => import('@/views/admin/AdminView.vue')
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -25,6 +25,14 @@ const router = createRouter({
       path: ROUTES.DASHBOARD,
       name: 'Panel',
       component: home,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: ROUTES.ADMIN,
+      name: 'Admin',
+      component: admin,
       meta: {
         requiresAuth: true
       }
