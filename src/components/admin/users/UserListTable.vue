@@ -31,6 +31,10 @@
         </tbody>
       </table>
     </div>
+    <UserListPagination 
+      :pagination="pagination" 
+      @page-change="onPageChange"
+    />
   </div>
 </template>
 
@@ -39,13 +43,20 @@ import { ref, computed } from 'vue'
 import TruncatedContent from '@components/common/TruncatedContent.vue'
 import UserListActions from './UserListActions.vue'
 import UserListFilters from './UserListFilters.vue'
+import UserListPagination from './UserListPagination.vue'
 
 const props = defineProps({
   users: {
     type: Array,
     required: true
+  },
+  pagination: {
+    type: Object,
+    required: true
   }
 })
+
+const emit = defineEmits(['page-change'])
 
 const activeFilters = ref({})
 
@@ -67,4 +78,8 @@ const filteredUsers = computed(() => {
     return true
   })
 })
+
+const onPageChange = (newPage) => {
+  emit('page-change', newPage)
+}
 </script>

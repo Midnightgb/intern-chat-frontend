@@ -8,15 +8,19 @@
       <span class="font-semibold text-gray-900 dark:text-white">{{ pagination.total_users }}</span>
     </span>
     <ul class="inline-flex items-stretch -space-x-px">
-      <fwb-pagination v-model="currentPage" :total-pages="pagination.total_pages" show-icons/>
+      <fwb-pagination 
+        v-model="currentPage" 
+        :total-pages="pagination.total_pages" 
+        show-icons
+        @update:modelValue="onPageChange"
+      />
     </ul>
   </nav>
 </template>
 
 <script setup>
-import { defineProps } from 'vue'
+import { defineProps, defineEmits, ref, watch } from 'vue'
 import { FwbPagination } from 'flowbite-vue'
-import { ref } from 'vue'
 
 const props = defineProps({
   pagination: {
@@ -25,7 +29,15 @@ const props = defineProps({
   }
 })
 
+const emit = defineEmits(['page-change'])
+
 const currentPage = ref(props.pagination.page)
 
-</script>
+watch(() => props.pagination.page, (newPage) => {
+  currentPage.value = newPage
+})
 
+function onPageChange(newPage) {
+  emit('page-change', newPage)
+}
+</script>
