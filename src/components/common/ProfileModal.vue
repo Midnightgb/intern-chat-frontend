@@ -202,9 +202,8 @@ import { CircleUserRound } from 'lucide-vue-next'
 
 const authStore = useAuthStore()
 const { user } = storeToRefs(authStore)
-console.log(user.value)
 
-const isOpen = ref(true)
+const isOpen = ref(false)
 const loading = ref(true)
 const name = ref(user.value.name)
 const type = ref(user.value.role)
