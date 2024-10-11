@@ -4,9 +4,11 @@ import { useVuelidate } from '@vuelidate/core'
 import { authValidators } from '@utils/validators'
 import { login as apiLogin } from '@services/api'
 import { useAuthStore } from '@stores/auth'
+import { useCurrentUserStore } from '@stores/user/currentUserStore'
 
 export default function useLogin() {
   const authStore = useAuthStore()
+  const currentUserStore = useCurrentUserStore()
 
   const state = reactive({
     network_user: '',
@@ -33,6 +35,7 @@ export default function useLogin() {
           data: response.data.user
         }
         authStore.login(data, response.data.token)
+        currentUserStore.updateCurrentUserRole(response.data.role)
 
         return true
       } catch (err) {
