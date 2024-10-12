@@ -29,7 +29,7 @@
         </h3>
       </template>
       <template #body>
-        <UserForm @submit="handleFormSubmit" />
+        <UserForm @submit="handleFormSubmit" :close-modal="closeModal" />
       </template>
     </fwb-modal>
   </article>
