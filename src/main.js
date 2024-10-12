@@ -8,6 +8,7 @@ import pinia from '@/plugins/pinia'
 
 // Styles
 import '@assets/main.css'
+import 'sweetalert2/dist/sweetalert2.min.css';
 import '../node_modules/flowbite-vue/dist/index.css'
 import '../node_modules/flowbite/dist/flowbite.min.js'
 
