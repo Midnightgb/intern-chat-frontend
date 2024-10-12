@@ -11,15 +11,23 @@ export function cleanupSession() {
   const messageStore = useMessageStore()
   const currentChannelStore = useCurrentChannelStore()
 
-  // Limpiar la cookie de sesión
+  // Retrieve the current theme
+  const currentTheme = localStorage.getItem('userTheme')
+
+  // Clear the session cookie
   authStore.clearSessionCookie()
 
-  // Restablecer todos los stores
+  // Reset all stores
   authStore.$reset()
   channelStore.$reset()
   messageStore.$reset()
   currentChannelStore.$reset()
 
-  // Limpiar el localStorage
+  // Clear the localStorage
   localStorage.clear()
+
+  // Set the theme back to localStorage
+  if (currentTheme) {
+    localStorage.setItem('userTheme', currentTheme)
+  }
 }
