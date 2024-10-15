@@ -26,6 +26,9 @@ export const useAuthStore = defineStore('auth', {
       this.token = token
       this.setSessionCookie(token)
 
+      // Guardar el usuario en el almacenamiento local
+      localStorage.setItem('user', JSON.stringify(this.user))
+
       // Reconectar el socket con el nuevo token
       socketService.disconnect()
       socketService.connect()
@@ -51,15 +54,22 @@ export const useAuthStore = defineStore('auth', {
         this.isAuthenticated = false
         this.user = null
         this.token = null
+
+        // Eliminar el usuario del almacenamiento local
+        localStorage.removeItem('user')
       }
     },
     checkAuth() {
       const token = this.getSessionCookie()
       if (token) {
-        // Aquí verificar el token con el backend
-        // Por ahora, solo estableceremos isAuthenticated a true
         this.isAuthenticated = true
         this.token = token
+        
+        // Recuperar el usuario del almacenamiento local
+        const storedUser = localStorage.getItem('user')
+        if (storedUser) {
+          this.user = JSON.parse(storedUser)
+        }
       } else {
         this.isAuthenticated = false
         this.user = null

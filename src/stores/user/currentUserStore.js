@@ -18,5 +18,11 @@ export const useCurrentUserStore = defineStore('currentUserStore', {
     updateCurrentUserRole(role) {
       this.currentUserRole = role; 
     },
+    initializeFromAuth(user) {
+      if (user) {
+        this.currentUserId = user.id;
+        this.currentUserRole = user.role;
+      }
+    }
   },
 });

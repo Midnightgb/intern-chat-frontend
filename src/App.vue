@@ -17,7 +17,8 @@
 <script setup>
 import { onMounted, computed } from 'vue'
 import { RouterView, useRoute } from 'vue-router'
-import { useAuthStore } from '@stores/auth'
+import { useAuthStore } from '@/stores/auth'
+import { useCurrentUserStore } from '@/stores/user/currentUserStore'
 import { initFlowbite } from 'flowbite'
 import { theme, toggleTheme } from '@utils/themeUtils';
 
@@ -28,8 +29,15 @@ onMounted(() => {
 
 const route = useRoute()
 const authStore = useAuthStore()
+const currentUserStore = useCurrentUserStore()
+
+authStore.checkAuth()
+if (authStore.user) {
+  currentUserStore.initializeFromAuth(authStore.user)
+}
 
 const showAuthContent = computed(() => {
   return authStore.isAuthenticated && route.name !== 'login'
 })
 </script>
+

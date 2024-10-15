@@ -27,8 +27,12 @@
                                 <!-- Avatar -->
                                 <span
                                     class="h-24 w-24 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center text-gray-500 dark:text-gray-300 text-2xl font-bold">
-                                    <ImageLoader v-if="currentContentName" :src="currentContentPhoto"
-                                        class="aspect-square h-full w-full" />
+                                    
+                                    <ImageLoader 
+                                        v-if="currentContentName" 
+                                        :message="{ photo_url: currentContentPhoto }"
+                                        class="aspect-square h-full w-full" 
+                                    />
                                     <CircleUserRound v-else size="32" class="aspect-square h-full w-full" />
                                 </span>
                                 <!-- Nombre -->
@@ -131,3 +135,4 @@ watchEffect(() => {
     }
 });
 </script>
+
