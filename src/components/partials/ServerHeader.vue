@@ -5,11 +5,6 @@
       <h2 class="text-xl font-bold text-gray-800 dark:text-gray-200">{{ serverName }}</h2>
     </div>
     <div class="flex items-center gap-2">
-      <button
-        class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-10 w-10 dark:text-gray-300 dark:hover:bg-gray-700"
-      >
-        <Search />
-      </button>
 
       <Modal v-if="openModal" />
 
@@ -25,7 +20,7 @@
 
 <script setup>
 import { computed } from 'vue'
-import { Server, X, Search } from 'lucide-vue-next'
+import { Server, X } from 'lucide-vue-next'
 import { useCurrentConversationStore } from '@stores/conversations/currentConversationStore'
 import { useCurrentChannelStore } from '@stores/channels/currentChannelStore'
 import { useCurrentUserStore } from '@stores/user/currentUserStore'

@@ -19,7 +19,6 @@
                         </button>
                     </div>
 
-                    <!-- Aquí dividimos en dos columnas -->
                     <div v-if="user" class="flex gap-6">
                         <!-- Columna izquierda (información principal) -->
                         <div class="space-y-6 flex-1">
@@ -27,7 +26,6 @@
                                 <!-- Avatar -->
                                 <span
                                     class="h-24 w-24 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center text-gray-500 dark:text-gray-300 text-2xl font-bold">
-                                    
                                     <ImageLoader 
                                         v-if="currentContentPhoto" 
                                         :message="{ photo_url: currentContentPhoto }"
@@ -62,16 +60,47 @@
                                     class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 dark:bg-gray-700 dark:text-white" />
                             </div>
 
-                            <!-- Botón Limpiar Chat solo para SUPERADMIN -->
-                            <div v-if="isSuperAdmin" class="space-y-2">
+                            <!-- Botón Limpiar Chat solo para canales -->
+                            <div v-if="currentContentType === 'Channel'" class="space-y-2">
                                 <button
                                     class="mt-4 w-full bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600"
-                                    @click="clearChat">
+                                    @click="showDateInputs = true">
                                     Limpiar Chat
                                 </button>
                             </div>
-                        </div>
 
+                            <!-- Inputs para fechas -->
+                            <div v-if="showDateInputs" class="space-y-4 mt-4">
+                                <div class="flex space-x-4">
+                                    <div class="flex-1">
+                                        <label for="startDate" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Fecha Inicio (DD-MM-YYYY)</label>
+                                        <input 
+                                            id="startDate" 
+                                            v-model="startDate" 
+                                            type="text"
+                                            placeholder="DD-MM-YYYY"
+                                            @input="formatDateInput('start')"
+                                            class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 dark:bg-gray-700 dark:text-white" 
+                                        />
+                                    </div>
+                                    <div class="flex-1">
+                                        <label for="endDate" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Fecha Final (DD-MM-YYYY)</label>
+                                        <input 
+                                            id="endDate" 
+                                            v-model="endDate" 
+                                            type="text"
+                                            placeholder="DD-MM-YYYY"
+                                            @input="formatDateInput('end')"
+                                            class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 dark:bg-gray-700 dark:text-white" 
+                                        />
+                                    </div>
+                                </div>
+                                <div class="flex justify-between mt-4">
+                                    <button @click="confirmDates" class="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600">Confirmar</button>
+                                    <button @click="cancelDates" class="bg-gray-500 text-white py-2 px-4 rounded hover:bg-gray-600">Cancelar</button>
+                                </div>
+                            </div>
+                        </div>
                         <!-- Columna derecha (lista de usuarios) -->
                         <div class="flex-1 space-y-4">
                             <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Usuarios</h3>
@@ -96,21 +125,21 @@
 import { ref, watchEffect, computed } from 'vue';
 import ToolTip from '@components/common/ToolTip.vue';
 import { useAuthStore } from '@stores/auth';
-import { useCurrentUserStore } from '@stores/user/currentUserStore'
-
 import { useCurrentContentStore } from '@stores/messages/contentStore';
 import { storeToRefs } from 'pinia';
 import ImageLoader from '@components/common/AvatarLoader.vue';
 import { CircleUserRound } from 'lucide-vue-next';
 
 const authStore = useAuthStore();
-const currentUserStore = useCurrentUserStore()
 const currentContentStore = useCurrentContentStore();
 
 const { user } = storeToRefs(authStore);
 const { currentContentName, currentContentPhoto, currentContentMessage, currentContentType, currentContentChannelId, currentContentUsers } = storeToRefs(currentContentStore);
 
 const isOpen = ref(false);
+const showDateInputs = ref(false); // Para controlar la visualización de los inputs de fecha
+const startDate = ref(''); // Para almacenar la fecha de inicio
+const endDate = ref(''); // Para almacenar la fecha final
 
 const totalIntegrantes = computed(() => {
     return currentContentType.value === 'Conversation' ? 2 : currentContentMessage.value;
@@ -120,13 +149,53 @@ const headerTitle = computed(() => {
     return currentContentType.value === 'Conversation' ? 'Información de la conversación' : 'Información del canal';
 });
 
-// Comprobamos si el usuario es SUPERADMIN
-const isSuperAdmin = computed(() => currentUserStore.currentUserRole === 'SUPERADMIN');
-// Función para limpiar el chat (solo si es SUPERADMIN)
-function clearChat() {
-    if (isSuperAdmin.value) {
-        console.log('Limpia el chat');
+
+function confirmDates() {
+    // Validar el formato de las fechas
+    if (!isValidDateFormat(startDate.value) || !isValidDateFormat(endDate.value)) {
+        alert('Por favor, introduce las fechas en el formato DD-MM-YYYY y sin letras.');
+        return;
     }
+
+    console.log('Fechas confirmadas:', startDate.value, endDate.value);
+    // Aquí puedes agregar la lógica que necesites para manejar las fechas.
+    showDateInputs.value = false; // Cerrar el formulario de fechas.
+}
+
+
+function cancelDates() {
+    showDateInputs.value = false; // Cerrar el formulario de fechas.
+}
+
+function formatDateInput(type) {
+    let inputValue = type === 'start' ? startDate.value : endDate.value;
+
+    // Eliminar caracteres no permitidos
+    inputValue = inputValue.replace(/[^0-9-]/g, '');
+
+    // Formatear la entrada para agregar guiones automáticamente
+    if (inputValue.length > 10) {
+        inputValue = inputValue.slice(0, 10);
+    } else {
+        if (inputValue.length > 2 && inputValue.charAt(2) !== '-') {
+            inputValue = inputValue.slice(0, 2) + '-' + inputValue.slice(2);
+        }
+        if (inputValue.length > 5 && inputValue.charAt(5) !== '-') {
+            inputValue = inputValue.slice(0, 5) + '-' + inputValue.slice(5);
+        }
+    }
+
+    // Actualizar el valor del input correspondiente
+    if (type === 'start') {
+        startDate.value = inputValue;
+    } else {
+        endDate.value = inputValue;
+    }
+}
+
+function isValidDateFormat(dateString) {
+    const regex = /^(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[0-2])-(\d{4})$/; // Formato DD-MM-YYYY
+    return regex.test(dateString);
 }
 
 const uniqueUsers = computed(() => {

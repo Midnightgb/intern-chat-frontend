@@ -41,7 +41,7 @@ export const useMessageStore = defineStore('message', {
           const response = await updateApi(updatedMessage);
           
           if (response) {
-          
+            console.log(`Updated ${errorMessage} in backend`);
           } else {
             console.error(`Failed to update ${errorMessage} in backend`);
           }
