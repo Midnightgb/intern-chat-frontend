@@ -11,7 +11,7 @@
         <Search />
       </button>
 
-      <Modal v-if="isAdmin" />
+      <Modal v-if="openModal" />
 
       <button
         class="ml-auto p-2 rounded-full hover:bg-slate-200 hover:text-red-500 dark:hover:bg-gray-700 dark:hover:text-red-400"
@@ -24,18 +24,18 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { computed } from 'vue'
 import { Server, X, Search } from 'lucide-vue-next'
 import { useCurrentConversationStore } from '@stores/conversations/currentConversationStore'
 import { useCurrentChannelStore } from '@stores/channels/currentChannelStore'
 import { useCurrentUserStore } from '@stores/user/currentUserStore'
-import Modal from '@components/common/Modal.vue'
+import Modal from '@components/common/ModalChats.vue'
 
 // Inicializa tus stores
 const currentConversationStore = useCurrentConversationStore()
 const currentChannelStore = useCurrentChannelStore()
 const currentUserStore = useCurrentUserStore() 
-const isAdmin = computed(() => currentUserStore.currentUserRole === 'ADMIN')
+const openModal = computed(() => currentUserStore.currentUserRole === 'ADMIN' || currentUserStore.currentUserRole === 'SUPERADMIN')
 
 function handleCloseChat() {
   currentConversationStore.clearCurrentConversation()

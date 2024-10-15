@@ -8,7 +8,7 @@ export const useCurrentUserStore = defineStore('currentUserStore', {
     currentUserRole: null,
   }),
   actions: {
-    updateCurrentUser(id, role) {
+    updateCurrentUser(id) {
       this.currentUserId = id;
     },
     clearCurrentUser() {

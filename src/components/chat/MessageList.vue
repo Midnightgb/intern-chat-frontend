@@ -99,10 +99,13 @@ import DropDown from '@components/common/DropDown.vue'
 import NewMessageNotification from '@components/common/NewMessageNotification.vue'
 import ImageLoader from '@components/common/AvatarLoader.vue'
 
+
+
 // Stores
 const messageStore = useMessageStore()
 const { messages } = storeToRefs(messageStore)
-const { currentUserId } = storeToRefs(useCurrentUserStore())
+const { currentUserId, currentUserRole  } = storeToRefs(useCurrentUserStore())
+
 
 // Refs
 const messageContainer = ref(null)
@@ -111,6 +114,9 @@ const showNewMessageNotification = ref(false)
 const editingMessage = ref(null)
 const editedContent = ref('')
 const deletingMessage = ref(null)
+
+
+console.log("este es el rol actual", currentUserRole.value)
 
 // Computed
 const computedMessages = computed(() => 

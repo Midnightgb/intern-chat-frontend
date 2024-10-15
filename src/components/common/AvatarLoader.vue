@@ -40,6 +40,8 @@ const error = ref(false)
 const cachedAvatarSrc = ref(null)
 
 const avatarSrc = computed(() => {
+  console.log("este es el mensaje", props.message);
+  
   return getUserAvatar(
     props.message,
     props.message.user_recipient ? 'user_recipient' : props.message.users ? 'users' : props.message.photo_url ? 'photo_url' : 'users_send'

@@ -57,6 +57,15 @@
                                 <input id="memberCount" :value="totalIntegrantes" type="text" disabled
                                     class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 dark:bg-gray-700 dark:text-white" />
                             </div>
+
+                            <!-- Botón Limpiar Chat solo para SUPERADMIN -->
+                            <div v-if="isSuperAdmin" class="space-y-2">
+                                <button
+                                    class="mt-4 w-full bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600"
+                                    @click="clearChat">
+                                    Limpiar Chat
+                                </button>
+                            </div>
                         </div>
 
                         <!-- Columna derecha (lista de usuarios) -->
@@ -73,7 +82,6 @@
                             </ul>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
@@ -94,7 +102,6 @@ const currentContentStore = useCurrentContentStore();
 
 const { user } = storeToRefs(authStore);
 const { currentContentName, currentContentPhoto, currentContentMessage, currentContentType, currentContentChannelId, currentContentUsers } = storeToRefs(currentContentStore);
-console.log("esta es la lista de usuarios", currentContentUsers);
 
 const isOpen = ref(false);
 
@@ -105,6 +112,16 @@ const totalIntegrantes = computed(() => {
 const headerTitle = computed(() => {
     return currentContentType.value === 'Conversation' ? 'Información de la conversación' : 'Información del canal';
 });
+
+// Comprobamos si el usuario es SUPERADMIN
+const isSuperAdmin = computed(() => authStore.currentUserRole === 'SUPERADMIN');
+
+// Función para limpiar el chat (solo si es SUPERADMIN)
+function clearChat() {
+    if (isSuperAdmin.value) {
+        console.log('Clearing chat...');
+    }
+}
 
 watchEffect(() => {
     if (isOpen.value && currentContentType.value === 'Channel' && currentContentChannelId.value) {
