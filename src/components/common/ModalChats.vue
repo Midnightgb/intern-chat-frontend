@@ -29,7 +29,7 @@
                                     class="h-24 w-24 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center text-gray-500 dark:text-gray-300 text-2xl font-bold">
                                     
                                     <ImageLoader 
-                                        v-if="currentContentName" 
+                                        v-if="currentContentPhoto" 
                                         :message="{ photo_url: currentContentPhoto }"
                                         class="aspect-square h-full w-full" 
                                     />
@@ -79,7 +79,7 @@
                                 <p>Cargando usuarios...</p>
                             </div>
                             <ul v-else class="space-y-2">
-                                <li v-for="(user, index) in currentContentUsers" :key="index"
+                                <li v-for="(user, index) in uniqueUsers" :key="index"
                                     class="p-3 bg-gray-100 dark:bg-gray-700 rounded-md shadow-sm dark:text-white">
                                     {{ user.users.full_name }}
                                 </li>
@@ -126,6 +126,16 @@ function clearChat() {
         console.log('Clearing chat...');
     }
 }
+
+const uniqueUsers = computed(() => {
+    const userMap = new Map();
+    currentContentUsers.value.forEach(user => {
+        if (!userMap.has(user.users.id_user)) {
+            userMap.set(user.users.id_user, user);
+        }
+    });
+    return Array.from(userMap.values());
+});
 
 watchEffect(() => {
     if (isOpen.value && currentContentType.value === 'Channel' && currentContentChannelId.value) {
