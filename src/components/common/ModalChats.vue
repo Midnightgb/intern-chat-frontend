@@ -96,12 +96,15 @@
 import { ref, watchEffect, computed } from 'vue';
 import ToolTip from '@components/common/ToolTip.vue';
 import { useAuthStore } from '@stores/auth';
+import { useCurrentUserStore } from '@stores/user/currentUserStore'
+
 import { useCurrentContentStore } from '@stores/messages/contentStore';
 import { storeToRefs } from 'pinia';
 import ImageLoader from '@components/common/AvatarLoader.vue';
 import { CircleUserRound } from 'lucide-vue-next';
 
 const authStore = useAuthStore();
+const currentUserStore = useCurrentUserStore()
 const currentContentStore = useCurrentContentStore();
 
 const { user } = storeToRefs(authStore);
@@ -118,12 +121,11 @@ const headerTitle = computed(() => {
 });
 
 // Comprobamos si el usuario es SUPERADMIN
-const isSuperAdmin = computed(() => authStore.currentUserRole === 'SUPERADMIN');
-
+const isSuperAdmin = computed(() => currentUserStore.currentUserRole === 'SUPERADMIN');
 // Función para limpiar el chat (solo si es SUPERADMIN)
 function clearChat() {
     if (isSuperAdmin.value) {
-        console.log('Clearing chat...');
+        console.log('Limpia el chat');
     }
 }
 
