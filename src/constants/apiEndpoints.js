@@ -22,7 +22,7 @@ export const API_ENDPOINTS = {
   GET_USER_BY_ID: `${BASE_USER}/find_user/:id`, // not ready
   GET_USER_BY_NAME: `${BASE_USER}/find_user_name/:network_user`, // ready
   CREATE_USER: `${BASE_USER}/create_user`, // ready
-  DELETE_USER: `${BASE_USER}/delete_user`, // ready
+  TOGGLE_USER_STATUS: `${BASE_USER}/delete_user/:id`, // ready
   UPDATE_USER: `${BASE_USER}/update_user/:id`, // not ready
 
   // Permisos

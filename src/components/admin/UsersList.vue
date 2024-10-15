@@ -18,6 +18,7 @@
           :pagination="pagination" 
           @page-change="handlePageChange"
           @limit-change="handleLimitChange"
+          @user-updated="handleUserUpdated"
         />
       </div>
     </section>
@@ -85,7 +86,6 @@ function openModal() {
 }
 
 function closeModal () {
-   
   isShowModal.value = false
 }
 
@@ -104,7 +104,11 @@ async function handleFormSubmit(formData) {
 
 async function handleLimitChange(newLimit) {
   pagination.value.limit = newLimit
-  await fetchUsers(1) // Reset to first page when changing limit
+  await fetchUsers(1)
+}
+  
+const handleUserUpdated = () => {
+  fetchUsers()
 }
 </script>
 

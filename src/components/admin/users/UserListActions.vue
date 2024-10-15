@@ -28,7 +28,7 @@ import { FwbDropdown, FwbListGroup, FwbListGroupItem } from 'flowbite-vue'
 import Swal from 'sweetalert2'
 import UserViewModal from './UserViewModal.vue'
 import UserEditModal from './UserEditModal.vue'
-import { deleteUser } from '@/services/api'
+import { toggleUserStatus } from '@/services/api'
 
 const props = defineProps({
   user: {
@@ -46,10 +46,16 @@ const emit = defineEmits(['user-updated', 'user-deleted'])
 const showViewModal = ref(false)
 const showEditModal = ref(false)
 
+const labelMap = {
+  view: 'Ver',
+  edit: 'Editar',
+  toggle: (user) => user.status_user ? 'Desactivar' : 'Activar'
+}
+
 const actionMap = {
-  view: { label: 'Ver', value: 'show' },
-  edit: { label: 'Editar', value: 'edit' },
-  delete: { label: 'Eliminar', value: 'delete' }
+  view: { label: labelMap.view, value: 'show' },
+  edit: { label: labelMap.edit, value: 'edit' },
+  toggle: { label: labelMap.toggle(props.user), value: 'toggle' }
 }
 
 const availableActions = computed(() => {
@@ -64,13 +70,13 @@ const handleAction = (action) => {
     case 'edit':
       showEditModal.value = true
       break
-    case 'delete':
-      confirmDelete()
+    case 'toggle':
+      confirmToggleStatus()
       break
   }
 }
 
-const confirmDelete = () => {
+/* const confirmDelete = () => {
   Swal.fire({
     title: '¿Estás seguro?',
     text: 'No podrás revertir esto!',
@@ -95,7 +101,7 @@ const confirmDelete = () => {
 const handleDeleteUser = async (id_user) => {
   try {
   
-    await deleteUser(id_user)
+    await toggleUserStatus(id_user)
     Swal.fire({
       title: 'Eliminado!',
       text: 'El usuario ha sido eliminado.',
@@ -117,9 +123,56 @@ const handleDeleteUser = async (id_user) => {
     })
   }
 }
-
+ */
 const handleUserUpdated = (updatedUser) => {
   emit('user-updated', updatedUser)
+}
+
+const confirmToggleStatus = () => {
+  const action = props.user.status_user ? 'desactivar' : 'activar'
+  Swal.fire({
+    title: `¿Estás seguro?`,
+    text: `¿Deseas ${action} este usuario?`,
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: `Sí, ${action}!`,
+    cancelButtonText: 'Cancelar',
+    customClass: {
+      container: 'swal2-container-custom'
+    }
+  }).then((result) => {
+    if (result.isConfirmed) {
+      handleToggleUserStatus(props.user.id_user)
+    }
+  })
+}
+
+const handleToggleUserStatus = async (id_user) => {
+  try {
+    await toggleUserStatus(id_user)
+    const action = props.user.status_user ? 'desactivado' : 'activado'
+    Swal.fire({
+      title: `${action.charAt(0).toUpperCase() + action.slice(1)}!`,
+      text: `El usuario ha sido ${action}.`,
+      icon: 'success',
+      customClass: {
+        container: 'swal2-container-custom'
+      }
+    })
+    emit('user-updated', { ...props.user, status_user: !props.user.status_user })
+  } catch (error) {
+    console.error(error)
+    Swal.fire({
+      title: 'Error!',
+      text: `No se pudo ${props.user.status_user ? 'desactivar' : 'activar'} el usuario. Por favor, intente nuevamente.`,
+      icon: 'error',
+      customClass: {
+        container: 'swal2-container-custom'
+      }
+    })
+  }
 }
 </script>
 

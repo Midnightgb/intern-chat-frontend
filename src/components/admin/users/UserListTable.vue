@@ -26,10 +26,10 @@
             <td class="px-4 py-3">{{ user.role.name }}</td>
             <td class="px-4 py-3 flex items-center justify-end">
               <div v-if="!isSuperAdmin && user.role.name !== 'SUPERADMIN'">
-                <UserListActions :user="user" :actions="['view', ...(user.role.name === 'AGENTE' ? ['edit'] : []), ...(user.status_user ? ['delete'] : [])]"/>
+                <UserListActions :user="user" :actions="['view', ...(user.role.name === 'AGENTE' ? ['edit'] : []), 'toggle']" @user-updated="handleUserUpdated" />
               </div>
               <div v-else>  
-                <UserListActions :user="user" :actions="['view', 'edit', ...(user.status_user ? ['delete'] : [])]" />
+                <UserListActions :user="user" :actions="['view', 'edit', 'toggle']" @user-updated="handleUserUpdated" />
               </div>
             </td>
           </tr>
@@ -70,7 +70,7 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(['page-change', 'limit-change'])
+const emit = defineEmits(['page-change', 'limit-change', 'user-updated'])
 
 const activeFilters = ref({})
 
@@ -100,5 +100,10 @@ const onPageChange = (newPage) => {
 const onLimitChange = (newLimit) => {
   emit('limit-change', newLimit)
 }
+
+const handleUserUpdated = (updatedUser) => {
+  emit('user-updated', updatedUser)
+}
+
 </script>
 

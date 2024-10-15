@@ -6,14 +6,14 @@
           red</label>
         <input type="text" id="network_user" v-model="formData.network_user"
           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-          placeholder="BB0000" required>
+          placeholder="BB0000" required autocomplete="off">
       </div>
       <div>
         <label for="full_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nombre
           completo</label>
         <input type="text" id="full_name" v-model="formData.full_name"
           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-          placeholder="John Doe" required>
+          placeholder="John Doe" required autocomplete="off">
       </div>
 
       <div class="col-span-2 bg-slate-200 dark:bg-slate-600 p-4 rounded-lg shadow-md">
@@ -35,14 +35,14 @@
         <label for="dominio" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Dominio</label>
         <input type="text" id="dominio" v-model="formData.dominio"
           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-          placeholder="example.com">
+          placeholder="example.com" autocomplete="off">
       </div>
       <div>
         <label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Contraseña</label>
         <div class="relative">
           <input :type="showPassword ? 'text' : 'password'" id="password" v-model="formData.password"
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 pr-10 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-            placeholder="••••••••" required>
+            placeholder="••••••••" required autocomplete="new-password">
           <button type="button" @click="togglePasswordVisibility" 
             class="absolute inset-y-0 right-0 flex items-center px-3 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
             <Eye v-if="!showPassword" class="w-5 h-5" />
