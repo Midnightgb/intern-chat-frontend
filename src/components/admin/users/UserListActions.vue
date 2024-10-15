@@ -9,7 +9,7 @@
     </template>
     <div class="z-50">
       <fwb-list-group class="bg-white rounded-lg shadow dark:bg-gray-700">
-        <fwb-list-group-item v-for="action in userActions" :key="action.value" @click="handleAction(action.value)"
+        <fwb-list-group-item v-for="action in availableActions" :key="action.value" @click="handleAction(action.value)"
           class="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors duration-300">
           {{ action.label }}
         </fwb-list-group-item>
@@ -22,16 +22,21 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { Ellipsis } from 'lucide-vue-next'
 import { FwbDropdown, FwbListGroup, FwbListGroupItem } from 'flowbite-vue'
 import Swal from 'sweetalert2'
 import UserViewModal from './UserViewModal.vue'
 import UserEditModal from './UserEditModal.vue'
 import { deleteUser } from '@/services/api'
+
 const props = defineProps({
   user: {
     type: Object,
+    required: true
+  },
+  actions: {
+    type: Array,
     required: true
   }
 })
@@ -41,11 +46,15 @@ const emit = defineEmits(['user-updated', 'user-deleted'])
 const showViewModal = ref(false)
 const showEditModal = ref(false)
 
-const userActions = [
-  { label: 'Ver', value: 'show' },
-  { label: 'Editar', value: 'edit' },
-  { label: 'Eliminar', value: 'delete' }
-]
+const actionMap = {
+  view: { label: 'Ver', value: 'show' },
+  edit: { label: 'Editar', value: 'edit' },
+  delete: { label: 'Eliminar', value: 'delete' }
+}
+
+const availableActions = computed(() => {
+  return props.actions.map(action => actionMap[action]).filter(Boolean)
+})
 
 const handleAction = (action) => {
   switch (action) {

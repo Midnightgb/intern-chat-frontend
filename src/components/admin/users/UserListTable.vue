@@ -25,7 +25,12 @@
             <td class="px-4 py-3">{{ user.status_user ? 'Activo' : 'Inactivo' }}</td>
             <td class="px-4 py-3">{{ user.role.name }}</td>
             <td class="px-4 py-3 flex items-center justify-end">
-              <UserListActions :user="user" />
+              <div v-if="!isSuperAdmin && user.role.name !== 'SUPERADMIN'">
+                <UserListActions :user="user" :actions="['view', ...(user.role.name === 'AGENTE' ? ['edit'] : []), ...(user.status_user ? ['delete'] : [])]"/>
+              </div>
+              <div v-else>  
+                <UserListActions :user="user" :actions="['view', 'edit', ...(user.status_user ? ['delete'] : [])]" />
+              </div>
             </td>
           </tr>
         </tbody>
@@ -41,10 +46,18 @@
 
 <script setup>
 import { ref, computed } from 'vue'
+import { storeToRefs } from 'pinia'
 import TruncatedContent from '@components/common/TruncatedContent.vue'
 import UserListActions from './UserListActions.vue'
 import UserListFilters from './UserListFilters.vue'
 import UserListPagination from './UserListPagination.vue'
+import { useAuthStore } from '@stores/auth'
+
+const authStore = useAuthStore()
+const { user } = storeToRefs(authStore)
+console.log(user)
+const isSuperAdmin = user.value.role === 'SUPERADMIN'
+console.log(isSuperAdmin)
 
 const props = defineProps({
   users: {
