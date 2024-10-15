@@ -18,12 +18,12 @@ export const useCurrentContentStore = defineStore('currentContentStore', {
             this.loading = true; // Activa el estado de carga
             try {
                 const response = await getUsersChannels(channelId);
-                console.log('Response from API:', response); // Aquí puedes verificar lo que devuelve tu API
+              
                 if (response.data && response.data.length > 0) {
                     this.updateCurrentContentMessage(response.data.length);
                     this.clearCurrentContentUsers();
                     this.updateCurrentContentUsers(response.data);
-                    console.log("usuarios actuales", this.currentContentUsers);
+                  
                     
                 } else {
                     console.warn('No users found for this channel.'); // Mensaje de advertencia si no se encuentran usuarios

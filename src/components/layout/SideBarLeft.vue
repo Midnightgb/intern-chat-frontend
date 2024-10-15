@@ -117,7 +117,7 @@ onMounted(() => {
 })
 
 const adminPanel = () => {
-  console.log('adminPanel')
+   
   handleAdminPanel(true)
 }
 

@@ -40,7 +40,6 @@ const error = ref(false)
 const cachedAvatarSrc = ref(null)
 
 const avatarSrc = computed(() => {
-  console.log("este es el mensaje", props.message);
   
   if (!props.message) return null;
 

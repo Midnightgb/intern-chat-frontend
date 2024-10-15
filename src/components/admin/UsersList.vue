@@ -85,7 +85,7 @@ function openModal() {
 }
 
 function closeModal () {
-  console.log('closeModal')
+   
   isShowModal.value = false
 }
 

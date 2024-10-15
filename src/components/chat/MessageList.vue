@@ -116,7 +116,7 @@ const editedContent = ref('')
 const deletingMessage = ref(null)
 
 
-console.log("este es el rol actual", currentUserRole.value)
+ 
 
 // Computed
 const computedMessages = computed(() => 

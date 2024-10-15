@@ -14,7 +14,7 @@ export const useMessageStore = defineStore('message', {
   }),
   actions: {
     async setMessages(messages) {
-      console.log('Setting messages:', messages);
+    
       const currentContentStore = useCurrentContentStore();
       currentContentStore.updateCurrentContentMessage(messages.length)
 
@@ -41,7 +41,7 @@ export const useMessageStore = defineStore('message', {
           const response = await updateApi(updatedMessage);
           
           if (response) {
-            console.log('Response from API:', response);
+          
           } else {
             console.error(`Failed to update ${errorMessage} in backend`);
           }
@@ -53,7 +53,7 @@ export const useMessageStore = defineStore('message', {
     },
     async deleteMessage(messageId, type) {
       try {
-        console.log('Deleting message:', messageId);
+      
         
         // Enviar solicitud de eliminación al backend
         if (type === 'id_direct_message') {
@@ -66,7 +66,7 @@ export const useMessageStore = defineStore('message', {
         this.messages = this.messages.filter(m => 
           m.id_message !== messageId && m.id_direct_message !== messageId
         );
-        console.log(`Mensaje con ID ${messageId} eliminado del estado y backend.`);
+      
       } catch (error) {
         this.error = 'No se pudo eliminar el mensaje';
         console.error('Error al eliminar el mensaje en el store:', error);
@@ -74,13 +74,13 @@ export const useMessageStore = defineStore('message', {
     },
     async deleteConversation(conversation) {
       try {
-        console.log("esto me llego xxxx", conversation);
+      
         // Enviar solicitud de eliminación al backend
         await deleteConversationApi(conversation);
 
         // Actualizar el estado eliminando el mensaje
         this.conversations = this.conversations.filter(c => c.id_direct_message !== conversation);
-        console.log(`Conversación con ID ${conversation} eliminada del estado y backend.`);
+      
       } catch (error) {
         this.error = 'No se pudo eliminar la conversación';
         console.error('Error al eliminar la conversación en el store:', error);

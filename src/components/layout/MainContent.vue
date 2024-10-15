@@ -73,10 +73,10 @@ watch([currentChannelId, currentConversationId], ([newChannelId, newConversation
   if (newChannelId !== oldChannelId || newConversationId !== oldConversationId) {
     socketService.cancelCurrentRequest();
     if (newChannelId) {
-      console.log("newChannelId", newChannelId);
+    
       socketService.joinChannel(newChannelId);
     } else if (newConversationId) {
-      console.log("newConversationId", newConversationId);
+    
       socketService.getDirectMessages(newConversationId, newConversationId);
     }
   }

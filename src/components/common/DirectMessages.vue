@@ -81,7 +81,7 @@ const debouncedSearch = debounce(async () => {
     const apiResults = await searchUserInDB(search.value)
     if (!searchCancelled.value) {
       if (apiResults.status === false) {
-        console.log('API Response:', apiResults)
+      
         filteredResults.value = []
       } else {
         filteredResults.value = Array.isArray(apiResults) ? apiResults : [apiResults]
@@ -115,7 +115,7 @@ async function searchUserInDB(query) {
 }
 
 function handleResultClick(result) {
-    console.log('handleResultClick', result);
+  
 
     // Verificar si es una conversación
     if (isConversation(result)) {

@@ -32,11 +32,11 @@ class SocketService {
     })
 
     this.socket.on('connect', () => {
-      console.log('Connected to WebSocket server')
+    
     })
 
     this.socket.on('token_renewed', (data) => {
-      console.log('Data emitida: ', data);
+    
       this.authStore.setSessionCookie(data.token_new)
       this.socket.auth.token = data.token_new
     })
@@ -47,7 +47,7 @@ class SocketService {
     })
 
     this.socket.on('new_message_channel', (message) => {
-      console.log('Nuevo mensaje canal:', message);
+    
       this.messageStore.addMessage(message)
     })
 
@@ -60,7 +60,7 @@ class SocketService {
 
     this.socket.on('delete_message_channel', (message) => {
       //this.messageStore.deleteMessage(message.id_message)
-      console.log('Mensaje eliminado:', message);
+    
       
     })
 
@@ -97,7 +97,7 @@ class SocketService {
     });
 
     this.socket.on('disconnect', () => {
-      console.log('Disconnected from WebSocket server')
+    
     })
   }
   

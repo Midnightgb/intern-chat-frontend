@@ -114,7 +114,7 @@ const handleFileUpload = (event) => {
 };
 
 const submitForm = () => {
-  console.log(formData.value);
+   
   if (!formData.value.network_user || !formData.value.full_name || !formData.value.password || !formData.value.role_id) {
     error.value = "Todos los campos son requeridos";
     return 

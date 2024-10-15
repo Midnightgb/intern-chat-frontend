@@ -55,9 +55,9 @@ import { useAuthStore } from '@stores/auth'
 
 const authStore = useAuthStore()
 const { user } = storeToRefs(authStore)
-console.log(user)
+ 
 const isSuperAdmin = user.value.role === 'SUPERADMIN'
-console.log(isSuperAdmin)
+ 
 
 const props = defineProps({
   users: {

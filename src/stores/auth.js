@@ -101,7 +101,7 @@ export const useAuthStore = defineStore('auth', {
         } else if (expiration < new Date(Date.now() + 1000 * 60 * 5)) {
           console.warn('Token expirará en menos de 5 minutos:', expiration)
         }else{
-          console.log('Token válido hasta:', expiration)
+          console.log('Token válido');
         }
       } catch (error) {
         console.error('Error decoding token:', error)

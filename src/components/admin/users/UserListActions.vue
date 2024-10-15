@@ -86,7 +86,7 @@ const confirmDelete = () => {
   }).then((result) => {
     if (result.isConfirmed) {
       const id_user = props.user.id_user
-      console.log('id_user', id_user)
+    
       handleDeleteUser(id_user)
     }
   })
@@ -94,7 +94,7 @@ const confirmDelete = () => {
 
 const handleDeleteUser = async (id_user) => {
   try {
-    console.log('eliminando', id_user)
+  
     await deleteUser(id_user)
     Swal.fire({
       title: 'Eliminado!',

@@ -29,7 +29,7 @@ const getToken = () => {
 const updateToken = (newToken) => {
   const authStore = useAuthStore();
   authStore.setSessionCookie(newToken);
-  console.log('Nuevo token actualizado:', newToken);
+   
 };
 
 // Configuración de interceptores
@@ -65,7 +65,7 @@ const handleErrorResponse = async (error) => {
   if (error.response?.status === 401 && error.config.url !== API_ENDPOINTS.LOGOUT) {
     const authStore = useAuthStore();
     if (authStore.isAuthenticated) {
-      console.log('Token expirado, cerrando sesión...');
+    
       const { handleLogout } = useLogout();
       await handleLogout();
     }
