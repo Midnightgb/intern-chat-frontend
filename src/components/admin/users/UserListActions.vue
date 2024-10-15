@@ -87,23 +87,35 @@ const confirmDelete = () => {
     if (result.isConfirmed) {
       const id_user = props.user.id_user
       console.log('id_user', id_user)
-      deleteUser(id_user)
-        .then(() => {
-          Swal.fire({
-            title: 'Eliminado!',
-            text: 'El usuario ha sido eliminado.',
-            icon: 'success',
-            customClass: {
-              container: 'swal2-container-custom'
-            }
-          })
-          emit('user-deleted', props.user.id_user)
-        })
-        .catch((error) => {
-          console.error(error)
-        })
+      handleDeleteUser(id_user)
     }
   })
+}
+
+const handleDeleteUser = async (id_user) => {
+  try {
+    console.log('eliminando', id_user)
+    await deleteUser(id_user)
+    Swal.fire({
+      title: 'Eliminado!',
+      text: 'El usuario ha sido eliminado.',
+      icon: 'success',
+      customClass: {
+        container: 'swal2-container-custom'
+      }
+    })
+    emit('user-deleted', id_user)
+  } catch (error) {
+    console.error(error)
+    Swal.fire({
+      title: 'Error!',
+      text: 'No se pudo eliminar el usuario. Por favor, intente nuevamente.',
+      icon: 'error',
+      customClass: {
+        container: 'swal2-container-custom'
+      }
+    })
+  }
 }
 
 const handleUserUpdated = (updatedUser) => {
