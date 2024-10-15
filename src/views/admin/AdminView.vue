@@ -54,7 +54,7 @@ const components = [
           </ul>
         </nav>
       </aside>
-      <main class="flex-grow p-8 overflow-auto">
+      <main class="flex-grow p-7 overflow-auto">
         <h2 class="text-3xl font-bold mb-6 text-gray-800 dark:text-white">
           {{ currentComponent }}
         </h2>
