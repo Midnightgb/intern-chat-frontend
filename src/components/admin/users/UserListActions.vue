@@ -76,54 +76,6 @@ const handleAction = (action) => {
   }
 }
 
-/* const confirmDelete = () => {
-  Swal.fire({
-    title: '¿Estás seguro?',
-    text: 'No podrás revertir esto!',
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonColor: '#3085d6',
-    cancelButtonColor: '#d33',
-    confirmButtonText: 'Si, eliminar!',
-    cancelButtonText: 'Cancelar',
-    customClass: {
-      container: 'swal2-container-custom'
-    }
-  }).then((result) => {
-    if (result.isConfirmed) {
-      const id_user = props.user.id_user
-    
-      handleDeleteUser(id_user)
-    }
-  })
-}
-
-const handleDeleteUser = async (id_user) => {
-  try {
-  
-    await toggleUserStatus(id_user)
-    Swal.fire({
-      title: 'Eliminado!',
-      text: 'El usuario ha sido eliminado.',
-      icon: 'success',
-      customClass: {
-        container: 'swal2-container-custom'
-      }
-    })
-    emit('user-deleted', id_user)
-  } catch (error) {
-    console.error(error)
-    Swal.fire({
-      title: 'Error!',
-      text: 'No se pudo eliminar el usuario. Por favor, intente nuevamente.',
-      icon: 'error',
-      customClass: {
-        container: 'swal2-container-custom'
-      }
-    })
-  }
-}
- */
 const handleUserUpdated = (updatedUser) => {
   emit('user-updated', updatedUser)
 }
