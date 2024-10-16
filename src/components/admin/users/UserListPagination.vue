@@ -5,9 +5,7 @@
       <span class="text-sm font-normal text-gray-500 dark:text-gray-400">
         Mostrando
         <span class="font-semibold text-gray-900 dark:text-white">
-          {{ (pagination.page - 1) * pagination.limit + 1 }}-{{
-            Math.min(pagination.page * pagination.limit, pagination.total_users)
-          }}
+          {{ startIndex }}-{{ endIndex }}
         </span>
         de
         <span class="font-semibold text-gray-900 dark:text-white">{{
@@ -48,8 +46,11 @@
 </template>
 
 <script setup>
-import { defineProps, defineEmits, ref, watch } from 'vue'
+import { defineProps, defineEmits, ref, watch, computed } from 'vue'
 import { FwbPagination, FwbDropdown, FwbListGroup, FwbListGroupItem, FwbButton } from 'flowbite-vue'
+import { useUserStore } from '@/stores/user/users'
+
+const userStore = useUserStore()
 
 const props = defineProps({
   pagination: {
@@ -71,12 +72,21 @@ watch(
   }
 )
 
+const startIndex = computed(() => {
+  return (props.pagination.page - 1) * props.pagination.limit + 1
+})
+
+const endIndex = computed(() => {
+  return Math.min(props.pagination.page * props.pagination.limit, props.pagination.total_users)
+})
+
 function onPageChange(newPage) {
   emit('page-change', newPage)
 }
 
-function changePageSize(newSize) {
+async function changePageSize(newSize) {
   if (newSize >= 1 && newSize <= 1000) {
+    await userStore.setLimit(newSize)
     emit('limit-change', newSize)
   }
 }

@@ -73,6 +73,9 @@
 import { ref } from 'vue';
 import { FwbButton, FwbSelect } from 'flowbite-vue';
 import { Plus, Eye, EyeOff } from 'lucide-vue-next';
+import { useUserStore } from '@/stores/user/users';
+
+const userStore = useUserStore();
 
 const props = defineProps({
   closeModal: {
@@ -99,7 +102,7 @@ const formData = ref({
 const file = ref(null);
 const imagePreview = ref(null);
 const error = ref(null);
-const emit = defineEmits(['submit']);
+const showPassword = ref(false);
 
 const handleFileUpload = (event) => {
   file.value = event.target.files[0];
@@ -113,12 +116,11 @@ const handleFileUpload = (event) => {
   }
 };
 
-const submitForm = () => {
-   
+const submitForm = async () => {
   if (!formData.value.network_user || !formData.value.full_name || !formData.value.password || !formData.value.role_id) {
     error.value = "Todos los campos son requeridos";
-    return 
-  } 
+    return;
+  }
   
   const formDataToSend = new FormData();
   Object.keys(formData.value).forEach(key => {
@@ -129,10 +131,13 @@ const submitForm = () => {
     formDataToSend.append('file', file.value);
   }
   
-  emit('submit', formDataToSend);
+  try {
+    await userStore.createUser(formDataToSend);
+    props.closeModal();
+  } catch (err) {
+    error.value = "Error al crear el usuario. Por favor, inténtelo de nuevo.";
+  }
 };
-
-const showPassword = ref(false);
 
 const togglePasswordVisibility = () => {
   showPassword.value = !showPassword.value;

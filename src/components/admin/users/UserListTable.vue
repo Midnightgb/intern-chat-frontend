@@ -35,12 +35,17 @@
         </div>
       </template>
     </ListTable>
-    <UserListPagination :pagination="pagination" @page-change="onPageChange" @limit-change="onLimitChange" />
+    <UserListPagination 
+      :pagination="userStore.pagination" 
+      @page-change="handlePageChange" 
+      @limit-change="handleLimitChange" 
+    />
   </div>
 </template>
 
 <script setup>
 import { ref, computed } from 'vue'
+import { useUserStore } from '@/stores/user/users'
 import ListTable from '@admin/common/ListTable.vue'
 import TruncatedContent from '@components/common/TruncatedContent.vue'
 import UserListActions from './UserListActions.vue'
@@ -50,21 +55,9 @@ import { storeToRefs } from 'pinia'
 import { useAuthStore } from '@stores/auth'
 
 const authStore = useAuthStore()
+const userStore = useUserStore()
 const { user } = storeToRefs(authStore)
 const isSuperAdmin = computed(() => user.value.role === 'SUPERADMIN')
-
-const props = defineProps({
-  users: {
-    type: Array,
-    required: true
-  },
-  pagination: {
-    type: Object,
-    required: true
-  }
-})
-
-const emit = defineEmits(['page-change', 'limit-change', 'user-updated'])
 
 const activeFilters = ref({})
 
@@ -73,7 +66,7 @@ const applyFilters = (filters) => {
 }
 
 const filteredUsers = computed(() => {
-  return props.users.filter(user => {
+  return userStore.getUsersForCurrentPage.filter(user => {
     if (activeFilters.value.true && !user.status_user) return false
     if (activeFilters.value.false && user.status_user) return false
     const roleFilters = ['AGENTE', 'ADMIN', 'SUPERADMIN']
@@ -91,15 +84,17 @@ const formatters = {
   role: (value) => value.name
 }
 
-const onPageChange = (newPage) => {
-  emit('page-change', newPage)
+const handlePageChange = async (newPage) => {
+  await userStore.fetchUsers(newPage)
 }
 
-const onLimitChange = (newLimit) => {
-  emit('limit-change', newLimit)
+const handleLimitChange = async (newLimit) => {
+  userStore.pagination.limit = newLimit
+  await userStore.fetchUsers(1)
 }
 
-const handleUserUpdated = (updatedUser) => {
-  emit('user-updated', updatedUser)
+const handleUserUpdated = async (updatedUser) => {
+  await userStore.updateUser(updatedUser.id_user, updatedUser)
+  await userStore.fetchUsers(userStore.pagination.page)
 }
 </script>
