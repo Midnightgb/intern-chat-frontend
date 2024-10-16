@@ -5,11 +5,19 @@
         <fwb-table-head-cell v-for="header in headers" :key="header">
           {{ header }}
         </fwb-table-head-cell>
+        <fwb-table-head-cell v-if="hasActions">
+          <span class="sr-only">Acciones</span>
+        </fwb-table-head-cell>
       </fwb-table-head>
       <fwb-table-body>
         <fwb-table-row v-for="item in items" :key="item[keyField]">
           <fwb-table-cell v-for="field in fields" :key="field">
-            {{ formatField(item[field], field) }}
+            <slot :name="`cell-${field}`" :item="item" :value="item[field]">
+              {{ formatField(item[field], field) }}
+            </slot>
+          </fwb-table-cell>
+          <fwb-table-cell v-if="hasActions">
+            <slot name="actions" :item="item"></slot>
           </fwb-table-cell>
         </fwb-table-row>
       </fwb-table-body>
@@ -47,6 +55,10 @@ const props = defineProps({
   formatters: {
     type: Object,
     default: () => ({})
+  },
+  hasActions: {
+    type: Boolean,
+    default: false
   }
 })
 
