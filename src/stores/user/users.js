@@ -85,8 +85,9 @@ export const useUserStore = defineStore('user', {
       this.pagination.page = 1 // Reset to first page when changing limit
       await this.fetchUsers(1) // Fetch users with new limit
     },
-    invalidateCache() {
+    async invalidateCache() {
       this.pageCache = {}
+      await this.fetchUsers(1)
     }
   },
 
