@@ -8,7 +8,13 @@
           class="absolute inset-0 bg-gray-100 bg-opacity-50 dark:bg-gray-900 dark:bg-opacity-50 flex items-center justify-center z-10">
           <fwb-spinner size="12" />
         </div>
-
+        <ListTable 
+          :items="roles"
+          :headers="['ID', 'Nombre', 'Creado', 'Actualizado']"
+          :fields="['id_role', 'name', 'created_at', 'updated_at']"
+          keyField="id_role"
+          :formatters="formatters"
+        />
       </div>
     </section>
   </article>
@@ -19,6 +25,7 @@ import { ref, onMounted } from 'vue'
 import { getRoles } from '@services/api'
 import { FwbSpinner } from 'flowbite-vue'
 import HeaderTab from '@components/common/HeaderTab.vue'
+import ListTable from '@admin/common/ListTable.vue';
 
 const isLoading = ref(false)
 const roles = ref([])
@@ -38,5 +45,11 @@ async function fetchRoles() {
   } finally {
     isLoading.value = false
   }
+}
+
+const formatters = {
+  created_at: (value) => new Date(value).toLocaleString('es-ES'),
+  updated_at: (value) => new Date(value).toLocaleString('es-ES'),
+  status: (value) => value ? 'Activo' : 'Inactivo'
 }
 </script>

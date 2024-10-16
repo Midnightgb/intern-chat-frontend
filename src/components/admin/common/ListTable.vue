@@ -2,14 +2,14 @@
   <div class="relative">
     <fwb-table hoverable>
       <fwb-table-head>
-        <fwb-table-head-cell v-for="Header in Headers" :key="Header">
-          {{ Header }}
+        <fwb-table-head-cell v-for="header in headers" :key="header">
+          {{ header }}
         </fwb-table-head-cell>
       </fwb-table-head>
       <fwb-table-body>
-        <fwb-table-row v-for="object in objects" :key="object.id">
-          <fwb-table-cell v-for="Objectkey in Object.keys(object)" :key="Objectkey">
-            {{ object[Objectkey] }}
+        <fwb-table-row v-for="item in items" :key="item[keyField]">
+          <fwb-table-cell v-for="field in fields" :key="field">
+            {{ formatField(item[field], field) }}
           </fwb-table-cell>
         </fwb-table-row>
       </fwb-table-body>
@@ -19,28 +19,41 @@
 
 <script setup>
 import {
-FwbTable,
-FwbTableBody,
-FwbTableCell,
-FwbTableHead,
-FwbTableHeadCell,
-FwbTableRow,
+  FwbTable,
+  FwbTableBody,
+  FwbTableCell,
+  FwbTableHead,
+  FwbTableHeadCell,
+  FwbTableRow,
 } from 'flowbite-vue'
 
-defineProps({
-objects: {
-  type: Array,
-  required: true
-},
-Objectkey: {
-  type: String,
-  required: true
-},
-Headers: {
-  type: Array,
-  required: true
-}
+const props = defineProps({
+  items: {
+    type: Array,
+    required: true
+  },
+  headers: {
+    type: Array,
+    required: true
+  },
+  fields: {
+    type: Array,
+    required: true
+  },
+  keyField: {
+    type: String,
+    required: true
+  },
+  formatters: {
+    type: Object,
+    default: () => ({})
+  }
 })
 
+const formatField = (value, field) => {
+  if (props.formatters[field]) {
+    return props.formatters[field](value)
+  }
+  return value
+}
 </script>
-
