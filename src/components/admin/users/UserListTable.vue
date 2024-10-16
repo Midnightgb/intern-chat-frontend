@@ -2,62 +2,84 @@
   <div>
     <UserListFilters @filter-change="applyFilters" />
     <div class="relative">
-      <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-          <tr>
-            <th scope="col" class="px-4 py-3">ID Usuario</th>
-            <th scope="col" class="px-4 py-3">Usuario de red</th>
-            <th scope="col" class="px-4 py-3">Nombre completo</th>
-            <th scope="col" class="px-4 py-3">Estado</th>
-            <th scope="col" class="px-4 py-3">Rol</th>
-            <th scope="col" class="px-4 py-3">
-              <span class="sr-only">Acciones</span>
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="user in filteredUsers" :key="user.id_user" class="border-b dark:border-gray-700">
-            <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+      <fwb-table hoverable>
+        <fwb-table-head>
+          <fwb-table-head-cell>
+            ID Usuario
+          </fwb-table-head-cell>
+          <fwb-table-head-cell>
+            Usuario de red
+          </fwb-table-head-cell>
+          <fwb-table-head-cell>
+            Nombre completo
+          </fwb-table-head-cell>
+          <fwb-table-head-cell>
+            Estado
+          </fwb-table-head-cell>
+          <fwb-table-head-cell>
+            Rol
+          </fwb-table-head-cell>
+          <fwb-table-head-cell>
+            <span class="sr-only">Acciones</span>
+          </fwb-table-head-cell>
+        </fwb-table-head>
+        <fwb-table-body>
+          <fwb-table-row v-for="user in filteredUsers" :key="user.id_user">
+            <fwb-table-cell>
               <TruncatedContent :content="user.id_user" :max-length="10" />
-            </th>
-            <td class="px-4 py-3">{{ user.network_user }}</td>
-            <td class="px-4 py-3">{{ user.full_name }}</td>
-            <td class="px-4 py-3">{{ user.status_user ? 'Activo' : 'Inactivo' }}</td>
-            <td class="px-4 py-3">{{ user.role.name }}</td>
-            <td class="px-4 py-3 flex items-center justify-end">
+            </fwb-table-cell>
+            <fwb-table-cell>
+              {{ user.network_user }}
+            </fwb-table-cell>
+            <fwb-table-cell>
+              {{ user.full_name }}
+            </fwb-table-cell>
+            <fwb-table-cell>
+              {{ user.status_user ? 'Activo' : 'Inactivo' }}
+            </fwb-table-cell>
+            <fwb-table-cell>
+              {{ user.role.name }}
+            </fwb-table-cell>
+            <fwb-table-cell>
               <div v-if="!isSuperAdmin && user.role.name !== 'SUPERADMIN'">
-                <UserListActions :user="user" :actions="['view', ...(user.role.name === 'AGENTE' ? ['edit'] : []), 'toggle']" @user-updated="handleUserUpdated" />
+                <UserListActions :user="user"
+                  :actions="['view', ...(user.role.name === 'AGENTE' ? ['edit'] : []), 'toggle']"
+                  @user-updated="handleUserUpdated" />
               </div>
-              <div v-else>  
+              <div v-else>
                 <UserListActions :user="user" :actions="['view', 'edit', 'toggle']" @user-updated="handleUserUpdated" />
               </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+            </fwb-table-cell>
+          </fwb-table-row>
+        </fwb-table-body>
+      </fwb-table>
     </div>
-    <UserListPagination 
-      :pagination="pagination" 
-      @page-change="onPageChange"
-      @limit-change="onLimitChange"
-    />
+    <UserListPagination :pagination="pagination" @page-change="onPageChange" @limit-change="onLimitChange" />
   </div>
 </template>
 
 <script setup>
 import { ref, computed } from 'vue'
-import { storeToRefs } from 'pinia'
+// components
 import TruncatedContent from '@components/common/TruncatedContent.vue'
+import {
+  FwbTable,
+  FwbTableBody,
+  FwbTableCell,
+  FwbTableHead,
+  FwbTableHeadCell,
+  FwbTableRow,
+} from 'flowbite-vue'
 import UserListActions from './UserListActions.vue'
 import UserListFilters from './UserListFilters.vue'
 import UserListPagination from './UserListPagination.vue'
+// stores
+import { storeToRefs } from 'pinia'
 import { useAuthStore } from '@stores/auth'
 
 const authStore = useAuthStore()
 const { user } = storeToRefs(authStore)
- 
 const isSuperAdmin = user.value.role === 'SUPERADMIN'
- 
 
 const props = defineProps({
   users: {
@@ -106,4 +128,3 @@ const handleUserUpdated = (updatedUser) => {
 }
 
 </script>
-
