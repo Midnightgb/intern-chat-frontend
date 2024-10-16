@@ -32,10 +32,10 @@ export const API_ENDPOINTS = {
   DELETE_PRIVILEGE: `${BASE_PRIVILEGE}/delete_user_permission/`, // not ready
 
   // Roles Global
-  GET_ROLES: `${BASE_URL}/role/roles`, // not ready
+  GET_ROLES: `${BASE_URL}/role/roles`, // ready
 
   // Permisos	Global
-  GET_GLOBAL_PRIVILEGES: `${BASE_URL}/permission/permissions`, // not ready
+  GET_GLOBAL_PRIVILEGES: `${BASE_URL}/permission/permissions`, // ready
 
   // Historial
   MAKE_HISTORY: `${BASE_URL}/history/create_history`, // not ready

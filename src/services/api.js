@@ -98,5 +98,7 @@ export const updateConversation = (conversation) => apiClient.post(API_ENDPOINTS
 export const getPermissions = () => apiClient.get(API_ENDPOINTS.GET_GLOBAL_PRIVILEGES);
 export const getPermissionsUser = (id_user) => apiClient.post(API_ENDPOINTS.GET_PRIVILEGES, { id_user });
 export const getUsersChannels = (id) => apiClient.get(API_ENDPOINTS.GET_USERS_CHANNEL.replace(':id', id));
+// Roles
+export const getRoles = () => apiClient.get(API_ENDPOINTS.GET_ROLES);
 
 export default apiClient;
