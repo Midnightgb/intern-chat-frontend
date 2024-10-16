@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 // Handlers
 import { useAuthHandlers } from '@handlers/auth'
 // Icons
@@ -11,8 +11,13 @@ import PermissionsList from '@/components/admin/PermissionsList.vue'
 import RolesList from '@/components/admin/RolesList.vue'
 import HistoryList from '@/components/admin/HistoryList.vue'
 
-const currentComponent = ref('Usuarios')
+const currentComponent = ref(localStorage.getItem('currentComponent') || 'Usuarios')
 const { handleAdminPanel } = useAuthHandlers()
+
+watch(currentComponent, () => {
+  localStorage.setItem('currentComponent', currentComponent.value)
+})
+
 
 const closeAdminView = () => {
   handleAdminPanel(false)
