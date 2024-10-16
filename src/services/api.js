@@ -95,7 +95,8 @@ export const postDirectMessage = (content) => apiClient.post(API_ENDPOINTS.CREAT
 export const deleteConversation = (conversationId) => apiClient.delete(API_ENDPOINTS.DELETE_CONVERSATION.replace(':id', conversationId));
 export const updateConversation = (conversation) => apiClient.post(API_ENDPOINTS.UPDATE_CONVERSATION, conversation);
 // Permissions
-export const getPermissions = (id_user) => apiClient.post(API_ENDPOINTS.GET_PRIVILEGES, { id_user });
+export const getPermissions = () => apiClient.get(API_ENDPOINTS.GET_GLOBAL_PRIVILEGES);
+export const getPermissionsUser = (id_user) => apiClient.post(API_ENDPOINTS.GET_PRIVILEGES, { id_user });
 export const getUsersChannels = (id) => apiClient.get(API_ENDPOINTS.GET_USERS_CHANNEL.replace(':id', id));
 
 export default apiClient;

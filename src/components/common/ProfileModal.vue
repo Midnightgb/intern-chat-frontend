@@ -194,7 +194,7 @@
 import { ref, watchEffect, onMounted } from 'vue'
 import ToolTip from '@components/common/ToolTip.vue'
 import { theme, toggleTheme } from '@utils/themeUtils'
-import { getPermissions } from '@services/api'
+import { getPermissionsUser } from '@services/api'
 import { useAuthStore } from '@stores/auth'
 import { storeToRefs } from 'pinia'
 import ImageLoader from '@components/common/AvatarLoader.vue'
@@ -232,7 +232,7 @@ watchEffect(() => {
 onMounted(async () => {
   try {
     if (user.value?.id) {
-      const permissions = await getPermissions(user.value.id)
+      const permissions = await getPermissionsUser(user.value.id)
       permissions.value = permissions.data.role_permission
       permissions_list.value = permissions.value.map((permission) => permission.Permissions)
     }
